@@ -7,7 +7,7 @@ export type RootStackParamList = {
   NotFound: undefined;
   Login: undefined;
   ReviewRequest: undefined;
-  ReviewDetails: undefined;
+  ReviewDetails: { id: number };
   Home: undefined;
   ShareRequest: undefined;
 };

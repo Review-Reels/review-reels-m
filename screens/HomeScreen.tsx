@@ -1,10 +1,30 @@
+import { StackScreenProps } from "@react-navigation/stack";
 import * as React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, Text, View } from "react-native";
+import { RootStackParamList } from "../types";
 
-export default function HomeScreen() {
+export default function HomeScreen({
+  navigation,
+}: StackScreenProps<RootStackParamList, "NotFound">) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Home</Text>
+      <Button
+        title="Review 1"
+        onPress={() => navigation.push("ReviewDetails", { id: 1 })}
+      ></Button>
+      <Button
+        title="Review 2"
+        onPress={() => navigation.push("ReviewDetails", { id: 2 })}
+      ></Button>
+      <Button
+        title="Review 3"
+        onPress={() => navigation.push("ReviewDetails", { id: 3 })}
+      ></Button>
+      <Button
+        title="Ask for Review"
+        onPress={() => navigation.push("ReviewRequest")}
+      ></Button>
     </View>
   );
 }
