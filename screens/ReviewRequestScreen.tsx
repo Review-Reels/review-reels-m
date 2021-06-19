@@ -1,35 +1,32 @@
 import { StackScreenProps } from "@react-navigation/stack";
+import { RRAppWrapper } from "components";
 import * as React from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
-import { RootStackParamList } from "../types";
+import { RootStackParamList } from "types";
+import Close from "assets/svg/Close.svg";
+import { Circle, Path, Rect, Svg } from "react-native-svg";
 
-export default function ReviewRequestScreen({
-  navigation,
-}: StackScreenProps<RootStackParamList, "NotFound">) {
+export default function ReviewRequestScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Review Request</Text>
-      <Button
-        title="Share Request"
-        onPress={() => navigation.push("ShareRequest")}
-      ></Button>
-    </View>
+    <RRAppWrapper>
+      <View style={styles.container}>
+        <View>
+          <Text style={styles.title}>Create Your Ask Message</Text>
+          {/* <Close width={120} height={40}></Close> */}
+        </View>
+      </View>
+    </RRAppWrapper>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    margin: 24,
   },
   title: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
+    fontFamily: "karla",
   },
 });

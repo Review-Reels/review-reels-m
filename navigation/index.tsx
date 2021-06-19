@@ -11,13 +11,13 @@ import {
 import { createStackNavigator } from "@react-navigation/stack";
 import * as React from "react";
 import { ColorSchemeName } from "react-native";
-import HomeScreen from "../screens/HomeScreen";
-import LoginScreen from "../screens/LoginScreen";
-import NotFoundScreen from "../screens/NotFoundScreen";
-import ReviewDetailsScreen from "../screens/ReviewDetailScreen";
-import ReviewRequestScreen from "../screens/ReviewRequestScreen";
-import ShareRequestScreen from "../screens/ShareRequestScreen";
-import { RootStackParamList } from "../types";
+import LoginScreen from "screens/LoginScreen";
+import NotFoundScreen from "screens/NotFoundScreen";
+import ReviewDetailsScreen from "screens/ReviewDetailScreen";
+import ReviewRequestScreen from "screens/ReviewRequestScreen";
+import ShareRequestScreen from "screens/ShareRequestScreen";
+import HomeScreen from "screens/HomeScreen";
+import { RootStackParamList } from "types";
 import LinkingConfiguration from "./LinkingConfiguration";
 
 export default function Navigation() {

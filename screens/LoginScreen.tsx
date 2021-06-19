@@ -1,7 +1,8 @@
 import { StackScreenProps } from "@react-navigation/stack";
+import { RRTextInput } from "components";
 import * as React from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
-import { RootStackParamList } from "../types";
+import { RootStackParamList } from "types";
 
 export default function LoginScreen({
   navigation,
@@ -10,6 +11,8 @@ export default function LoginScreen({
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
       <View style={styles.separator} />
+      <RRTextInput placeholder="Username"></RRTextInput>
+      <RRTextInput placeholder="Password"></RRTextInput>
       <Button title="Login" onPress={() => navigation.replace("Home")}></Button>
     </View>
   );
