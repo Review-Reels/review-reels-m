@@ -5,11 +5,11 @@
     "baseUrl": ".",
     "paths": {
       "*": ["./*"],
-      "types": ["./types"],
-      "components": ["./components"],
-      "screens": ["./screens"],
-      "colors": ["./constants/colors"],
-      "assets": ["./assets"]
+      "_types": ["./types"],
+      "_components": ["./components"],
+      "_screens": ["./screens"],
+      "_colors": ["./constants/colors"],
+      "_assets": ["./assets"]
     }
   }
 }

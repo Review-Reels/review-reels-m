@@ -16,7 +16,7 @@ export default function RRButton({
   };
 
   return (
-    <Pressable style={[styles.container]} onPress={onPressOk}>
+    <Pressable style={[styles.container,style]} onPress={onPressOk}>
       <Text style={[styles.buttonTitle]}>{title}</Text>
     </Pressable>
   );
