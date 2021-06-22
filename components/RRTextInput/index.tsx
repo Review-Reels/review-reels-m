@@ -1,3 +1,4 @@
+import colors from "constants/colors";
 import React, { useState } from "react";
 import {
   StyleSheet,
@@ -17,11 +18,13 @@ export default function RRTextInput({
   label,
   onChangeText,
   onSubmitEditing,
-  inputType,
   disabled,
+  numberOfLines,
+  multiline,
 }: TextInputType) {
   return (
-    <View style={[style, styles.container]}>
+    <View style={[style]}>
+      <Text style={styles.label}>{label}</Text>
       <TextInput
         editable={!disabled}
         style={[
@@ -33,6 +36,8 @@ export default function RRTextInput({
         onChangeText={(text) => onChangeText(text)}
         placeholder={placeholder}
         onSubmitEditing={onSubmitEditing}
+        numberOfLines={numberOfLines}
+        multiline={multiline}
       />
       {error ? <Text style={styles.errorTxt}>{error}</Text> : null}
     </View>
@@ -40,15 +45,15 @@ export default function RRTextInput({
 }
 
 const styles = StyleSheet.create({
-  container: { width: "100%", marginBottom: 16 },
   input: {
-    borderWidth: 1,
-    borderRadius: 24,
-    height: 56,
+    borderRadius: 8,
+    // height: 56,
     paddingHorizontal: 24,
     paddingVertical: 16,
     fontSize: 16,
     fontWeight: "400",
+    backgroundColor: colors.Concrete,
+    color: colors.Black2,
   },
   errorInput: {
     borderColor: "red",
@@ -60,11 +65,12 @@ const styles = StyleSheet.create({
     marginLeft: 16,
   },
   label: {
-    fontWeight: "500",
+    fontWeight: "bold",
     fontSize: 14,
-    lineHeight: 17,
-    letterSpacing: 0.11,
+    lineHeight: 16,
+    fontFamily: "karla",
     marginBottom: 8,
+    color: colors.Black2,
   },
   view_only: {
     backgroundColor: "#F5F5F5",
