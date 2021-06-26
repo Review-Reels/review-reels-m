@@ -1,14 +1,14 @@
 import colors from "constants/colors";
 import React from "react";
 import { StyleSheet, View, Text, Pressable } from "react-native";
-import { ButtonType } from "types";
+import { ButtonProps } from "types";
 
 export default function RRButton({
   title = "",
   onPress,
   style,
   isDisabled,
-}: ButtonType) {
+}: ButtonProps) {
   const onPressOk = () => {
     if (!isDisabled) {
       onPress();

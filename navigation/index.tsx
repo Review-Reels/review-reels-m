@@ -35,8 +35,8 @@ const Stack = createStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="Home" component={HomeScreen} />
+      {/* <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Home" component={HomeScreen} /> */}
       <Stack.Screen name="ReviewRequest" component={ReviewRequestScreen} />
       <Stack.Screen name="ReviewDetails" component={ReviewDetailsScreen} />
       <Stack.Screen name="ShareRequest" component={ShareRequestScreen} />

@@ -8,7 +8,7 @@ import {
   Pressable,
   StyleProp,
 } from "react-native";
-import { TextInputType } from "types";
+import { TextInputProps } from "types";
 
 export default function RRTextInput({
   placeholder,
@@ -21,7 +21,7 @@ export default function RRTextInput({
   disabled,
   numberOfLines,
   multiline,
-}: TextInputType) {
+}: TextInputProps) {
   return (
     <View style={[style]}>
       <Text style={styles.label}>{label}</Text>

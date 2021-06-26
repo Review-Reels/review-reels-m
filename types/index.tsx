@@ -15,7 +15,7 @@ export type RootStackParamList = {
   ShareRequest: undefined;
 };
 
-export type TextInputType = {
+export type TextInputProps = {
   placeholder?: string;
   value?: string | undefined;
   error?: string;
@@ -28,9 +28,15 @@ export type TextInputType = {
   multiline?: boolean;
 };
 
-export type ButtonType = {
+export type ButtonProps = {
   title: string;
   onPress: Function;
   style?: StyleProp<any>;
   isDisabled?: boolean;
 };
+
+export type CameraProps = {
+  isOpen:boolean;
+  onClose:Function;
+  onCapture:Function;
+}

@@ -1,25 +1,30 @@
-import { RRAppWrapper, RRTextInput } from "components";
+import { RRAppWrapper, RRCamera, RRTextInput } from "components";
 import * as React from "react";
 import {
-  Button,
   Keyboard,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from "react-native";
 import colors from "constants/colors";
 import { Camera } from "expo-camera";
 import { useEffect, useState } from "react";
 import RRButton from "components/RRButton";
+import Close from "assets/svg/Close.svg";
+import AddPhoto from "assets/svg/AddPhoto.svg";
+import { scaleSize } from "constants/layout";
+import { Actionsheet, useDisclose } from "native-base";
 
 export default function ReviewRequestScreen() {
   const [requestMessage, setRequestMessage] = useState(
     "Hope you enjoyed using our product. It will be great if you can tell us how much you like our product with a short video."
   );
   const [isShowBtn, setBtnStatus] = useState(true);
+  const [isOpenCamera, setCameraStatus] = useState(false);
+  const [isOpen, setOpenStatus] = useState(false);
 
   useEffect(() => {
     Keyboard.addListener("keyboardDidShow", hideBtn);
@@ -42,59 +47,100 @@ export default function ReviewRequestScreen() {
 
   return (
     <RRAppWrapper>
-      <ScrollView style={styles.container}>
-        <View>
-          <Text style={styles.title}>Create Your Ask Message</Text>
-          {/* <Close width={120} height={40}></Close> */}
-        </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.infoText}>
-            The card below will be shown to your customers as a message from
-            you. Let’s make it sound irresistable!
-          </Text>
-        </View>
-        <View style={styles.mainContainer}>
-          <Pressable style={styles.addVideoCntnr}>
-            <Text style={styles.addVideoTxt}>Add a Video or Image</Text>
-          </Pressable>
-          <View style={styles.msgCntnr}>
-            <RRTextInput
-              numberOfLines={4}
-              multiline={true}
-              label="Message"
-              value={requestMessage}
-              onChangeText={(value: string) => setRequestMessage(value)}
-            ></RRTextInput>
+      <View style={{ flex: 1 }}>
+        <ScrollView style={styles.container}>
+          <View style={styles.headerCntnr}>
+            <Text style={styles.title}>Create Your Ask Message</Text>
+            <Pressable>
+              {Platform.OS == "web" ? (
+                <img style={{ width: 48, height: 48 }} src={Close}></img>
+              ) : (
+                <Close width={32} height={32}></Close>
+              )}
+            </Pressable>
           </View>
-        </View>
-      </ScrollView>
-      {isShowBtn == true ? (
-        <View
-          style={{
-            position: "absolute",
-            bottom: 0,
-            alignSelf: "center",
-            marginBottom: 16,
-          }}
-        >
-          <RRButton title="Proceed" onPress={() => {}}></RRButton>
-        </View>
-      ) : null}
+          <View style={styles.infoContainer}>
+            <Text style={styles.infoText}>
+              The card below will be shown to your customers as a message from
+              you. Let’s make it sound irresistable!
+            </Text>
+          </View>
+          <View style={styles.mainContainer}>
+            <Pressable
+              style={styles.addVideoCntnr}
+              onPress={() => setOpenStatus(true)}
+            >
+              {Platform.OS == "web" ? (
+                <img style={{ width: 32, height: 32 }} src={AddPhoto}></img>
+              ) : (
+                <AddPhoto width={32} height={32}></AddPhoto>
+              )}
+              <Text style={styles.addVideoTxt}>Add a Video or Image</Text>
+            </Pressable>
+            <View style={styles.msgCntnr}>
+              <RRTextInput
+                numberOfLines={4}
+                multiline={true}
+                label="Message"
+                value={requestMessage}
+                onChangeText={(value: string) => setRequestMessage(value)}
+              ></RRTextInput>
+            </View>
+          </View>
+        </ScrollView>
+        {isShowBtn == true ? (
+          <View
+            style={{
+              position: "absolute",
+              bottom: 0,
+              alignSelf: "center",
+              marginBottom: 16,
+            }}
+          >
+            <RRButton title="Proceed" onPress={() => {}}></RRButton>
+          </View>
+        ) : null}
+        <Actionsheet isOpen={isOpen} onClose={() => setOpenStatus(false)}>
+          <Actionsheet.Content>
+            <Actionsheet.Item>Choose from Gallery</Actionsheet.Item>
+            <Actionsheet.Item
+              onPressIn={() => {
+                console.log("cooooool");
+                setCameraStatus(true);
+                setOpenStatus(false);
+              }}
+            >
+              Capture Video
+            </Actionsheet.Item>
+          </Actionsheet.Content>
+        </Actionsheet>
+        {isOpenCamera && (
+          <RRCamera
+            isOpen={isOpenCamera}
+            onClose={() => setCameraStatus(false)}
+            onCapture={() => setCameraStatus(false)}
+          ></RRCamera>
+        )}
+      </View>
     </RRAppWrapper>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: 24,
+    paddingHorizontal: 24,
     marginTop: 16,
-    // marginBottom: 50,
-    // height: 300,
+  },
+  headerCntnr: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
     fontFamily: "karla",
+    flexWrap: "wrap",
+    width: scaleSize(200),
   },
   infoContainer: {
     padding: 24,
@@ -125,6 +171,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
     lineHeight: 24,
+    marginTop: 8,
   },
   msgCntnr: {
     marginTop: 24,
