@@ -23,7 +23,7 @@ export default function ReviewRequestScreen() {
     "Hope you enjoyed using our product. It will be great if you can tell us how much you like our product with a short video."
   );
   const [isShowBtn, setBtnStatus] = useState(true);
-  const [isOpenCamera, setCameraStatus] = useState(false);
+  const [isOpenCamera, setCameraStatus] = useState(true);
   const [isOpen, setOpenStatus] = useState(false);
 
   useEffect(() => {

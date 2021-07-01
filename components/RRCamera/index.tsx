@@ -12,15 +12,19 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { CameraProps } from "types";
+import Record from "./record";
+import { Audio } from "expo-av";
 
 export default function RRCamera({ isOpen, onCapture, onClose }: CameraProps) {
-  const [hasPermission, setHasPermission] = useState(false);
+  const [hasPermission, setPermission] = useState(false);
+  const [hasAudioPermission, setAudioPermission] = useState(false);
   const [type, setType] = useState(Camera.Constants.Type.back);
 
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestPermissionsAsync();
-      setHasPermission(status === "granted");
+      await Audio.requestPermissionsAsync();
+      setPermission(status === "granted");
     })();
   }, []);
 
@@ -40,7 +44,7 @@ export default function RRCamera({ isOpen, onCapture, onClose }: CameraProps) {
         onClose();
       }}
     >
-      <Camera style={styles.camera} type={type}>
+      {/* <Camera style={styles.camera} type={type}>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
@@ -55,7 +59,8 @@ export default function RRCamera({ isOpen, onCapture, onClose }: CameraProps) {
             <Text style={styles.text}> Flip </Text>
           </TouchableOpacity>
         </View>
-      </Camera>
+      </Camera> */}
+      <Record />
     </Modal>
   );
 }
