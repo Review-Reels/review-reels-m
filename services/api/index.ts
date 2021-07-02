@@ -1,12 +1,11 @@
 import axios from "axios";
-// import { API_URL } from "@env";
+import { API_URL } from "@env";
 // import {getAuthToken} from '_utils';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 // import Snackbar from 'react-native-snackbar';
 
 const apiClient = axios.create({
-  //   baseURL: API_URL,
-  baseURL: "www.test.com/",
+  baseURL: API_URL,
   headers: { "Content-Type": "application/json" },
 });
 

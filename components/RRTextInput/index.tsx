@@ -38,6 +38,7 @@ export default function RRTextInput({
         onSubmitEditing={onSubmitEditing}
         numberOfLines={numberOfLines}
         multiline={multiline}
+        placeholderTextColor={colors.Black3}
       />
       {error ? <Text style={styles.errorTxt}>{error}</Text> : null}
     </View>
@@ -53,7 +54,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "400",
     backgroundColor: colors.Concrete,
-    color: colors.Black2,
+    color: colors.Black,
   },
   errorInput: {
     borderColor: "red",

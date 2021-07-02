@@ -36,7 +36,19 @@ export type ButtonProps = {
 };
 
 export type CameraProps = {
-  isOpen:boolean;
-  onClose:Function;
-  onCapture:Function;
-}
+  isOpen: boolean;
+  onClose: Function;
+  onCapture: Function;
+};
+
+export type SignupPayload = {
+  username: string;
+  email: string;
+  name: string;
+  id?: string;
+  givenName?: string;
+  familyName?: string;
+  photoUrl?: string;
+  accessToken?: string;
+  refreshToken?: string;
+};

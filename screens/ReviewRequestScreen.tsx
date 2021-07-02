@@ -17,13 +17,17 @@ import Close from "assets/svg/Close.svg";
 import AddPhoto from "assets/svg/AddPhoto.svg";
 import { scaleSize } from "constants/layout";
 import { Actionsheet, useDisclose } from "native-base";
+import { StackScreenProps } from "@react-navigation/stack";
+import { RootStackParamList } from "types";
 
-export default function ReviewRequestScreen() {
+export default function ReviewRequestScreen({
+  navigation,
+}: StackScreenProps<RootStackParamList, "NotFound">) {
   const [requestMessage, setRequestMessage] = useState(
     "Hope you enjoyed using our product. It will be great if you can tell us how much you like our product with a short video."
   );
   const [isShowBtn, setBtnStatus] = useState(true);
-  const [isOpenCamera, setCameraStatus] = useState(true);
+  const [isOpenCamera, setCameraStatus] = useState(false);
   const [isOpen, setOpenStatus] = useState(false);
 
   useEffect(() => {
@@ -45,9 +49,13 @@ export default function ReviewRequestScreen() {
     setBtnStatus(true);
   };
 
+  const onPressProceed = () => {
+    navigation.navigate("ShareRequest");
+  };
+
   return (
     <RRAppWrapper>
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, marginTop: 24 }}>
         <ScrollView style={styles.container}>
           <View style={styles.headerCntnr}>
             <Text style={styles.title}>Create Your Ask Message</Text>
@@ -97,7 +105,7 @@ export default function ReviewRequestScreen() {
               marginBottom: 16,
             }}
           >
-            <RRButton title="Proceed" onPress={() => {}}></RRButton>
+            <RRButton title="Proceed" onPress={onPressProceed}></RRButton>
           </View>
         ) : null}
         <Actionsheet isOpen={isOpen} onClose={() => setOpenStatus(false)}>
@@ -105,7 +113,6 @@ export default function ReviewRequestScreen() {
             <Actionsheet.Item>Choose from Gallery</Actionsheet.Item>
             <Actionsheet.Item
               onPressIn={() => {
-                console.log("cooooool");
                 setCameraStatus(true);
                 setOpenStatus(false);
               }}

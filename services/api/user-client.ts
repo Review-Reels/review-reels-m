@@ -1,8 +1,9 @@
+import { SignupPayload } from "types";
 import axios from "./index";
 
 export default {
-  login(payload: { username: string; password: string }) {
-    return axios.post("student/auth/login", payload);
+  signUp(payload: SignupPayload | undefined) {
+    return axios.post("user/signup", payload);
   },
   getProfileInfo() {
     return axios.get("student/profile");
