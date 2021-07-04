@@ -8,25 +8,54 @@ import {
   StyleSheet,
   Text,
   View,
+  Share,
 } from "react-native";
 import { RootStackParamList } from "types";
 import Close from "assets/svg/Close.svg";
-import Share from "assets/svg/Share.svg";
+import ShareIcon from "assets/svg/Share.svg";
 import Copy from "assets/svg/Copy.svg";
 import Email from "assets/svg/Email.svg";
 import colors from "constants/colors";
 import { scaleSize } from "constants/layout";
+import * as Clipboard from "expo-clipboard";
 
 export default function ShareRequestScreen({
   navigation,
 }: StackScreenProps<RootStackParamList, "NotFound">) {
+  const onPressShare = async () => {
+    try {
+      const result = await Share.share({
+        message: "https://reviewreels.com/carnival",
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  const onPressCopy = () => {
+    Clipboard.default.setString("https://reviewreels.com/carnival");
+  };
+
+  const onPressClose = () => {
+    navigation.goBack();
+  };
+
   return (
     <RRAppWrapper style={styles.container}>
       <View>
         <View style={styles.headerCntnr}>
           <View style={styles.headerRow}>
             <Text style={styles.title}>Your ask message is saved here</Text>
-            <Pressable>
+            <Pressable onPress={onPressClose}>
               {Platform.OS == "web" ? (
                 <img style={{ width: 48, height: 48 }} src={Close}></img>
               ) : (
@@ -57,22 +86,22 @@ export default function ShareRequestScreen({
               customers to get reviews.
             </Text>
             <View style={styles.actionsCntnr}>
-              <Pressable style={styles.action}>
+              <Pressable style={styles.action} onPress={onPressShare}>
                 {Platform.OS == "web" ? (
                   <img
                     style={{ width: 20, height: 20, marginRight: 4 }}
-                    src={Share}
+                    src={ShareIcon}
                   ></img>
                 ) : (
-                  <Share
+                  <ShareIcon
                     style={{ marginRight: 4 }}
                     width={20}
                     height={20}
-                  ></Share>
+                  ></ShareIcon>
                 )}
                 <Text style={styles.actionTxt}>Share</Text>
               </Pressable>
-              <Pressable style={styles.action}>
+              <Pressable style={styles.action} onPress={onPressCopy}>
                 {Platform.OS == "web" ? (
                   <img
                     style={{ width: 20, height: 20, marginRight: 4 }}
