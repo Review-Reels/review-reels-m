@@ -23,8 +23,9 @@ import { scaleSize } from "constants/layout";
 import { Actionsheet, useDisclose } from "native-base";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "types";
+import * as ImagePicker from "expo-image-picker";
 
-export default function ReviewRequestScreen({
+export default function ViewRequestScreen({
   navigation,
 }: StackScreenProps<RootStackParamList, "NotFound">) {
   const [requestMessage, setRequestMessage] = useState(
@@ -38,7 +39,15 @@ export default function ReviewRequestScreen({
   useEffect(() => {
     Keyboard.addListener("keyboardDidShow", hideBtn);
     Keyboard.addListener("keyboardDidHide", showBtn);
-
+    (async () => {
+      if (Platform.OS !== "web") {
+        const { status } =
+          await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== "granted") {
+          alert("Sorry, we need camera roll permissions to make this work!");
+        }
+      }
+    })();
     // cleanup function
     return () => {
       Keyboard.removeListener("keyboardDidShow", hideBtn);
@@ -58,64 +67,35 @@ export default function ReviewRequestScreen({
     navigation.navigate("ShareRequest");
   };
 
+  const pickVideo = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      console.log(result);
+      // setImage(result.uri);
+    }
+  };
+
   return (
     <RRAppWrapper>
       <View style={{ flex: 1 }}>
         <ScrollView style={styles.container}>
           <View style={styles.headerCntnr}>
             <Text style={styles.title}>Create Your Ask Message</Text>
-            <Pressable>
-              {Platform.OS == "web" ? (
-                <img style={{ width: 48, height: 48 }} src={Close}></img>
-              ) : (
-                <Close width={32} height={32}></Close>
-              )}
-            </Pressable>
-          </View>
-          <View style={styles.infoContainer}>
-            <Text style={styles.infoText}>
-              The card below will be shown to your customers as a message from
-              you. Let’s make it sound irresistable!
-            </Text>
-          </View>
-          <View style={styles.mainContainer}>
-            <Pressable
-              style={styles.addVideoCntnr}
-              onPress={() => setOpenStatus(true)}
-            >
-              {Platform.OS == "web" ? (
-                <img style={{ width: 32, height: 32 }} src={AddPhoto}></img>
-              ) : (
-                <AddPhoto width={32} height={32}></AddPhoto>
-              )}
-              <Text style={styles.addVideoTxt}>Add a Video or Image</Text>
-            </Pressable>
-            <View style={styles.msgCntnr}>
-              <RRTextInput
-                numberOfLines={4}
-                multiline={true}
-                label="Message"
-                value={requestMessage}
-                onChangeText={(value: string) => setRequestMessage(value)}
-              ></RRTextInput>
-            </View>
           </View>
         </ScrollView>
-        {isShowBtn == true ? (
-          <View
-            style={{
-              position: "absolute",
-              bottom: 0,
-              alignSelf: "center",
-              marginBottom: 16,
-            }}
-          >
-            <RRButton title="Proceed" onPress={onPressProceed}></RRButton>
-          </View>
-        ) : null}
+
         <Actionsheet isOpen={isOpen} onClose={() => setOpenStatus(false)}>
           <Actionsheet.Content>
-            <Actionsheet.Item>Choose from Gallery</Actionsheet.Item>
+            <Actionsheet.Item onPressIn={() => pickVideo()}>
+              Choose from Gallery
+            </Actionsheet.Item>
             <Actionsheet.Item
               onPressIn={() => {
                 setShowInfoTxt(true);

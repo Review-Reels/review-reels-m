@@ -5,7 +5,8 @@ import { API_URL } from "@env";
 // import Snackbar from 'react-native-snackbar';
 
 const apiClient = axios.create({
-  baseURL: API_URL,
+  // baseURL: API_URL,
+  baseURL: "http://13.127.45.28:3000/api/",
   headers: { "Content-Type": "application/json" },
 });
 

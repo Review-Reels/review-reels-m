@@ -11,14 +11,15 @@ import {
 import { createStackNavigator } from "@react-navigation/stack";
 import * as React from "react";
 import { ColorSchemeName } from "react-native";
-import LoginScreen from "screens/LoginScreen";
-import NotFoundScreen from "screens/NotFoundScreen";
-import ReviewDetailsScreen from "screens/ReviewDetailScreen";
-import ReviewRequestScreen from "screens/ReviewRequestScreen";
-import ShareRequestScreen from "screens/ShareRequestScreen";
-import HomeScreen from "screens/HomeScreen";
+import LoginScreen from "screens/merchant/LoginScreen";
+import NotFoundScreen from "screens/merchant/NotFoundScreen";
+import ReviewDetailsScreen from "screens/merchant/ReviewDetailScreen";
+import ReviewRequestScreen from "screens/merchant/ReviewRequestScreen";
+import ShareRequestScreen from "screens/merchant/ShareRequestScreen";
+import HomeScreen from "screens/merchant/HomeScreen";
 import { RootStackParamList } from "types";
 import LinkingConfiguration from "./LinkingConfiguration";
+import ViewRequestScreen from "screens/customer/ViewRequestScreen";
 
 export default function Navigation() {
   return (
@@ -35,8 +36,8 @@ const Stack = createStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {/* <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="Home" component={HomeScreen} /> */}
+      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="ReviewRequest" component={ReviewRequestScreen} />
       <Stack.Screen name="ReviewDetails" component={ReviewDetailsScreen} />
       <Stack.Screen name="ShareRequest" component={ShareRequestScreen} />
@@ -45,6 +46,7 @@ function RootNavigator() {
         component={NotFoundScreen}
         options={{ title: "Oops!" }}
       />
+      <Stack.Screen name="ViewRequest" component={ViewRequestScreen} />
     </Stack.Navigator>
   );
 }

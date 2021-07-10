@@ -13,6 +13,7 @@ export type RootStackParamList = {
   ReviewDetails: { id: number };
   Home: undefined;
   ShareRequest: undefined;
+  ViewRequest: { merchant: string };
 };
 
 export type TextInputProps = {

@@ -16,6 +16,7 @@ export default {
       Home: "home",
       ReviewDetails: "review",
       NotFound: "*",
+      ViewRequest: "request",
     },
   },
 };

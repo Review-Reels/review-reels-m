@@ -45,7 +45,7 @@ export default function LoginScreen({
 
   const signInAsync = async () => {
     if (Platform.OS == "web") {
-      navigation.navigate("Home");
+      proceedSignin();
     } else
       try {
         const config: Google.GoogleLogInConfig = {
@@ -74,19 +74,14 @@ export default function LoginScreen({
   };
 
   const proceedSignin = () => {
-    setPayload({
-      username: "",
-      email: "benkolenchery@gmai.com",
-      name: "Ben Babu",
-      givenName: "Ben",
-      familyName: "Babu",
-      photoUrl: "",
-      accessToken: "accessToken",
-      refreshToken: "refreshToken",
-    });
+    let data = {
+      email: "hari@gmail.com",
+      name: "Hariprasad K B",
+      password: "thisis@complecated",
+      username: "newuser",
+    };
     navigation.navigate("Home");
-    // userClient.signUp(payLoad).then((response) => {
-    //   console.log(response);
+    // userClient.signUp(data).then((response) => {
     //   navigation.navigate("Home");
     // });
   };
