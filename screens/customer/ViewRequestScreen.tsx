@@ -1,6 +1,7 @@
 import { RRAppWrapper, RRCamera, RRTextInput } from "components";
 import * as React from "react";
 import {
+  Button,
   Keyboard,
   Modal,
   Platform,
@@ -24,6 +25,7 @@ import { Actionsheet, useDisclose } from "native-base";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "types";
 import * as ImagePicker from "expo-image-picker";
+import { Video, AVPlaybackStatus } from "expo-av";
 
 export default function ViewRequestScreen({
   navigation,
@@ -35,6 +37,8 @@ export default function ViewRequestScreen({
   const [isOpenCamera, setCameraStatus] = useState(false);
   const [isShowInfoTxt, setShowInfoTxt] = useState(false);
   const [isOpen, setOpenStatus] = useState(false);
+  const video = React.useRef(null);
+  const [status, setStatus] = React.useState({});
 
   useEffect(() => {
     Keyboard.addListener("keyboardDidShow", hideBtn);
@@ -86,8 +90,33 @@ export default function ViewRequestScreen({
     <RRAppWrapper>
       <View style={{ flex: 1 }}>
         <ScrollView style={styles.container}>
-          <View style={styles.headerCntnr}>
-            <Text style={styles.title}>Create Your Ask Message</Text>
+          <View style={styles.requestCntnr}>
+            <View style={styles.requestVideoCntnr}>
+              <Video
+                ref={video}
+                style={styles.video}
+                source={{
+                  uri: "https://review-reels-videos.s3.ap-south-1.amazonaws.com/7685598d-6e72-4157-9136-84e5bc4f3851/Pexels%20Videos%201777362.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA5XDWG7WLBYX6Y6GZ%2F20210706%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20210706T090451Z&X-Amz-Expires=604800&X-Amz-Signature=9ebf518af46201adf9dad2136a99e0a6c898b4af0cfdae34249bc1fd685adc8a&X-Amz-SignedHeaders=host",
+                }}
+                resizeMode="contain"
+                useNativeControls
+                isLooping
+                onPlaybackStatusUpdate={(status) => setStatus(() => status)}
+              />
+              {/* <View style={styles.buttons}>
+                <Button
+                  title={status.isPlaying ? "Pause" : "Play"}
+                  onPress={() =>
+                    status.isPlaying
+                      ? video.current.pauseAsync()
+                      : video.current.playAsync()
+                  }
+                />
+              </View> */}
+            </View>
+            <View style={styles.requestMsgCntnr}>
+              <Text>Hi</Text>
+            </View>
           </View>
         </ScrollView>
 
@@ -196,6 +225,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 24,
     marginTop: 40,
+    backgroundColor: colors.Athens_Gray,
   },
   headerCntnr: {
     flexDirection: "row",
@@ -285,5 +315,18 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 16,
     fontFamily: "karla",
+  },
+  requestCntnr: {
+    padding: 24,
+    backgroundColor: colors.White,
+    borderRadius: 16,
+  },
+  requestVideoCntnr: {
+    flex: 1,
+  },
+  video: {
+    borderRadius: 16,
+    height: 400,
+    width: 300,
   },
 });
