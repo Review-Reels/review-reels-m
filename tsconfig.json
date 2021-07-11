@@ -10,7 +10,8 @@
       "_screens": ["./screens"],
       "_colors": ["./constants/colors"],
       "_assets": ["./assets"],
-      "_utils": ["./utils"]
+      "_utils": ["./utils"],
+      "_shared": ["./screens/shared"]
     }
   }
 }

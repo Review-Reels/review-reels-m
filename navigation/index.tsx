@@ -20,6 +20,7 @@ import HomeScreen from "screens/merchant/HomeScreen";
 import { RootStackParamList } from "types";
 import LinkingConfiguration from "./LinkingConfiguration";
 import ViewRequestScreen from "screens/customer/ViewRequestScreen";
+import SubmitSuccessScreen from "screens/customer/SubmitSuccessScreen";
 
 export default function Navigation() {
   return (
@@ -47,6 +48,7 @@ function RootNavigator() {
         options={{ title: "Oops!" }}
       />
       <Stack.Screen name="ViewRequest" component={ViewRequestScreen} />
+      <Stack.Screen name="SubmitSuccess" component={SubmitSuccessScreen} />
     </Stack.Navigator>
   );
 }

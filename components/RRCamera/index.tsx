@@ -10,6 +10,7 @@ import {
   Alert,
   TouchableHighlight,
   TouchableOpacity,
+  Platform,
 } from "react-native";
 import { CameraProps } from "types";
 import Record from "./record";
@@ -22,9 +23,13 @@ export default function RRCamera({ isOpen, onCapture, onClose }: CameraProps) {
 
   useEffect(() => {
     (async () => {
-      const { status } = await Camera.requestPermissionsAsync();
-      await Audio.requestPermissionsAsync();
-      setPermission(status === "granted");
+      if (Platform.OS !== "web") {
+        const { status } = await Camera.requestPermissionsAsync();
+        await Audio.requestPermissionsAsync();
+        setPermission(status === "granted");
+      } else {
+        setPermission(true);
+      }
     })();
   }, []);
 
@@ -44,7 +49,7 @@ export default function RRCamera({ isOpen, onCapture, onClose }: CameraProps) {
         onClose();
       }}
     >
-      {/* <Camera style={styles.camera} type={type}>
+      <Camera style={styles.camera} type={type}>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
@@ -59,7 +64,7 @@ export default function RRCamera({ isOpen, onCapture, onClose }: CameraProps) {
             <Text style={styles.text}> Flip </Text>
           </TouchableOpacity>
         </View>
-      </Camera> */}
+      </Camera>
       <Record />
     </Modal>
   );

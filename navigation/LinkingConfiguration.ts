@@ -17,6 +17,7 @@ export default {
       ReviewDetails: "review",
       NotFound: "*",
       ViewRequest: "request",
+      SubmitSuccess: "success",
     },
   },
 };
