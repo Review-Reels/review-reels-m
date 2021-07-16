@@ -19,7 +19,7 @@ import { Audio } from "expo-av";
 export default function RRCamera({ isOpen, onCapture, onClose }: CameraProps) {
   const [hasPermission, setPermission] = useState(false);
   const [hasAudioPermission, setAudioPermission] = useState(false);
-  const [type, setType] = useState(Camera.Constants.Type.back);
+  const [type, setType] = useState(Camera.Constants.Type.front);
 
   useEffect(() => {
     (async () => {
@@ -41,52 +41,20 @@ export default function RRCamera({ isOpen, onCapture, onClose }: CameraProps) {
   }
 
   return (
-    <Modal
-      animationType="slide"
-      transparent={false}
-      visible={isOpen}
-      onRequestClose={() => {
-        onClose();
-      }}
-    >
-      <Camera style={styles.camera} type={type}>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              setType(
-                type === Camera.Constants.Type.back
-                  ? Camera.Constants.Type.front
-                  : Camera.Constants.Type.back
-              );
-            }}
-          >
-            <Text style={styles.text}> Flip </Text>
-          </TouchableOpacity>
-        </View>
-      </Camera>
+    <View style={styles.container}>
       <Record />
-    </Modal>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  camera: {
-    flex: 1,
-  },
-  buttonContainer: {
-    flex: 1,
-    backgroundColor: "transparent",
-    flexDirection: "row",
-    margin: 20,
-  },
-  button: {
-    flex: 0.1,
-    alignSelf: "flex-end",
-    alignItems: "center",
+    position: "absolute",
+    height: "100%",
+    left: 0,
+    right: 0,
+    backgroundColor: colors.Black,
   },
   text: {
     fontSize: 18,

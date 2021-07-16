@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react";
 import { View, StyleSheet, Image, Dimensions } from "react-native";
 import { Video, AVPlaybackStatus } from "expo-av";
+import RRButton from "components/RRButton";
 
 export default class Preview extends PureComponent {
   render() {
@@ -11,6 +12,8 @@ export default class Preview extends PureComponent {
       onLoadStart,
       handleVideoRef,
       onPlaybackStatusUpdate,
+      onPressTakeAgain,
+      onPressProceed,
     } = this.props;
     if (video && video.uri) {
       const { height, width } = Dimensions.get("window");
@@ -28,6 +31,12 @@ export default class Preview extends PureComponent {
             shouldPlay
             onPlaybackStatusUpdate={onPlaybackStatusUpdate}
           />
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            <RRButton onPress={onPressTakeAgain} title="Take Again"></RRButton>
+            <RRButton onPress={onPressProceed} title="Proceed"></RRButton>
+          </View>
         </View>
       );
     }
@@ -40,8 +49,8 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     left: 0,
-    width: "100%",
-    height: "100%",
+    width: 300,
+    height: 400,
   },
   image: {
     flex: 1,

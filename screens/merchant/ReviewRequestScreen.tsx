@@ -24,6 +24,7 @@ import { Actionsheet, useDisclose } from "native-base";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "types";
 import * as ImagePicker from "expo-image-picker";
+import MerchantVideoInfo from "screens/shared/merchant-video-info";
 
 export default function ReviewRequestScreen({
   navigation,
@@ -32,7 +33,7 @@ export default function ReviewRequestScreen({
     "Hope you enjoyed using our product. It will be great if you can tell us how much you like our product with a short video."
   );
   const [isShowBtn, setBtnStatus] = useState(true);
-  const [isOpenCamera, setCameraStatus] = useState(false);
+  const [isOpenCamera, setCameraStatus] = useState(true);
   const [isShowInfoTxt, setShowInfoTxt] = useState(false);
   const [isOpen, setOpenStatus] = useState(false);
 
@@ -105,7 +106,7 @@ export default function ReviewRequestScreen({
           <View style={styles.mainContainer}>
             <Pressable
               style={styles.addVideoCntnr}
-              onPress={() => setOpenStatus(true)}
+              onPress={() => setShowInfoTxt(true)}
             >
               {Platform.OS == "web" ? (
                 <img style={{ width: 32, height: 32 }} src={AddPhoto}></img>
@@ -144,7 +145,7 @@ export default function ReviewRequestScreen({
             </Actionsheet.Item>
             <Actionsheet.Item
               onPressIn={() => {
-                setShowInfoTxt(true);
+                setCameraStatus(true);
                 setOpenStatus(false);
               }}
             >
@@ -160,78 +161,13 @@ export default function ReviewRequestScreen({
           ></RRCamera>
         )}
         {isShowInfoTxt && (
-          <View style={styles.videoInfoCntnr}>
-            <View style={styles.videoInfoTxtCntnr}>
-              <Pressable
-                style={{ alignSelf: "flex-end" }}
-                onPress={() => {
-                  setShowInfoTxt(false);
-                }}
-              >
-                {Platform.OS == "web" ? (
-                  <img style={{ width: 48, height: 48 }} src={Close}></img>
-                ) : (
-                  <Close width={32} height={32}></Close>
-                )}
-              </Pressable>
-              <View style={styles.videoInfoRow}>
-                {Platform.OS == "web" ? (
-                  <img style={{ width: 48, height: 48 }} src={VideoTimer}></img>
-                ) : (
-                  <VideoTimer width={48} height={48}></VideoTimer>
-                )}
-                <Text style={styles.videoInfoText}>
-                  You can reply with a short video of duration less than 30
-                  seconds
-                </Text>
-              </View>
-              <View style={styles.videoInfoRow}>
-                <View>
-                  {Platform.OS == "web" ? (
-                    <img
-                      style={{ width: 48, height: 48 }}
-                      src={VideoInfo1}
-                    ></img>
-                  ) : (
-                    <VideoInfo1 width={48} height={48}></VideoInfo1>
-                  )}
-                </View>
-                <View>
-                  <Text style={styles.videoInfoText}>
-                    Please try to keep it on point, so that your customers get
-                    it easily.
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.videoInfoRow}>
-                <View>
-                  {Platform.OS == "web" ? (
-                    <img
-                      style={{ width: 48, height: 48 }}
-                      src={VideoInfo2}
-                    ></img>
-                  ) : (
-                    <VideoInfo2 width={48} height={48}></VideoInfo2>
-                  )}
-                </View>
-                <View>
-                  <Text style={styles.videoInfoText}>
-                    You can upload a video from phone or you can make one in
-                    next step
-                  </Text>
-                </View>
-              </View>
-              <Pressable
-                style={styles.videoInfoAction}
-                onPress={() => {
-                  setCameraStatus(true);
-                  setShowInfoTxt(false);
-                }}
-              >
-                <Text style={styles.videoInfoActionTxt}>Okay, Got it!</Text>
-              </Pressable>
-            </View>
-          </View>
+          <MerchantVideoInfo
+            onPressOk={() => {
+              setShowInfoTxt(false);
+              setOpenStatus(true);
+            }}
+            onPressClose={() => setShowInfoTxt(false)}
+          />
         )}
       </View>
     </RRAppWrapper>

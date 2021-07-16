@@ -10,7 +10,7 @@ import { Camera } from "expo-camera";
 import ProgressBar from "./progressBar";
 import { countdown } from "../../utils/countdown";
 
-const VIDEO_DURATION = 7000;
+const VIDEO_DURATION = 30000;
 
 //  my components
 import Cam from "./cam";
@@ -28,30 +28,6 @@ export default class Record extends React.Component {
       progressText: VIDEO_DURATION / 1000,
     };
 
-    this.progressAnimation = new Animated.Value(0);
-    this.progressTranslateX = this.progressAnimation.interpolate({
-      inputRange: [0, 1],
-      outputRange: ["-200%", "0%"],
-    });
-    this.progressFlex = this.progressAnimation.interpolate({
-      inputRange: [0, 1],
-      outputRange: [0, 1],
-    });
-    this.progressBackgroundColor = this.progressAnimation.interpolate({
-      inputRange: [0, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
-      outputRange: [
-        "#ff470f",
-        "#ff3860",
-        "#b86bff",
-        "#2196f3",
-        "#b86bff",
-        "#ff7600",
-        "#3273dc",
-        "red",
-        "#FF5F14",
-      ],
-    });
-
     this.isRecording = false;
     this.recordingWasManuallyCancelled = false;
 
@@ -63,8 +39,6 @@ export default class Record extends React.Component {
     this.onPlaybackStatusUpdate = this.onPlaybackStatusUpdate.bind(this);
     this.cancelMedia = this.cancelMedia.bind(this);
 
-    this.animateProgressBar = this.animateProgressBar.bind(this);
-    this.animationStyle = this.animationStyle.bind(this);
     this.updateProgressText = this.updateProgressText.bind(this);
     this.startCountdown = this.startCountdown.bind(this);
   }
@@ -93,17 +67,20 @@ export default class Record extends React.Component {
   }
   // used to cancel video that was recorded already, or to start/pause a current recording
   onPress() {
-    this.onRecordVideo();
+    if (!this.isRecording) this.onRecordVideo();
+    else this.onStopRecording();
   }
+
+  onStopRecording = () => {
+    this.camera.stopRecording();
+    this.setState({ isRecording: false, progressText: VIDEO_DURATION / 1000 });
+  };
+
   async onRecordVideo() {
     if (this.camera) {
-      // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       this.setState({ isRecording: true }, async () => {
         this.isRecording = true; // variable used for other functions that need to know if it's recording without waiting for state
-        // this.recordTime = ;
-        console.log("RECORDING STARTED");
-
-        this.animateProgressBar();
         this.startCountdown();
         // NOTE
         // There appears to be some relationship between maxDuration in recordAsync and this bug.
@@ -111,20 +88,20 @@ export default class Record extends React.Component {
           maxDuration: VIDEO_DURATION / 1000,
         });
         this.isRecording = false;
-
-        console.log(video);
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         this.setState({ videoIsLoading: false, isRecording: false, video });
-        // this.setState({ isRecording: false, video });
       });
     }
   }
+
   cancelMedia() {
     this.setState({ video: null });
   }
+
   handleCameraRef(ref) {
     this.camera = ref;
   }
+
   handleVideoPlayerRef(ref) {
     this.video = ref;
     if (this.video) {
@@ -132,38 +109,24 @@ export default class Record extends React.Component {
       // this.video.setIsLoopingAsync(true);
     }
   }
+
   handleRecordButtonRef(ref) {
     this.recordButton = ref;
   }
+
   updateProgressText(progressText) {
     this.setState({ progressText });
   }
+
   startCountdown() {
     const endDate = Date.now() + VIDEO_DURATION;
     this.setState({ progressText: VIDEO_DURATION / 1000 }, () =>
       countdown(endDate, this.updateProgressText)
     );
   }
-  animateProgressBar() {
-    this.progressAnimation.setValue(0);
-    Animated.timing(this.progressAnimation, {
-      toValue: 1,
-      useNativeDriver: false,
-      easing: Easing.linear,
-      duration: VIDEO_DURATION,
-    }).start();
-  }
-  animationStyle() {
-    const { progressFlex: flex, progressBackgroundColor: backgroundColor } =
-      this;
-    return {
-      flex,
-      // transform: [
-      //   { translateX }
-      // ],
-      backgroundColor,
-    };
-  }
+
+  onPressTakeAgain() {}
+
   render() {
     const { video, isRecording, videoIsLoading, progressText } = this.state;
     return (
@@ -171,26 +134,33 @@ export default class Record extends React.Component {
         <Cam
           handleCameraRef={this.handleCameraRef}
           cameraFlipDirection={Camera.Constants.Type.front}
+          onPressRecord={this.onPress}
+          progressText={progressText}
+          isRecording={isRecording}
+          onPressStop={this.onStopRecording}
         />
-        <ProgressBar
+        {/* <CameraOverlay
+          onPress={this.onPress}
+          onPressOut={this.onPressOut}
+          onLongPress={this.onLongPress}
+          video={video}
+          isRecording={isRecording}
+        /> */}
+        {/* <ProgressBar
           video={video}
           isRecording={isRecording}
           animationStyle={this.animationStyle()}
           progressText={progressText}
           cancelMedia={this.cancelMedia}
           videoIsLoading={videoIsLoading}
-        />
-        <CameraOverlay
-          onPress={this.onPress}
-          onPressOut={this.onPressOut}
-          onLongPress={this.onLongPress}
-          video={video}
-          isRecording={isRecording}
-        />
+        /> */}
+
         <Preview
           video={video}
           handleVideoRef={this.handleVideoPlayerRef}
           onPlaybackStatusUpdate={this.onPlaybackStatusUpdate}
+          onPressTakeAgain={this.onPressTakeAgain}
+          onPressProceed={this.onPressProceed}
         />
       </View>
     );
@@ -210,5 +180,7 @@ const whatTimeIsIt = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
