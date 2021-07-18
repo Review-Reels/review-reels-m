@@ -1,4 +1,4 @@
-import { SignupPayload } from "types";
+import { SignupPayload, googleSignUpPayload, updateUserPayload } from "types";
 import axios from "./index";
 
 export default {
@@ -10,5 +10,11 @@ export default {
   },
   changePassword(payload: { email: string }) {
     return axios.post("faculty/user/change-password", payload);
+  },
+  googleSignIn(payload: googleSignUpPayload | undefined) {
+    return axios.post("auth/google_sign_in", payload);
+  },
+  updateUser(payload: updateUserPayload | undefined) {
+    return axios.post("user/update_user", payload);
   },
 };
