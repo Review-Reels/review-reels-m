@@ -22,6 +22,12 @@ import LinkingConfiguration from "./LinkingConfiguration";
 import ViewRequestScreen from "screens/customer/ViewRequestScreen";
 import SubmitSuccessScreen from "screens/customer/SubmitSuccessScreen";
 
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import jwt_decode, { JwtPayload } from "jwt-decode";
+import { useState ,useContext} from "react";
+import {authContext} from "../context/AuthContext"
+import {set, SET_TOKEN, SET_USER} from "context/authActions"
+
 export default function Navigation() {
   return (
     <NavigationContainer linking={LinkingConfiguration}>
@@ -34,21 +40,47 @@ export default function Navigation() {
 // Read more here: https://reactnavigation.org/docs/modal
 const Stack = createStackNavigator<RootStackParamList>();
 
+
 function RootNavigator() {
+
+  const {authState,authDispatch} = useContext(authContext)
+
+  React.useEffect(()=>{
+   checkLogin()
+  },[])
+
+  const checkLogin = async () =>{
+    const authToken =  await AsyncStorage.getItem("@token");
+
+    if(authToken){
+    const decodedToken = jwt_decode<JwtPayload>(authToken) 
+    let currentDate = new Date();
+    if (decodedToken.exp * 1000 < currentDate.getTime()) {
+      await AsyncStorage.removeItem("@token")
+      } else{
+        authDispatch(set(SET_TOKEN,authToken))
+      }
+    }
+    const user =  await AsyncStorage.getItem("@user");
+    if(user)
+    authDispatch(set(SET_USER,JSON.parse(user)))
+  }
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="ReviewRequest" component={ReviewRequestScreen} />
-      <Stack.Screen name="ReviewDetails" component={ReviewDetailsScreen} />
-      <Stack.Screen name="ShareRequest" component={ShareRequestScreen} />
-      <Stack.Screen
-        name="NotFound"
-        component={NotFoundScreen}
-        options={{ title: "Oops!" }}
-      />
-      <Stack.Screen name="ViewRequest" component={ViewRequestScreen} />
-      <Stack.Screen name="SubmitSuccess" component={SubmitSuccessScreen} />
+      {!authState.token?  <Stack.Screen name="Login" component={LoginScreen} />:
+       (<><Stack.Screen name="Home" component={HomeScreen} />
+       <Stack.Screen name="ReviewRequest" component={ReviewRequestScreen} />
+       <Stack.Screen name="ReviewDetails" component={ReviewDetailsScreen} />
+       <Stack.Screen name="ShareRequest" component={ShareRequestScreen} />
+       <Stack.Screen
+         name="NotFound"
+         component={NotFoundScreen}
+         options={{ title: "Oops!" }}
+       />
+       <Stack.Screen name="ViewRequest" component={ViewRequestScreen} />
+       <Stack.Screen name="SubmitSuccess" component={SubmitSuccessScreen} /></>)
+       }
+     
     </Stack.Navigator>
   );
 }

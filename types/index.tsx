@@ -53,4 +53,13 @@ export type SignupPayload = {
   photoUrl?: string;
   accessToken?: string;
   refreshToken?: string;
+  idToken?:string
 };
+
+export type googleSignUpPayload = {
+  idToken:string;
+};
+
+export type updateUserPayload={
+  username?:string;
+}

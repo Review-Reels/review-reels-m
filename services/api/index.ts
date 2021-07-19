@@ -1,21 +1,25 @@
 import axios from "axios";
 import { API_URL } from "@env";
 // import {getAuthToken} from '_utils';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 // import Snackbar from 'react-native-snackbar';
 
 const apiClient = axios.create({
   // baseURL: API_URL,
-  baseURL: "http://13.127.45.28:3000/api/",
+  baseURL: "http://127.0.0.1:3000/api/",
   headers: { "Content-Type": "application/json" },
 });
 
 apiClient.interceptors.request.use(
   async function (config) {
     // Do something before request is sent
-    const authToken = "";
-    // const authToken = await AsyncStorage.getItem('@auth_token');
-    config.headers.Authorization = "Bearer " + authToken;
+    // const authToken = "";
+    try {
+      const authToken = await AsyncStorage.getItem("@token");
+      if (authToken) config.headers.Authorization = "Bearer " + authToken;
+    } catch (e) {
+      console.log(e);
+    }
     return config;
   },
   function (error) {
