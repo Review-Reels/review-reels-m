@@ -26,6 +26,7 @@ export default class Record extends React.Component {
       video: null,
       videoIsLoading: false,
       progressText: VIDEO_DURATION / 1000,
+      showPreview: false,
     };
 
     this.isRecording = false;
@@ -89,7 +90,12 @@ export default class Record extends React.Component {
         });
         this.isRecording = false;
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-        this.setState({ videoIsLoading: false, isRecording: false, video });
+        this.setState({
+          videoIsLoading: false,
+          isRecording: false,
+          video,
+          showPreview: true,
+        });
       });
     }
   }
@@ -125,43 +131,32 @@ export default class Record extends React.Component {
     );
   }
 
-  onPressTakeAgain() {}
+  onPressTakeAgain = () => {
+    this.setState({ video: null, videoIsLoading: false });
+  };
 
   render() {
     const { video, isRecording, videoIsLoading, progressText } = this.state;
     return (
       <View style={styles.container}>
-        <Cam
-          handleCameraRef={this.handleCameraRef}
-          cameraFlipDirection={Camera.Constants.Type.front}
-          onPressRecord={this.onPress}
-          progressText={progressText}
-          isRecording={isRecording}
-          onPressStop={this.onStopRecording}
-        />
-        {/* <CameraOverlay
-          onPress={this.onPress}
-          onPressOut={this.onPressOut}
-          onLongPress={this.onLongPress}
-          video={video}
-          isRecording={isRecording}
-        /> */}
-        {/* <ProgressBar
-          video={video}
-          isRecording={isRecording}
-          animationStyle={this.animationStyle()}
-          progressText={progressText}
-          cancelMedia={this.cancelMedia}
-          videoIsLoading={videoIsLoading}
-        /> */}
-
-        <Preview
-          video={video}
-          handleVideoRef={this.handleVideoPlayerRef}
-          onPlaybackStatusUpdate={this.onPlaybackStatusUpdate}
-          onPressTakeAgain={this.onPressTakeAgain}
-          onPressProceed={this.onPressProceed}
-        />
+        {showPreview ? (
+          <Preview
+            video={video}
+            handleVideoRef={this.handleVideoPlayerRef}
+            onPlaybackStatusUpdate={this.onPlaybackStatusUpdate}
+            onPressTakeAgain={() => this.onPressTakeAgain()}
+            onPressProceed={this.onPressProceed}
+          />
+        ) : (
+          <Cam
+            handleCameraRef={this.handleCameraRef}
+            cameraFlipDirection={Camera.Constants.Type.front}
+            onPressRecord={this.onPress}
+            progressText={progressText}
+            isRecording={isRecording}
+            onPressStop={this.onStopRecording}
+          />
+        )}
       </View>
     );
   }
