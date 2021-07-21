@@ -27,6 +27,8 @@ import * as ImagePicker from "expo-image-picker";
 import MerchantVideoInfo from "screens/shared/merchant-video-info";
 import { Video } from "expo-av";
 
+import { reviewRequest } from "services/api/review-request";
+
 export default function ReviewRequestScreen({
   navigation,
 }: StackScreenProps<RootStackParamList, "NotFound">) {
@@ -67,7 +69,8 @@ export default function ReviewRequestScreen({
   };
 
   const onPressProceed = () => {
-    navigation.navigate("ShareRequest");
+    createReviewRequest(video);
+    // navigation.navigate("ShareRequest");
   };
 
   const pickVideo = async () => {
@@ -77,12 +80,27 @@ export default function ReviewRequestScreen({
       quality: 1,
     });
 
-    console.log(result);
-
     if (!result.cancelled) {
-      console.log(result);
-      // setImage(result.uri);
+      createReviewRequest(result);
     }
+  };
+
+  const createReviewRequest = (videoPayload) => {
+    let formData = new FormData();
+    const name = new Date().toISOString() + ".mp4";
+    formData.append("fileName", {
+      name: name,
+      uri: videoPayload.uri,
+      type: "video",
+    });
+    formData.append("askMessage", requestMessage);
+    reviewRequest(formData)
+      .then((res) => {
+        console.log("res", res.data);
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
   };
 
   return (
