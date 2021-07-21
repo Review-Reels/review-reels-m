@@ -7,6 +7,7 @@ import StopButton from "assets/svg/StopButton.svg";
 import FlipCamera from "assets/svg/FlipCamera.svg";
 import More from "assets/svg/More.svg";
 import colors from "constants/colors";
+import CameraClose from "assets/svg/CameraClose.svg";
 
 export default class Cam extends PureComponent {
   render() {
@@ -17,12 +18,28 @@ export default class Cam extends PureComponent {
       progressText,
       isRecording,
       onPressStop,
+      onPressClose,
     } = this.props;
     return (
       <View style={[styles.cameraContainer, { width: scaleSize(375) }]}>
         {isRecording && (
           <Text style={styles.videoTimer}>00:{progressText}</Text>
         )}
+        <Pressable
+          onPress={onPressClose}
+          style={{
+            position: "absolute",
+            top: 24,
+            right: 24,
+            zIndex: 999,
+          }}
+        >
+          {Platform.OS == "web" ? (
+            <img style={{ width: 48, height: 48 }} src={CameraClose}></img>
+          ) : (
+            <CameraClose width={48} height={48}></CameraClose>
+          )}
+        </Pressable>
         <Camera
           style={styles.camera}
           type={cameraFlipDirection}

@@ -18,18 +18,18 @@ import CameraOverlay from "./overlay";
 import Preview from "./preview";
 
 export default class Record extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       isRecording: false,
       video: null,
       videoIsLoading: false,
       progressText: VIDEO_DURATION / 1000,
+      showPreview: false,
     };
 
     this.isRecording = false;
-    this.recordingWasManuallyCancelled = false;
 
     this.handleCameraRef = this.handleCameraRef.bind(this);
     this.handleRecordButtonRef = this.handleRecordButtonRef.bind(this);
@@ -43,25 +43,11 @@ export default class Record extends React.Component {
     this.startCountdown = this.startCountdown.bind(this);
   }
   async onPlaybackStatusUpdate(status) {
-    // THIS FUNCTION DOESN'T ACTUALLY DO ANYTHING RIGHT NOW.
-    // I tried messing around with it to manually loop the video and see if that would fix it, but no luck...
-
-    // console.log('\n\n\n', status, '\n\n\n');
     if (status.didJustFinish && !status.isLooping && !status.isPlaying) {
       if (this.video) {
-        console.log("video should loop now...");
         if (!this.recordingWasManuallyCancelled) {
-          // For some reason, if you manually trigger this.video.stopRecording(),
-          // then looping faces a bug after the first playback, where it just freezes indefinitely.
-          // However, if the video gets canceled on its own with the time running out from
-          // maxDuration: 4, then there's no issue  with looping after the first playback.
-          // Thus, we check if the user cancelled the recording or if it happened on its own.
-          // this.video.setIsLoopingAsync(true);
         }
-        // await this.video.setIsLoopingAsync(true);
-        // console.log('set to loop...');
         await this.video.replayAsync();
-        console.log("was replayed...");
       }
     }
   }
@@ -89,7 +75,12 @@ export default class Record extends React.Component {
         });
         this.isRecording = false;
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-        this.setState({ videoIsLoading: false, isRecording: false, video });
+        this.setState({
+          videoIsLoading: false,
+          isRecording: false,
+          video,
+          showPreview: true,
+        });
       });
     }
   }
@@ -125,43 +116,43 @@ export default class Record extends React.Component {
     );
   }
 
-  onPressTakeAgain() {}
+  onPressTakeAgain = () => {
+    this.setState({ video: null, videoIsLoading: false, showPreview: false });
+  };
+
+  onPressClose = () => {
+    this.props.onClose();
+  };
+
+  onPressProceed = () => {
+    this.props.onCapture(this.state.video);
+  };
 
   render() {
-    const { video, isRecording, videoIsLoading, progressText } = this.state;
+    const { video, isRecording, videoIsLoading, progressText, showPreview } =
+      this.state;
     return (
       <View style={styles.container}>
-        <Cam
-          handleCameraRef={this.handleCameraRef}
-          cameraFlipDirection={Camera.Constants.Type.front}
-          onPressRecord={this.onPress}
-          progressText={progressText}
-          isRecording={isRecording}
-          onPressStop={this.onStopRecording}
-        />
-        {/* <CameraOverlay
-          onPress={this.onPress}
-          onPressOut={this.onPressOut}
-          onLongPress={this.onLongPress}
-          video={video}
-          isRecording={isRecording}
-        /> */}
-        {/* <ProgressBar
-          video={video}
-          isRecording={isRecording}
-          animationStyle={this.animationStyle()}
-          progressText={progressText}
-          cancelMedia={this.cancelMedia}
-          videoIsLoading={videoIsLoading}
-        /> */}
-
-        <Preview
-          video={video}
-          handleVideoRef={this.handleVideoPlayerRef}
-          onPlaybackStatusUpdate={this.onPlaybackStatusUpdate}
-          onPressTakeAgain={this.onPressTakeAgain}
-          onPressProceed={this.onPressProceed}
-        />
+        {showPreview ? (
+          <Preview
+            video={video}
+            handleVideoRef={this.handleVideoPlayerRef}
+            onPlaybackStatusUpdate={this.onPlaybackStatusUpdate}
+            onPressTakeAgain={() => this.onPressTakeAgain()}
+            onPressProceed={this.onPressProceed}
+            onPressClose={this.onPressClose}
+          />
+        ) : (
+          <Cam
+            handleCameraRef={this.handleCameraRef}
+            cameraFlipDirection={Camera.Constants.Type.front}
+            onPressRecord={this.onPress}
+            progressText={progressText}
+            isRecording={isRecording}
+            onPressStop={this.onStopRecording}
+            onPressClose={this.onPressClose}
+          />
+        )}
       </View>
     );
   }

@@ -35,6 +35,7 @@ export type ButtonProps = {
   onPress: Function;
   style?: StyleProp<any>;
   isDisabled?: boolean;
+  mode?: string;
 };
 
 export type CameraProps = {
@@ -53,13 +54,13 @@ export type SignupPayload = {
   photoUrl?: string;
   accessToken?: string;
   refreshToken?: string;
-  idToken?:string
+  idToken?: string;
 };
 
 export type googleSignUpPayload = {
-  idToken:string;
+  idToken: string;
 };
 
-export type updateUserPayload={
-  username?:string;
-}
+export type updateUserPayload = {
+  username?: string;
+};

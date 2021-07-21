@@ -8,6 +8,7 @@ export default function RRButton({
   onPress,
   style,
   isDisabled,
+  mode,
 }: ButtonProps) {
   const onPressOk = () => {
     if (!isDisabled) {
@@ -16,7 +17,17 @@ export default function RRButton({
   };
 
   return (
-    <Pressable style={[styles.container,style]} onPress={onPressOk}>
+    <Pressable
+      style={[
+        styles.container,
+        style,
+        mode == "secondary" && {
+          opacity: 90,
+          backgroundColor: "rgba(255, 255, 255, 0.2)",
+        },
+      ]}
+      onPress={onPressOk}
+    >
       <Text style={[styles.buttonTitle]}>{title}</Text>
     </Pressable>
   );
