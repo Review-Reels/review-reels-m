@@ -68,7 +68,7 @@ function RootNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {!authState.token?  <Stack.Screen name="Login" component={LoginScreen} />:
-       (<><Stack.Screen name="Home" component={HomeScreen} />
+       (<Stack.Screen name="Home" component={HomeScreen} />)}
        <Stack.Screen name="ReviewRequest" component={ReviewRequestScreen} />
        <Stack.Screen name="ReviewDetails" component={ReviewDetailsScreen} />
        <Stack.Screen name="ShareRequest" component={ShareRequestScreen} />
@@ -78,9 +78,7 @@ function RootNavigator() {
          options={{ title: "Oops!" }}
        />
        <Stack.Screen name="ViewRequest" component={ViewRequestScreen} />
-       <Stack.Screen name="SubmitSuccess" component={SubmitSuccessScreen} /></>)
-       }
-     
+       <Stack.Screen name="SubmitSuccess" component={SubmitSuccessScreen} />
     </Stack.Navigator>
   );
 }
