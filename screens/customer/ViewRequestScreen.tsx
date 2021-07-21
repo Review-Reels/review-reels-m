@@ -109,7 +109,7 @@ export default function ViewRequestScreen({
                 ref={video}
                 style={styles.video}
                 source={{
-                  uri: S3_URL + reviewRequest.videoUrl,
+                  uri: S3_URL + reviewRequest?.videoUrl,
                 }}
                 resizeMode="contain"
                 useNativeControls
@@ -129,7 +129,7 @@ export default function ViewRequestScreen({
             </View>
             <View style={styles.requestMsgCntnr}>
               <Text style={styles.requestMsgTxt}>
-                {reviewRequest.askMessage}
+                {reviewRequest?.askMessage}
               </Text>
             </View>
             <RRButton
