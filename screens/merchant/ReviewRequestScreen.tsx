@@ -70,7 +70,7 @@ export default function ReviewRequestScreen({
 
   const onPressProceed = () => {
     createReviewRequest(video);
-    // navigation.navigate("ShareRequest");
+    navigation.navigate("ShareRequest");
   };
 
   const pickVideo = async () => {
@@ -81,7 +81,7 @@ export default function ReviewRequestScreen({
     });
 
     if (!result.cancelled) {
-      createReviewRequest(result);
+      setVideo(result);
     }
   };
 

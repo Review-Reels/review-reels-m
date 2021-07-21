@@ -26,7 +26,7 @@ import CustomerVideoInfo from "screens/shared/customer-video-info";
 import CaptureActionSheet from "screens/shared/capture-action-sheet";
 import CustomerInfo from "screens/shared/customer-info";
 import { getReviewRequest } from "services/api/review-request";
-const S3_URL = "https://review-reels-videos.s3.ap-south-1.amazonaws.com/";
+import { S3_URL } from "constants/apiUrls";
 export default function ViewRequestScreen({
   navigation,
   route,
