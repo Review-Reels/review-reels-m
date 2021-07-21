@@ -42,7 +42,7 @@ export default function RRCamera({ isOpen, onCapture, onClose }: CameraProps) {
 
   return (
     <View style={styles.container}>
-      <Record />
+      <Record onClose={onClose} onCapture={onCapture} />
     </View>
   );
 }

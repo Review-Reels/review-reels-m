@@ -25,6 +25,7 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "types";
 import * as ImagePicker from "expo-image-picker";
 import MerchantVideoInfo from "screens/shared/merchant-video-info";
+import { Video } from "expo-av";
 
 export default function ReviewRequestScreen({
   navigation,
@@ -33,9 +34,10 @@ export default function ReviewRequestScreen({
     "Hope you enjoyed using our product. It will be great if you can tell us how much you like our product with a short video."
   );
   const [isShowBtn, setBtnStatus] = useState(true);
-  const [isOpenCamera, setCameraStatus] = useState(true);
+  const [isOpenCamera, setCameraStatus] = useState(false);
   const [isShowInfoTxt, setShowInfoTxt] = useState(false);
   const [isOpen, setOpenStatus] = useState(false);
+  const [video, setVideo] = useState(null);
 
   useEffect(() => {
     Keyboard.addListener("keyboardDidShow", hideBtn);
@@ -93,7 +95,7 @@ export default function ReviewRequestScreen({
               {Platform.OS == "web" ? (
                 <img style={{ width: 48, height: 48 }} src={Close}></img>
               ) : (
-                <Close width={32} height={32}></Close>
+                <Close width={48} height={48}></Close>
               )}
             </Pressable>
           </View>
@@ -106,14 +108,34 @@ export default function ReviewRequestScreen({
           <View style={styles.mainContainer}>
             <Pressable
               style={styles.addVideoCntnr}
-              onPress={() => setShowInfoTxt(true)}
+              onPress={() => {
+                setShowInfoTxt(true);
+              }}
             >
-              {Platform.OS == "web" ? (
-                <img style={{ width: 32, height: 32 }} src={AddPhoto}></img>
+              {video ? (
+                <Video
+                  source={{ uri: video.uri }}
+                  style={[
+                    styles.image,
+                    { width: scaleSize(279), aspectRatio: 9 / 16 },
+                  ]}
+                  rate={1.0}
+                  isMuted={false}
+                  resizeMode="cover"
+                  volume={0.5}
+                  isLooping
+                  shouldPlay
+                />
               ) : (
-                <AddPhoto width={32} height={32}></AddPhoto>
+                <View style={{ alignItems: "center" }}>
+                  {Platform.OS == "web" ? (
+                    <img style={{ width: 32, height: 32 }} src={AddPhoto}></img>
+                  ) : (
+                    <AddPhoto width={32} height={32}></AddPhoto>
+                  )}
+                  <Text style={styles.addVideoTxt}>Add a Video or Image</Text>
+                </View>
               )}
-              <Text style={styles.addVideoTxt}>Add a Video or Image</Text>
             </Pressable>
             <View style={styles.msgCntnr}>
               <RRTextInput
@@ -147,6 +169,7 @@ export default function ReviewRequestScreen({
               onPressIn={() => {
                 setCameraStatus(true);
                 setOpenStatus(false);
+                setVideo(null);
               }}
             >
               Capture Video
@@ -157,7 +180,11 @@ export default function ReviewRequestScreen({
           <RRCamera
             isOpen={isOpenCamera}
             onClose={() => setCameraStatus(false)}
-            onCapture={() => setCameraStatus(false)}
+            onCapture={(video: any) => {
+              setVideo(video);
+              setCameraStatus(false);
+              console.log(video);
+            }}
           ></RRCamera>
         )}
         {isShowInfoTxt && (
@@ -178,6 +205,14 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 24,
     marginTop: 40,
+  },
+  image: {
+    flex: 1,
+    transform: [
+      {
+        scaleX: -1,
+      },
+    ],
   },
   headerCntnr: {
     flexDirection: "row",
