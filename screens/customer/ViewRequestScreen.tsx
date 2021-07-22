@@ -25,9 +25,11 @@ import { Video, AVPlaybackStatus } from "expo-av";
 import CustomerVideoInfo from "screens/shared/customer-video-info";
 import CaptureActionSheet from "screens/shared/capture-action-sheet";
 import CustomerInfo from "screens/shared/customer-info";
-
+import { getReviewRequestWithUsername } from "services/api/review-request";
+import { S3_URL } from "constants/apiUrls";
 export default function ViewRequestScreen({
   navigation,
+  route,
 }: StackScreenProps<RootStackParamList, "NotFound">) {
   const [requestMessage, setRequestMessage] = useState(
     "Hope you enjoyed using our product. It will be great if you can tell us how much you like our product with a short video."
@@ -38,6 +40,8 @@ export default function ViewRequestScreen({
   const [isOpen, setOpenStatus] = useState(false);
   const [isShowCustomerInfo, setShowCustomerInfo] = useState(false);
   const [video, setVideo] = useState(null);
+  const [status, setStatus] = React.useState({});
+  const [reviewRequest, setReviewRequest] = React.useState({});
 
   useEffect(() => {
     Keyboard.addListener("keyboardDidShow", hideBtn);
@@ -57,6 +61,13 @@ export default function ViewRequestScreen({
       Keyboard.removeListener("keyboardDidHide", showBtn);
     };
   }, []);
+
+  useEffect(() => {
+    getReviewRequestWithUsername(route.params.username).then((res) => {
+      console.log(res);
+      if (res.data.length) setReviewRequest(res.data[0]);
+    });
+  }, [route]);
 
   const hideBtn = () => {
     setBtnStatus(false);
@@ -91,31 +102,33 @@ export default function ViewRequestScreen({
     <RRAppWrapper>
       <View style={{ flex: 1 }}>
         <ScrollView style={styles.container}>
-          <View style={styles.mainContainer}>
-            <Video
-              source={{
-                uri: "https://www.videvo.net/video/flat-lay-panning-close-up-saxophone-keys/531731/",
-              }}
-              style={[
-                styles.image,
-                {
-                  width: scaleSize(279),
-                  aspectRatio: 9 / 16,
-                  borderRadius: 16,
-                },
-              ]}
-              rate={1.0}
-              isMuted={false}
-              resizeMode="cover"
-              volume={0.5}
-              isLooping
-              shouldPlay
-            />
+          <View style={styles.requestCntnr}>
+            <View style={styles.mainContainer}>
+              <Video
+                ref={video}
+                style={styles.video}
+                source={{
+                  uri: S3_URL + reviewRequest?.videoUrl,
+                }}
+                resizeMode="contain"
+                useNativeControls
+                isLooping
+                onPlaybackStatusUpdate={(status) => setStatus(() => status)}
+              />
+              {/* <View style={styles.buttons}>
+                <Button
+                  title={status.isPlaying ? "Pause" : "Play"}
+                  onPress={() =>
+                    status.isPlaying
+                      ? video.current.pauseAsync()
+                      : video.current.playAsync()
+                  }
+                />
+              </View> */}
+            </View>
             <View style={styles.requestMsgCntnr}>
               <Text style={styles.requestMsgTxt}>
-                Hi, This is Mariya form Carnival Collections. Hope you enjoyed
-                using our products. It will be great if you can tell us how much
-                you like our products with a short video.
+                {reviewRequest?.askMessage}
               </Text>
             </View>
             <RRButton
