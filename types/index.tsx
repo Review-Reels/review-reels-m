@@ -64,3 +64,4 @@ export type googleSignUpPayload = {
 export type updateUserPayload = {
   username?: string;
 };
+

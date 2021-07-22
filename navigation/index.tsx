@@ -41,7 +41,7 @@ export default function Navigation() {
 const Stack = createStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
-  const { authState, authDispatch } = useContext(authContext);
+  const { authState, authDispatch } = useContext(authContext) 
 
   React.useEffect(() => {
     checkLogin();

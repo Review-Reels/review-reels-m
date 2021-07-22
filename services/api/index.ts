@@ -5,8 +5,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 // import Snackbar from 'react-native-snackbar';
 
 const apiClient = axios.create({
-  // baseURL: API_URL,
-  baseURL: "http://127.0.0.1:3000/api/",
+  // baseURL: `${process.env.API_URL}`,
+  baseURL: "http://13.127.45.28:3000/api/",
   headers: { "Content-Type": "application/json" },
 });
 

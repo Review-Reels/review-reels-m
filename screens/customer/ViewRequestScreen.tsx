@@ -25,9 +25,11 @@ import { Video, AVPlaybackStatus } from "expo-av";
 import CustomerVideoInfo from "screens/shared/customer-video-info";
 import CaptureActionSheet from "screens/shared/capture-action-sheet";
 import CustomerInfo from "screens/shared/customer-info";
-
+import { getReviewRequestWithUsername } from "services/api/review-request";
+import { S3_URL } from "constants/apiUrls";
 export default function ViewRequestScreen({
   navigation,
+  route,
 }: StackScreenProps<RootStackParamList, "NotFound">) {
   const [requestMessage, setRequestMessage] = useState(
     "Hope you enjoyed using our product. It will be great if you can tell us how much you like our product with a short video."
@@ -39,6 +41,7 @@ export default function ViewRequestScreen({
   const [isShowCustomerInfo, setShowCustomerInfo] = useState(false);
   const video = React.useRef(null);
   const [status, setStatus] = React.useState({});
+  const [reviewRequest, setReviewRequest] = React.useState({});
 
   useEffect(() => {
     Keyboard.addListener("keyboardDidShow", hideBtn);
@@ -58,6 +61,13 @@ export default function ViewRequestScreen({
       Keyboard.removeListener("keyboardDidHide", showBtn);
     };
   }, []);
+
+  useEffect(() => {
+    getReviewRequestWithUsername(route.params.username).then((res) => {
+      console.log(res);
+      if (res.data.length) setReviewRequest(res.data[0]);
+    });
+  }, [route]);
 
   const hideBtn = () => {
     setBtnStatus(false);
@@ -99,7 +109,7 @@ export default function ViewRequestScreen({
                 ref={video}
                 style={styles.video}
                 source={{
-                  uri: "https://review-reels-videos.s3.ap-south-1.amazonaws.com/7685598d-6e72-4157-9136-84e5bc4f3851/Pexels%20Videos%201777362.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA5XDWG7WLBYX6Y6GZ%2F20210706%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20210706T090451Z&X-Amz-Expires=604800&X-Amz-Signature=9ebf518af46201adf9dad2136a99e0a6c898b4af0cfdae34249bc1fd685adc8a&X-Amz-SignedHeaders=host",
+                  uri: S3_URL + reviewRequest?.videoUrl,
                 }}
                 resizeMode="contain"
                 useNativeControls
@@ -119,9 +129,7 @@ export default function ViewRequestScreen({
             </View>
             <View style={styles.requestMsgCntnr}>
               <Text style={styles.requestMsgTxt}>
-                Hi, This is Mariya form Carnival Collections. Hope you enjoyed
-                using our products. It will be great if you can tell us how much
-                you like our products with a short video.
+                {reviewRequest?.askMessage}
               </Text>
             </View>
             <RRButton
