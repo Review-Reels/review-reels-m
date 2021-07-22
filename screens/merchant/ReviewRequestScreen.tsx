@@ -117,7 +117,11 @@ export default function ReviewRequestScreen({
                   source={{ uri: video.uri }}
                   style={[
                     styles.image,
-                    { width: scaleSize(279), aspectRatio: 9 / 16 },
+                    {
+                      width: scaleSize(279),
+                      aspectRatio: 9 / 16,
+                      borderRadius: 16,
+                    },
                   ]}
                   rate={1.0}
                   isMuted={false}

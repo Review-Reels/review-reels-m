@@ -37,8 +37,7 @@ export default function ViewRequestScreen({
   const [isShowInfoTxt, setShowInfoTxt] = useState(false);
   const [isOpen, setOpenStatus] = useState(false);
   const [isShowCustomerInfo, setShowCustomerInfo] = useState(false);
-  const video = React.useRef(null);
-  const [status, setStatus] = React.useState({});
+  const [video, setVideo] = useState(null);
 
   useEffect(() => {
     Keyboard.addListener("keyboardDidShow", hideBtn);
@@ -68,16 +67,15 @@ export default function ViewRequestScreen({
   };
 
   const pickVideo = async () => {
-    // let result = await ImagePicker.launchImageLibraryAsync({
-    //   mediaTypes: ImagePicker.MediaTypeOptions.Videos,
-    //   aspect: [4, 3],
-    //   quality: 1,
-    // });
-    // console.log(result);
-    // if (!result.cancelled) {
-    //   console.log(result);
-    //   // setImage(result.uri);
-    // }
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    console.log(result);
+    if (!result.cancelled) {
+      console.log(result);
+    }
   };
 
   const onPressReply = () => {
@@ -93,30 +91,26 @@ export default function ViewRequestScreen({
     <RRAppWrapper>
       <View style={{ flex: 1 }}>
         <ScrollView style={styles.container}>
-          <View style={styles.requestCntnr}>
-            <View style={styles.requestVideoCntnr}>
-              <Video
-                ref={video}
-                style={styles.video}
-                source={{
-                  uri: "https://review-reels-videos.s3.ap-south-1.amazonaws.com/7685598d-6e72-4157-9136-84e5bc4f3851/Pexels%20Videos%201777362.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA5XDWG7WLBYX6Y6GZ%2F20210706%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20210706T090451Z&X-Amz-Expires=604800&X-Amz-Signature=9ebf518af46201adf9dad2136a99e0a6c898b4af0cfdae34249bc1fd685adc8a&X-Amz-SignedHeaders=host",
-                }}
-                resizeMode="contain"
-                useNativeControls
-                isLooping
-                onPlaybackStatusUpdate={(status) => setStatus(() => status)}
-              />
-              {/* <View style={styles.buttons}>
-                <Button
-                  title={status.isPlaying ? "Pause" : "Play"}
-                  onPress={() =>
-                    status.isPlaying
-                      ? video.current.pauseAsync()
-                      : video.current.playAsync()
-                  }
-                />
-              </View> */}
-            </View>
+          <View style={styles.mainContainer}>
+            <Video
+              source={{
+                uri: "https://www.videvo.net/video/flat-lay-panning-close-up-saxophone-keys/531731/",
+              }}
+              style={[
+                styles.image,
+                {
+                  width: scaleSize(279),
+                  aspectRatio: 9 / 16,
+                  borderRadius: 16,
+                },
+              ]}
+              rate={1.0}
+              isMuted={false}
+              resizeMode="cover"
+              volume={0.5}
+              isLooping
+              shouldPlay
+            />
             <View style={styles.requestMsgCntnr}>
               <Text style={styles.requestMsgTxt}>
                 Hi, This is Mariya form Carnival Collections. Hope you enjoyed
@@ -150,7 +144,11 @@ export default function ViewRequestScreen({
           <RRCamera
             isOpen={isOpenCamera}
             onClose={() => setCameraStatus(false)}
-            onCapture={() => setCameraStatus(false)}
+            onCapture={(video: any) => {
+              // setCameraStatus(false);
+              setVideo(video);
+              setShowCustomerInfo(true);
+            }}
           ></RRCamera>
         )}
         {isShowInfoTxt && (
@@ -159,9 +157,9 @@ export default function ViewRequestScreen({
               setShowInfoTxt(false);
             }}
             onPressOk={() => {
-              // setShowInfoTxt(false);
-              // setOpenStatus(true);
-              setShowCustomerInfo(true);
+              setShowInfoTxt(false);
+              setOpenStatus(true);
+              // setShowCustomerInfo(true);
             }}
           ></CustomerVideoInfo>
         )}
