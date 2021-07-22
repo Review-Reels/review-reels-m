@@ -8,8 +8,16 @@ export const reviewRequest = async (payload) => {
   });
 };
 
-export const getReviewRequest = async (username) => {
+export const getReviewRequestWithUsername = async (username) => {
   return axios.get(`review/reviewRequest/${username}`, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+
+export const getReviewRequest = async () => {
+  return axios.get(`review/reviewRequest`, {
     headers: {
       "Content-Type": "multipart/form-data",
     },

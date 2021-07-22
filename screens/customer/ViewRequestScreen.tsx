@@ -25,7 +25,7 @@ import { Video, AVPlaybackStatus } from "expo-av";
 import CustomerVideoInfo from "screens/shared/customer-video-info";
 import CaptureActionSheet from "screens/shared/capture-action-sheet";
 import CustomerInfo from "screens/shared/customer-info";
-import { getReviewRequest } from "services/api/review-request";
+import { getReviewRequestWithUsername } from "services/api/review-request";
 import { S3_URL } from "constants/apiUrls";
 export default function ViewRequestScreen({
   navigation,
@@ -63,9 +63,9 @@ export default function ViewRequestScreen({
   }, []);
 
   useEffect(() => {
-    getReviewRequest(route.params.username).then((res) => {
+    getReviewRequestWithUsername(route.params.username).then((res) => {
       console.log(res);
-      setReviewRequest(res.data[0]);
+      if (res.data.length) setReviewRequest(res.data[0]);
     });
   }, [route]);
 
