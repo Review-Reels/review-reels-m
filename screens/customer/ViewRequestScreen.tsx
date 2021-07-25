@@ -26,6 +26,8 @@ import CustomerVideoInfo from "screens/shared/customer-video-info";
 import CaptureActionSheet from "screens/shared/capture-action-sheet";
 import CustomerInfo from "screens/shared/customer-info";
 import { getReviewRequestWithUsername } from "services/api/review-request";
+import { submitReview } from "services/api/review-request";
+
 import { S3_URL } from "constants/apiUrls";
 export default function ViewRequestScreen({
   navigation,
@@ -34,14 +36,17 @@ export default function ViewRequestScreen({
   const [requestMessage, setRequestMessage] = useState(
     "Hope you enjoyed using our product. It will be great if you can tell us how much you like our product with a short video."
   );
-  const [isShowBtn, setBtnStatus] = useState(true);
   const [isOpenCamera, setCameraStatus] = useState(false);
   const [isShowInfoTxt, setShowInfoTxt] = useState(false);
   const [isOpen, setOpenStatus] = useState(false);
   const [isShowCustomerInfo, setShowCustomerInfo] = useState(false);
   const [video, setVideo] = useState(null);
   const [status, setStatus] = React.useState({});
-  const [reviewRequest, setReviewRequest] = React.useState({});
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [reviewRequest, setReviewRequest] = React.useState({
+    videoUrl: "",
+    askMessage: "",
+  });
 
   useEffect(() => {
     Keyboard.addListener("keyboardDidShow", hideBtn);
@@ -98,6 +103,24 @@ export default function ViewRequestScreen({
     navigation.replace("SubmitSuccess");
   };
 
+  const onSelectFile = (data) => {
+    console.log(data);
+    // setSelectedFile(JSON.stringify(data));
+    setOpenStatus(false);
+    let formData = new FormData();
+    formData.append("fileName", data);
+    formData.append("customerName", "Ben Bbau");
+    formData.append("whatYouDo", "Ben ius working");
+    formData.append("reviewRequestId", "2a655f3b-8830-449d-a82e-97943a80d724");
+    submitReview(formData)
+      .then((res) => {
+        navigation.navigate("SubmitSuccess");
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  };
+
   return (
     <RRAppWrapper>
       <View style={{ flex: 1 }}>
@@ -139,30 +162,20 @@ export default function ViewRequestScreen({
           </View>
         </ScrollView>
         {isOpen && (
-          <CaptureActionSheet
-            onClose={() => {
-              setOpenStatus(false);
-            }}
-            onPressCamera={() => {
-              setOpenStatus(false);
-              setCameraStatus(true);
-            }}
-            onPressGallery={() => {
-              setOpenStatus(false);
-              pickVideo();
-            }}
-          ></CaptureActionSheet>
-        )}
-        {isOpenCamera && (
-          <RRCamera
-            isOpen={isOpenCamera}
-            onClose={() => setCameraStatus(false)}
-            onCapture={(video: any) => {
-              // setCameraStatus(false);
-              setVideo(video);
-              setShowCustomerInfo(true);
-            }}
-          ></RRCamera>
+          <Actionsheet isOpen={true}>
+            <Actionsheet.Content>
+              <Actionsheet.Item>Choose from Gallery</Actionsheet.Item>
+              <Actionsheet.Item>
+                <input
+                  type="file"
+                  accept="video/*"
+                  capture
+                  value={selectedFile}
+                  onChange={(e) => onSelectFile(e.target.files[0])}
+                />
+              </Actionsheet.Item>
+            </Actionsheet.Content>
+          </Actionsheet>
         )}
         {isShowInfoTxt && (
           <CustomerVideoInfo

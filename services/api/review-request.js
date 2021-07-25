@@ -23,3 +23,11 @@ export const getReviewRequest = async () => {
     },
   });
 };
+
+export const submitReview = async (payload) => {
+  return axios.post("review/reviewResponse", payload, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
