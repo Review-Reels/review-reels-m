@@ -18,14 +18,27 @@ import Email from "assets/svg/Email.svg";
 import colors from "constants/colors";
 import { scaleSize } from "constants/layout";
 import * as Clipboard from "expo-clipboard";
+import { getReviewRequest } from "services/api/review-request";
+import { WEB_APP_URL } from "constants/apiUrls";
+import { authContext } from "context/AuthContext";
 
 export default function ShareRequestScreen({
   navigation,
 }: StackScreenProps<RootStackParamList, "NotFound">) {
+  const [reviewRequests, setReviewRequests] = React.useState({});
+  const { authState, authDispatch } = React.useContext(authContext);
+  const shareUrl = WEB_APP_URL + "request/" + authState.user.username;
+  React.useEffect(() => {
+    getReviewRequest().then((res) => {
+      console.log(res.data);
+      if (res.data.length) setReviewRequests(res.data[0]);
+    });
+  });
+
   const onPressShare = async () => {
     try {
       const result = await Share.share({
-        message: "https://reviewreels.com/carnival",
+        message: shareUrl,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -42,11 +55,17 @@ export default function ShareRequestScreen({
   };
 
   const onPressCopy = () => {
-    Clipboard.default.setString("https://reviewreels.com/carnival");
+    Clipboard.default.setString(shareUrl);
   };
 
   const onPressClose = () => {
     navigation.goBack();
+  };
+  const onPressPreview = () => {
+    navigation.navigate("ReviewDetails", reviewRequests);
+  };
+  const onPressEdit = () => {
+    navigation.navigate("ReviewRequest", reviewRequests);
   };
 
   return (
@@ -67,10 +86,10 @@ export default function ShareRequestScreen({
             Share your message with customers to collect reviews
           </Text>
           <View style={styles.headerActionsCntnr}>
-            <Pressable style={styles.headerAction}>
+            <Pressable style={styles.headerAction} onPress={onPressEdit}>
               <Text style={styles.headerActionTxt}>Edit</Text>
             </Pressable>
-            <Pressable style={styles.headerAction}>
+            <Pressable style={styles.headerAction} onPress={onPressPreview}>
               <Text style={styles.headerActionTxt}>Preview</Text>
             </Pressable>
           </View>
@@ -78,9 +97,7 @@ export default function ShareRequestScreen({
         <View style={styles.shareCntnr}>
           <View style={styles.linkShareCntnr}>
             <Text style={styles.shareHeaderTxt}>SHARE USING LINK</Text>
-            <Text style={styles.shareLinkTxt}>
-              https://reviewreels.com/carn..
-            </Text>
+            <Text style={styles.shareLinkTxt}>{shareUrl}</Text>
             <Text style={styles.infoText}>
               Your ask message is available on the above link, share with
               customers to get reviews.

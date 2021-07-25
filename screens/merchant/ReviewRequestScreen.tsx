@@ -26,11 +26,16 @@ import { RootStackParamList } from "types";
 import * as ImagePicker from "expo-image-picker";
 import MerchantVideoInfo from "screens/shared/merchant-video-info";
 import { Video } from "expo-av";
+import { S3_URL } from "constants/apiUrls";
 
-import { reviewRequest } from "services/api/review-request";
+import {
+  reviewRequest,
+  updateReviewRequestApi,
+} from "services/api/review-request";
 
 export default function ReviewRequestScreen({
   navigation,
+  route,
 }: StackScreenProps<RootStackParamList, "NotFound">) {
   const [requestMessage, setRequestMessage] = useState(
     "Hope you enjoyed using our product. It will be great if you can tell us how much you like our product with a short video."
@@ -60,6 +65,14 @@ export default function ReviewRequestScreen({
     };
   }, []);
 
+  useEffect(() => {
+    console.log(route.params);
+    if (route.params) {
+      setRequestMessage(route.params.askMessage);
+      setVideo({ uri: S3_URL + route.params.videoUrl });
+    }
+  }, [route]);
+
   const hideBtn = () => {
     setBtnStatus(false);
   };
@@ -69,7 +82,8 @@ export default function ReviewRequestScreen({
   };
 
   const onPressProceed = () => {
-    createReviewRequest(video);
+    if (route?.params?.id) updateReviewRequest(video);
+    else createReviewRequest(video);
   };
 
   const pickVideo = async () => {
@@ -94,6 +108,24 @@ export default function ReviewRequestScreen({
     });
     formData.append("askMessage", requestMessage);
     reviewRequest(formData)
+      .then((res) => {
+        console.log("res", res.data);
+        navigation.navigate("ShareRequest");
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  };
+  const updateReviewRequest = (videoPayload) => {
+    let formData = new FormData();
+    const name = new Date().toISOString() + ".mp4";
+    formData.append("fileName", {
+      name: name,
+      uri: videoPayload.uri,
+      type: "video",
+    });
+    formData.append("askMessage", requestMessage);
+    updateReviewRequestApi(formData, route?.params?.id)
       .then((res) => {
         console.log("res", res.data);
         navigation.navigate("ShareRequest");
