@@ -1,22 +1,27 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import * as React from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, Text, View, FlatList } from "react-native";
 import { RootStackParamList } from "../../types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { authContext } from "context/AuthContext";
 import { set, SET_TOKEN } from "context/authActions";
-import { getReviewRequest } from "services/api/review-request";
+import { getReviewResponse } from "services/api/review-response";
+
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
+//added dayjs because its lighter than moment.js so the app  size will decrease
 
 export default function HomeScreen({
   navigation,
 }: StackScreenProps<RootStackParamList, "NotFound">) {
   const { authState, authDispatch } = React.useContext(authContext);
-  const [reviewList, setReviewList] = React.useState({});
+  const [reviewResponseList, setReviewResponseList] = React.useState([]);
 
   React.useEffect(() => {
-    getReviewRequest().then((res) => {
+    getReviewResponse().then((res) => {
       console.log(res.data);
-      if (res.data.length) setReviewList(res.data[0]);
+      if (res.data.length) setReviewResponseList(res.data);
     });
   }, []);
 
@@ -24,7 +29,16 @@ export default function HomeScreen({
     <View style={styles.container}>
       <Text style={styles.title}>Home</Text>
       <Text style={styles.title}>{authState.user.name}</Text>
-      <Text>{reviewList.askMessage}</Text>
+      <FlatList
+        data={reviewResponseList}
+        renderItem={({ item }) => (
+          <>
+            <Text style={styles.title}>{item.customerName}</Text>
+            <Text>{item.whatYouDo}</Text>
+            <Text>{dayjs().to(dayjs(item.createdAt))}</Text>
+          </>
+        )}
+      />
       <Button
         title="Review 1"
         onPress={() => navigation.push("ReviewDetails", { id: 1 })}
@@ -40,6 +54,10 @@ export default function HomeScreen({
       <Button
         title="Ask for Review"
         onPress={() => navigation.push("ReviewRequest")}
+      ></Button>
+      <Button
+        title="Share Request"
+        onPress={() => navigation.push("ShareRequest")}
       ></Button>
       <Button
         title="Sign Out"
