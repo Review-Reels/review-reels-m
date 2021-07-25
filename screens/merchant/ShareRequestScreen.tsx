@@ -33,7 +33,7 @@ export default function ShareRequestScreen({
       console.log(res.data);
       if (res.data.length) setReviewRequests(res.data[0]);
     });
-  }, []);
+  });
 
   const onPressShare = async () => {
     try {
@@ -64,6 +64,9 @@ export default function ShareRequestScreen({
   const onPressPreview = () => {
     navigation.navigate("ReviewDetails", reviewRequests);
   };
+  const onPressEdit = () => {
+    navigation.navigate("ReviewRequest", reviewRequests);
+  };
 
   return (
     <RRAppWrapper style={styles.container}>
@@ -83,7 +86,7 @@ export default function ShareRequestScreen({
             Share your message with customers to collect reviews
           </Text>
           <View style={styles.headerActionsCntnr}>
-            <Pressable style={styles.headerAction}>
+            <Pressable style={styles.headerAction} onPress={onPressEdit}>
               <Text style={styles.headerActionTxt}>Edit</Text>
             </Pressable>
             <Pressable style={styles.headerAction} onPress={onPressPreview}>

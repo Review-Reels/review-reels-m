@@ -14,8 +14,8 @@ export default function ReviewDetailScreen({
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Review Details</Text>
-      <Text>{reviewRequest.askMessage}</Text>
-      <Text>{reviewRequest.createdAt}</Text>
+      <Text>{reviewRequest?.askMessage}</Text>
+      <Text>{reviewRequest?.createdAt}</Text>
     </View>
   );
 }

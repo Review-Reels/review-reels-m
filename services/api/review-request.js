@@ -7,6 +7,13 @@ export const reviewRequest = async (payload) => {
     },
   });
 };
+export const updateReviewRequestApi = async (payload, id) => {
+  return axios.put(`review/reviewRequest/${id}`, payload, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
 
 export const getReviewRequestWithUsername = async (username) => {
   return axios.get(`review/reviewRequest/${username}`, {
