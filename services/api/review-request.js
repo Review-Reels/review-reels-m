@@ -16,17 +16,9 @@ export const updateReviewRequestApi = async (payload, id) => {
 };
 
 export const getReviewRequestWithUsername = async (username) => {
-  return axios.get(`review/reviewRequest/${username}`, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  return axios.get(`review/reviewRequest/${username}`);
 };
 
 export const getReviewRequest = async () => {
-  return axios.get(`review/reviewRequest`, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  return axios.get(`review/reviewRequest`);
 };

@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   emailShareCntnr: {
-    backgroundColor: colors.SweetPink,
+    backgroundColor: colors.Sweet_Pink,
     borderRadius: 12,
     padding: 24,
     marginTop: 24,

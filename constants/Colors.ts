@@ -16,5 +16,7 @@ export default {
   Alizarin_Crimson: "#EE2737",
   Anakiwa: "#B1D0FF",
   Charade: "#2F2F43",
-  SweetPink: "#FAA1B1",
+  Sweet_Pink: "#FAA1B1",
+  Peach_Orange: "#FFCF9E",
+  Azalea: "#F0B3E3",
 };
