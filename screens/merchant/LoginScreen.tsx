@@ -10,16 +10,16 @@ import {
   ScrollView,
   Keyboard,
 } from "react-native";
-import { RootStackParamList, SignupPayload,googleSignUpPayload } from "types";
+import { RootStackParamList, SignupPayload, googleSignUpPayload } from "types";
 import Logo from "assets/svg/Logo.svg";
 import Statement from "assets/svg/Statement.svg";
 import RRButton from "components/RRButton";
 import * as Google from "expo-google-app-auth";
 import userClient from "services/api/user-client";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {authContext} from "context/AuthContext"
-import {set, SET_TOKEN,SET_USER} from "context/authActions"
-
+import { authContext } from "context/AuthContext";
+import { set, SET_TOKEN, SET_USER } from "context/authActions";
+import { GoogleLogin } from "react-google-login";
 
 export default function LoginScreen({
   navigation,
@@ -29,20 +29,17 @@ export default function LoginScreen({
   const [username, setUsername] = React.useState<string>("");
   const [isShowBtn, setBtnStatus] = React.useState(true);
 
-  const {authState,authDispatch} = React.useContext(authContext)
-
+  const { authState, authDispatch } = React.useContext(authContext);
 
   React.useEffect(() => {
     Keyboard.addListener("keyboardDidShow", hideBtn);
     Keyboard.addListener("keyboardDidHide", showBtn);
-    
 
     return () => {
       Keyboard.removeListener("keyboardDidShow", hideBtn);
       Keyboard.removeListener("keyboardDidHide", showBtn);
     };
   }, []);
-
 
   const hideBtn = () => {
     setBtnStatus(false);
@@ -62,8 +59,13 @@ export default function LoginScreen({
           iosClientId: `821902754014-47rd60g2ltm6dj6kl7dmvd5k9kdf0ctj.apps.googleusercontent.com`,
           androidClientId: `821902754014-d7ssa6q6d21ebo0q069co91dk4bs288k.apps.googleusercontent.com`,
         };
-        const { type, user, accessToken, refreshToken,idToken }: Google.LogInResult =
-          await Google.logInAsync(config);
+        const {
+          type,
+          user,
+          accessToken,
+          refreshToken,
+          idToken,
+        }: Google.LogInResult = await Google.logInAsync(config);
         if (type === "success") {
           setPayload({
             username: "",
@@ -74,51 +76,57 @@ export default function LoginScreen({
             photoUrl: user.photoUrl,
             accessToken: accessToken,
             refreshToken: refreshToken,
-            idToken:idToken
+            idToken: idToken,
           });
-          console.log(idToken)
-          try{
-          const signedInUser = await userClient.googleSignIn({idToken})
-          console.log(signedInUser.data)
-          await AsyncStorage.setItem('@token',signedInUser.data.Authorization);
-          await AsyncStorage.setItem('@user',JSON.stringify(signedInUser.data));
-          authDispatch(set(SET_USER,signedInUser.data))
-          if(!signedInUser.data.username){
-          setIsUsername(true);
-        }else{
-          authDispatch(set(SET_TOKEN,signedInUser.data.Authorization))
-        }
-          }
-          catch(e){
-            console.log(e)
-          }
+          console.log(idToken);
+          googleSignInSignUp(idToken);
         }
       } catch (error) {
         console.log("LoginScreen.js 19 | error with login", error);
       }
   };
 
-  const proceedSignin = async() => {
+  const proceedSignin = async () => {
     // let data = {
     //   email: "hari@gmail.com",
     //   name: "Hariprasad K B",
     //   password: "thisis@complecated",
     //   username: "newuser",
     // };
-    try{
-    const updatedUser = await userClient.updateUser({username})
-    console.log(updatedUser.data)
-    if(updatedUser){
-      const authToken = await AsyncStorage.getItem('@token');
-      authDispatch(set(SET_TOKEN,authToken))
-           }
-    }
-    catch(e){
-      console.log(e)
+    try {
+      const updatedUser = await userClient.updateUser({ username });
+      console.log(updatedUser.data);
+      if (updatedUser) {
+        const authToken = await AsyncStorage.getItem("@token");
+        authDispatch(set(SET_TOKEN, authToken));
+      }
+    } catch (e) {
+      console.log(e);
     }
     // userClient.signUp(data).then((response) => {
     //   navigation.navigate("Home");
     // });
+  };
+  const responseGoogle = (response) => {
+    console.log(response.tokenObj.id_token);
+    googleSignInSignUp(response.tokenObj.id_token);
+  };
+
+  const googleSignInSignUp = async (idToken: string) => {
+    try {
+      const signedInUser = await userClient.googleSignIn({ idToken });
+      console.log(signedInUser.data);
+      await AsyncStorage.setItem("@token", signedInUser.data.Authorization);
+      await AsyncStorage.setItem("@user", JSON.stringify(signedInUser.data));
+      authDispatch(set(SET_USER, signedInUser.data));
+      if (!signedInUser.data.username) {
+        setIsUsername(true);
+      } else {
+        authDispatch(set(SET_TOKEN, signedInUser.data.Authorization));
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
@@ -162,11 +170,34 @@ export default function LoginScreen({
                   <Statement></Statement>
                 )}
               </View>
-              <RRButton
-                style={styles.button}
-                title="Connect with Google"
-                onPress={() => signInAsync()}
-              ></RRButton>
+              {Platform.OS === "web" ? (
+                <GoogleLogin
+                  clientId="821902754014-fm9npqchn7ja27eagrrr76bk91ikspsg.apps.googleusercontent.com"
+                  render={(renderProps) => (
+                    <RRButton
+                      style={styles.button}
+                      title="Connect with Google"
+                      onPress={renderProps.onClick}
+                    ></RRButton>
+                    // <button
+                    //   onClick={renderProps.onClick}
+                    //   disabled={renderProps.disabled}
+                    // >
+                    //   This is my custom Google button
+                    // </button>
+                  )}
+                  onSuccess={responseGoogle}
+                  onFailure={responseGoogle}
+                  cookiePolicy={"single_host_origin"}
+                />
+              ) : (
+                <RRButton
+                  style={styles.button}
+                  title="Connect with Google"
+                  onPress={() => signInAsync()}
+                ></RRButton>
+              )}
+
               <Text style={[styles.signInTxt]}>
                 By signing up you agree to our terms and conditions
               </Text>

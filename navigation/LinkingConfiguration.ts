@@ -15,6 +15,7 @@ export default {
       ShareRequest: "share-review",
       Home: "home",
       ReviewDetails: "review",
+      ReviewResponseDetails: "review-response",
       NotFound: "*",
       ViewRequest: "request/:username",
       SubmitSuccess: "success",

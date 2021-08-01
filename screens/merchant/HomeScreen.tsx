@@ -1,6 +1,13 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import * as React from "react";
-import { Button, StyleSheet, Text, View, FlatList } from "react-native";
+import {
+  Button,
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  Pressable,
+} from "react-native";
 import { RootStackParamList } from "../../types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { authContext } from "context/AuthContext";
@@ -25,6 +32,10 @@ export default function HomeScreen({
     });
   }, []);
 
+  const goToReviewResponse = (item) => {
+    console.log(item);
+    navigation.navigate("ReviewResponseDetails", item);
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Home</Text>
@@ -32,11 +43,11 @@ export default function HomeScreen({
       <FlatList
         data={reviewResponseList}
         renderItem={({ item }) => (
-          <>
+          <Pressable onPress={() => goToReviewResponse(item)}>
             <Text style={styles.title}>{item.customerName}</Text>
             <Text>{item.whatYouDo}</Text>
             <Text>{dayjs().to(dayjs(item.createdAt))}</Text>
-          </>
+          </Pressable>
         )}
       />
       <Button

@@ -21,6 +21,7 @@ import { RootStackParamList } from "types";
 import LinkingConfiguration from "./LinkingConfiguration";
 import ViewRequestScreen from "screens/customer/ViewRequestScreen";
 import SubmitSuccessScreen from "screens/customer/SubmitSuccessScreen";
+import ReviewResponseDetails from "screens/merchant/ReviewResponseDetails";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwt_decode, { JwtPayload } from "jwt-decode";
@@ -41,7 +42,7 @@ export default function Navigation() {
 const Stack = createStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
-  const { authState, authDispatch } = useContext(authContext) 
+  const { authState, authDispatch } = useContext(authContext);
 
   React.useEffect(() => {
     checkLogin();
@@ -76,6 +77,10 @@ function RootNavigator() {
           <Stack.Screen name="ReviewRequest" component={ReviewRequestScreen} />
           <Stack.Screen name="ReviewDetails" component={ReviewDetailsScreen} />
           <Stack.Screen name="ShareRequest" component={ShareRequestScreen} />
+          <Stack.Screen
+            name="ReviewResponseDetails"
+            component={ReviewResponseDetails}
+          />
           <Stack.Screen
             name="NotFound"
             component={NotFoundScreen}
