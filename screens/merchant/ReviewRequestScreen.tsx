@@ -11,14 +11,10 @@ import {
   View,
 } from "react-native";
 import colors from "constants/Colors";
-import { Camera } from "expo-camera";
 import { useEffect, useState } from "react";
 import RRButton from "components/RRButton";
 import Close from "assets/svg/Close.svg";
 import AddPhoto from "assets/svg/AddPhoto.svg";
-import VideoTimer from "assets/svg/VideoTimer.svg";
-import VideoInfo1 from "assets/svg/VideoInfo1.svg";
-import VideoInfo2 from "assets/svg/VideoInfo2.svg";
 import { scaleSize } from "constants/Layout";
 import { Actionsheet, useDisclose } from "native-base";
 import { StackScreenProps } from "@react-navigation/stack";
@@ -92,7 +88,7 @@ export default function ReviewRequestScreen({
       aspect: [4, 3],
       quality: 1,
     });
-    console.log(result)
+    console.log(result);
     if (!result.cancelled) {
       setVideo(result);
     }
@@ -117,7 +113,6 @@ export default function ReviewRequestScreen({
       });
   };
 
-  
   const updateReviewRequest = (videoPayload) => {
     let formData = new FormData();
     const name = new Date().toISOString() + ".mp4";
@@ -129,7 +124,6 @@ export default function ReviewRequestScreen({
     formData.append("askMessage", requestMessage);
     updateReviewRequestApi(formData, route?.params?.id)
       .then((res) => {
-        console.log("res", res.data);
         navigation.navigate("ShareRequest");
       })
       .catch((err) => {
