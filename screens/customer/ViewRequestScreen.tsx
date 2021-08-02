@@ -71,7 +71,6 @@ export default function ViewRequestScreen({
     let formData = new FormData();
     const name = new Date().toISOString() + ".mp4";
     const file = DataURIToBlob(selectedFile.uri);
-    console.log(file);
     formData.append("fileName", file);
     formData.append("customerName", info.name);
     formData.append("whatYouDo", info.job);
