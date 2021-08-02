@@ -19,6 +19,7 @@ export default {
       NotFound: "*",
       ViewRequest: "request/:username",
       SubmitSuccess: "success",
+      PublishReview: "publish-review",
     },
   },
 };
