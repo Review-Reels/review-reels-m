@@ -1,12 +1,12 @@
 import React, { PureComponent } from "react";
 import { StyleSheet, View, Pressable, Platform, Text } from "react-native";
 import { Camera } from "expo-camera";
-import { deviceWidth, scaleSize } from "constants/layout";
+import { deviceWidth, scaleSize } from "constants/Layout";
 import RecordButton from "assets/svg/RecordButton.svg";
 import StopButton from "assets/svg/StopButton.svg";
 import FlipCamera from "assets/svg/FlipCamera.svg";
 import More from "assets/svg/More.svg";
-import colors from "constants/colors";
+import colors from "constants/Colors";
 import CameraClose from "assets/svg/CameraClose.svg";
 
 export default class Cam extends PureComponent {

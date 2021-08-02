@@ -8,7 +8,7 @@
       "_types": ["./types"],
       "_components": ["./components"],
       "_screens": ["./screens"],
-      "_colors": ["./constants/colors"],
+      "_colors": ["./constants/Colors"],
       "_assets": ["./assets"],
       "_utils": ["./utils"],
       "_shared": ["./screens/shared"]

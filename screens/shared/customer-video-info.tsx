@@ -14,8 +14,8 @@ import AddPhoto from "assets/svg/AddPhoto.svg";
 import VideoTimer from "assets/svg/VideoTimer.svg";
 import VideoInfo1 from "assets/svg/VideoInfo1.svg";
 import VideoInfo2 from "assets/svg/VideoInfo2.svg";
-import colors from "constants/colors";
-import { scaleSize } from "constants/layout";
+import colors from "constants/Colors";
+import { scaleSize } from "constants/Layout";
 
 export default function CustomerVideoInfo({
   onPressClose,

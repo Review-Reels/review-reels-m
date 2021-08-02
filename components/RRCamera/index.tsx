@@ -1,4 +1,4 @@
-import colors from "constants/colors";
+import colors from "constants/Colors";
 import { Camera } from "expo-camera";
 import React, { useEffect, useState } from "react";
 import {

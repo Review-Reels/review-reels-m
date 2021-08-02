@@ -22,3 +22,11 @@ export const getReviewRequestWithUsername = async (username) => {
 export const getReviewRequest = async () => {
   return axios.get(`review/reviewRequest`);
 };
+
+export const submitReview = async (payload) => {
+  return axios.post("review/reviewResponse", payload, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};

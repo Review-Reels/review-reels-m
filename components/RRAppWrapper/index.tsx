@@ -1,6 +1,6 @@
 import React, { ReactElement } from "react";
 import { StyleSheet, SafeAreaView, StyleProp } from "react-native";
-import Colors from "constants/colors";
+import Colors from "constants/Colors";
 
 export default function CSAppWrapper({
   style,
