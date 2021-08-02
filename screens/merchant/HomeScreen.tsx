@@ -19,13 +19,12 @@ import {
   updateReviewResponse,
 } from "services/api/review-response";
 import ThreeDot from "assets/svg/ThreeDot.svg";
-
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 import { RRAppWrapper, RRTextInput } from "components";
-// import { style } from "styled-system";
+
 import colors from "constants/colors";
-dayjs.extend(relativeTime);
+
+import { getElapsedTime } from "utils/daysJsUtils";
+import RRButton from "components/RRButton";
 //added dayjs because its lighter than moment.js so the app  size will decrease
 const colorList = [
   colors.Anakiwa,
@@ -78,7 +77,7 @@ export default function HomeScreen({
           {Platform.OS == "web" ? (
             <img src={ThreeDot}></img>
           ) : (
-            <ThreeDot style={{ width: 10, height: 10 }}></ThreeDot>
+            <ThreeDot style={styles.threeDot}></ThreeDot>
           )}
         </View>
         <RRTextInput
@@ -88,10 +87,7 @@ export default function HomeScreen({
         <FlatList
           data={searchedReviewResponseList}
           renderItem={({ item, index }) => (
-            <Pressable
-              style={{ cursor: "pointer" }}
-              onPress={() => goToReviewResponse(item)}
-            >
+            <Pressable onPress={() => goToReviewResponse(item)}>
               <View style={styles.inboxContainer}>
                 <View
                   style={[
@@ -119,30 +115,26 @@ export default function HomeScreen({
                       color: item.isRead ? colors.Black2 : colors.Black,
                     }}
                   >
-                    Asked via Email - {dayjs().to(dayjs(item.createdAt), true)}
+                    Asked via Email - {getElapsedTime(item.createdAt)}
                   </Text>
                 </View>
               </View>
             </Pressable>
           )}
         />
-        <Button
-          title="Review 1"
-          onPress={() => navigation.push("ReviewDetails", { id: 1 })}
-        ></Button>
-        <Button
-          title="Review 2"
-          onPress={() => navigation.push("ReviewDetails", { id: 2 })}
-        ></Button>
-        <Button
-          title="Review 3"
-          onPress={() => navigation.push("ReviewDetails", { id: 3 })}
-        ></Button>
-        <Button
-          title="Ask for Review"
-          onPress={() => navigation.push("ReviewRequest")}
-        ></Button>
-        <Button
+        <View
+          style={{
+            position: "absolute",
+            bottom: 0,
+            alignSelf: "center",
+          }}
+        >
+          <RRButton
+            title="Ask for Review"
+            onPress={() => navigation.push("ReviewRequest")}
+          ></RRButton>
+        </View>
+        {/* <Button
           title="Share Request"
           onPress={() => navigation.push("ShareRequest")}
         ></Button>
@@ -152,7 +144,7 @@ export default function HomeScreen({
             await AsyncStorage.removeItem("@token");
             authDispatch(set(SET_TOKEN, ""));
           }}
-        ></Button>
+        ></Button> */}
       </View>
     </RRAppWrapper>
   );
@@ -194,4 +186,5 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   customerName: { marginBottom: 5 },
+  threeDot: { width: 10, height: 10 },
 });
