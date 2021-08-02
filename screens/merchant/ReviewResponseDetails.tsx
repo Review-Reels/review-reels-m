@@ -8,9 +8,9 @@ import ThreeDotVertical from "assets/svg/ThreeDotVertical.svg";
 import Back from "assets/svg/Back.svg";
 
 import { RRAppWrapper } from "components";
-import colors from "constants/colors";
+import colors from "constants/Colors";
 import { getElapsedTime } from "utils/daysJsUtils";
-import { scaleSize } from "constants/layout";
+import { scaleSize } from "constants/Layout";
 
 export default function ReviewResponseDetails({
   navigation,

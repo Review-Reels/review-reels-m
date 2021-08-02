@@ -21,7 +21,7 @@ import {
 import ThreeDot from "assets/svg/ThreeDot.svg";
 import { RRAppWrapper, RRTextInput } from "components";
 
-import colors from "constants/colors";
+import colors from "constants/Colors";
 
 import { getElapsedTime } from "utils/daysJsUtils";
 import RRButton from "components/RRButton";

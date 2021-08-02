@@ -7,7 +7,7 @@ import { Video } from "expo-av";
 
 import { RRAppWrapper } from "components";
 
-import { scaleSize } from "constants/layout";
+import { scaleSize } from "constants/Layout";
 
 export default function PublishReview({
   navigation,
