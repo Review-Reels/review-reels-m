@@ -23,7 +23,7 @@ module.exports = function (api) {
             _screens: "./screens",
             _types: "./types",
             _components: "./components",
-            _colors: "./constants/colors",
+            _colors: "./constants/Colors",
             _assets: "./assets",
             _utils: "./utils",
             _shared: "./screens/shared",

@@ -11,19 +11,18 @@ import {
   Text,
   View,
 } from "react-native";
-import colors from "constants/colors";
+import colors from "constants/Colors";
 import { Camera } from "expo-camera";
 import { useEffect, useState } from "react";
 import RRButton from "components/RRButton";
 
-import { scaleSize } from "constants/layout";
+import { scaleSize } from "constants/Layout";
 import { Actionsheet, useDisclose } from "native-base";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "types";
 import * as ImagePicker from "expo-image-picker";
-import { Video, AVPlaybackStatus } from "expo-av";
+import { Video } from "expo-av";
 import CustomerVideoInfo from "screens/shared/customer-video-info";
-import CaptureActionSheet from "screens/shared/capture-action-sheet";
 import CustomerInfo from "screens/shared/customer-info";
 import { getReviewRequestWithUsername } from "services/api/review-request";
 import { submitReview } from "services/api/review-request";
@@ -36,36 +35,14 @@ export default function ViewRequestScreen({
   const [requestMessage, setRequestMessage] = useState(
     "Hope you enjoyed using our product. It will be great if you can tell us how much you like our product with a short video."
   );
-  const [isOpenCamera, setCameraStatus] = useState(false);
   const [isShowInfoTxt, setShowInfoTxt] = useState(false);
-  const [isOpen, setOpenStatus] = useState(false);
   const [isShowCustomerInfo, setShowCustomerInfo] = useState(false);
-  const [video, setVideo] = useState(null);
-  const [status, setStatus] = React.useState({});
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFile, setSelectedFile] = useState<any>(null);
   const [reviewRequest, setReviewRequest] = React.useState({
     videoUrl: "",
     askMessage: "",
+    id: "",
   });
-
-  useEffect(() => {
-    Keyboard.addListener("keyboardDidShow", hideBtn);
-    Keyboard.addListener("keyboardDidHide", showBtn);
-    (async () => {
-      if (Platform.OS !== "web") {
-        const { status } =
-          await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== "granted") {
-          alert("Sorry, we need camera roll permissions to make this work!");
-        }
-      }
-    })();
-    // cleanup function
-    return () => {
-      Keyboard.removeListener("keyboardDidShow", hideBtn);
-      Keyboard.removeListener("keyboardDidHide", showBtn);
-    };
-  }, []);
 
   useEffect(() => {
     getReviewRequestWithUsername(route.params.username).then((res) => {
@@ -74,24 +51,15 @@ export default function ViewRequestScreen({
     });
   }, [route]);
 
-  const hideBtn = () => {
-    setBtnStatus(false);
-  };
-
-  const showBtn = () => {
-    setBtnStatus(true);
-  };
-
   const pickVideo = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Videos,
-      aspect: [4, 3],
+      aspect: [16, 9],
       quality: 1,
+      base64: false,
     });
-    console.log(result);
-    if (!result.cancelled) {
-      console.log(result);
-    }
+    setSelectedFile(result);
+    setShowCustomerInfo(true);
   };
 
   const onPressReply = () => {
@@ -100,18 +68,14 @@ export default function ViewRequestScreen({
 
   const onProceedCustomerInfo = (info: any) => {
     setShowCustomerInfo(false);
-    navigation.replace("SubmitSuccess");
-  };
-
-  const onSelectFile = (data) => {
-    console.log(data);
-    // setSelectedFile(JSON.stringify(data));
-    setOpenStatus(false);
     let formData = new FormData();
-    formData.append("fileName", data);
-    formData.append("customerName", "Ben Bbau");
-    formData.append("whatYouDo", "Ben ius working");
-    formData.append("reviewRequestId", "2a655f3b-8830-449d-a82e-97943a80d724");
+    const name = new Date().toISOString() + ".mp4";
+    const file = DataURIToBlob(selectedFile.uri);
+    console.log(file);
+    formData.append("fileName", file);
+    formData.append("customerName", info.name);
+    formData.append("whatYouDo", info.job);
+    formData.append("reviewRequestId", reviewRequest.id);
     submitReview(formData)
       .then((res) => {
         navigation.navigate("SubmitSuccess");
@@ -121,34 +85,45 @@ export default function ViewRequestScreen({
       });
   };
 
+  function DataURIToBlob(dataURI: string) {
+    const splitDataURI = dataURI.split(",");
+    const byteString =
+      splitDataURI[0].indexOf("base64") >= 0
+        ? atob(splitDataURI[1])
+        : decodeURI(splitDataURI[1]);
+    const mimeString = splitDataURI[0].split(":")[1].split(";")[0];
+
+    const ia = new Uint8Array(byteString.length);
+    for (let i = 0; i < byteString.length; i++)
+      ia[i] = byteString.charCodeAt(i);
+
+    return new Blob([ia], { type: mimeString });
+  }
+
   return (
-    <RRAppWrapper>
+    <RRAppWrapper style={{ backgroundColor: colors.Athens_Gray }}>
       <View style={{ flex: 1 }}>
         <ScrollView style={styles.container}>
-          <View style={styles.requestCntnr}>
-            <View style={styles.mainContainer}>
+          <View style={styles.addVideoCntnr}>
+            {/* {reviewRequest?.videoUrl && (
               <Video
-                ref={video}
-                style={styles.video}
-                source={{
-                  uri: S3_URL + reviewRequest?.videoUrl,
-                }}
+                source={{ uri: S3_URL + reviewRequest?.videoUrl }}
+                style={[
+                  {
+                    width: scaleSize(279),
+                    aspectRatio: 9 / 16,
+                    borderRadius: 16,
+                  },
+                ]}
+                rate={1.0}
+                isMuted={false}
                 resizeMode="contain"
-                useNativeControls
-                isLooping
-                onPlaybackStatusUpdate={(status) => setStatus(() => status)}
+                volume={0.5}
+                shouldPlay
               />
-              {/* <View style={styles.buttons}>
-                <Button
-                  title={status.isPlaying ? "Pause" : "Play"}
-                  onPress={() =>
-                    status.isPlaying
-                      ? video.current.pauseAsync()
-                      : video.current.playAsync()
-                  }
-                />
-              </View> */}
-            </View>
+            )} */}
+          </View>
+          <View style={{ alignItems: "center" }}>
             <View style={styles.requestMsgCntnr}>
               <Text style={styles.requestMsgTxt}>
                 {reviewRequest?.askMessage}
@@ -161,22 +136,6 @@ export default function ViewRequestScreen({
             ></RRButton>
           </View>
         </ScrollView>
-        {isOpen && (
-          <Actionsheet isOpen={true}>
-            <Actionsheet.Content>
-              <Actionsheet.Item>Choose from Gallery</Actionsheet.Item>
-              <Actionsheet.Item>
-                <input
-                  type="file"
-                  accept="video/*"
-                  capture
-                  value={selectedFile}
-                  onChange={(e) => onSelectFile(e.target.files[0])}
-                />
-              </Actionsheet.Item>
-            </Actionsheet.Content>
-          </Actionsheet>
-        )}
         {isShowInfoTxt && (
           <CustomerVideoInfo
             onPressClose={() => {
@@ -184,8 +143,7 @@ export default function ViewRequestScreen({
             }}
             onPressOk={() => {
               setShowInfoTxt(false);
-              setOpenStatus(true);
-              // setShowCustomerInfo(true);
+              pickVideo();
             }}
           ></CustomerVideoInfo>
         )}
@@ -203,9 +161,9 @@ export default function ViewRequestScreen({
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 24,
     marginTop: 40,
-    backgroundColor: colors.Athens_Gray,
+    // backgroundColor: colors.White,
+    paddingHorizontal: 24,
   },
   mt_24: {
     marginTop: 24,
@@ -221,26 +179,8 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     width: scaleSize(200),
   },
-  infoContainer: {
-    padding: 24,
-    marginTop: 24,
-    backgroundColor: colors.Peach_Cream,
-    borderRadius: 12,
-  },
-  infoText: {
-    fontSize: 14,
-    fontWeight: "normal",
-    fontFamily: "karla",
-  },
-  mainContainer: {
-    padding: 24,
-    marginTop: 24,
-    backgroundColor: colors.White,
-    borderRadius: 16,
-  },
   addVideoCntnr: {
-    backgroundColor: colors.Dove_Grey,
-    height: 280,
+    backgroundColor: colors.White,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 16,
@@ -274,5 +214,8 @@ const styles = StyleSheet.create({
   },
   video: {
     borderRadius: 16,
+  },
+  fileInput: {
+    display: "none",
   },
 });
