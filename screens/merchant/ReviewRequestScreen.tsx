@@ -137,7 +137,7 @@ export default function ReviewRequestScreen({
         <ScrollView style={styles.container}>
           <View style={styles.headerCntnr}>
             <Text style={styles.title}>Create Your Ask Message</Text>
-            <Pressable>
+            <Pressable onPress={() => navigation.goBack()}>
               {Platform.OS == "web" ? (
                 <img style={{ width: 48, height: 48 }} src={Close}></img>
               ) : (

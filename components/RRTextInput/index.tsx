@@ -8,6 +8,7 @@ import {
   Pressable,
   StyleProp,
 } from "react-native";
+import { fontFamily } from "styled-system";
 import { TextInputProps } from "types";
 
 export default function RRTextInput({
@@ -55,6 +56,8 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     backgroundColor: colors.Concrete,
     color: colors.Black,
+    lineHeight: 24,
+    fontFamily: "karla",
   },
   errorInput: {
     borderColor: "red",

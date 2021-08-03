@@ -25,6 +25,9 @@ import colors from "constants/Colors";
 
 import { getElapsedTime } from "utils/daysJsUtils";
 import RRButton from "components/RRButton";
+import NoReview from "screens/shared/no-review";
+import { getReviewRequest } from "services/api/review-request";
+import NoAskMessage from "screens/shared/no-ask-message";
 //added dayjs because its lighter than moment.js so the app  size will decrease
 const colorList = [
   colors.Anakiwa,
@@ -39,7 +42,9 @@ export default function HomeScreen({
   const [reviewResponseList, setReviewResponseList] = React.useState([]);
   const [searchedReviewResponseList, setSearchedReviewResponseList] =
     React.useState([]);
-  const [search, setSearch] = React.useState("");
+  const [isAskMessageCreated, setAskMessageCreated] = React.useState<
+    boolean | null
+  >(null);
   const isFocused = useIsFocused();
 
   React.useEffect(() => {
@@ -50,6 +55,14 @@ export default function HomeScreen({
       }
     });
   }, [isFocused]);
+
+  React.useEffect(() => {
+    getReviewRequest().then((res) => {
+      if (res.data.length) {
+        setAskMessageCreated(true);
+      } else setAskMessageCreated(false);
+    });
+  }, []);
 
   const goToReviewResponse = (item) => {
     if (!item.isRead)
@@ -71,70 +84,71 @@ export default function HomeScreen({
   };
   return (
     <RRAppWrapper>
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.title}> Inbox</Text>
-          {Platform.OS == "web" ? (
-            <img src={ThreeDot}></img>
+      {isAskMessageCreated == true ? (
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <Text style={styles.title}> Inbox</Text>
+            {Platform.OS == "web" ? (
+              <img src={ThreeDot}></img>
+            ) : (
+              <ThreeDot style={styles.threeDot}></ThreeDot>
+            )}
+          </View>
+          {reviewResponseList.length > 0 ? (
+            <View>
+              <RRTextInput
+                placeholder="Search .."
+                onChangeText={searchReviewResponse}
+              ></RRTextInput>
+              <FlatList
+                data={searchedReviewResponseList}
+                renderItem={({ item, index }) => (
+                  <Pressable onPress={() => goToReviewResponse(item)}>
+                    <View style={styles.inboxContainer}>
+                      <View
+                        style={[
+                          styles.rounded,
+                          { backgroundColor: colorList[index % 4] },
+                        ]}
+                      >
+                        <Text style={styles.textColor}>
+                          {item.customerName.charAt(0).toUpperCase()}
+                        </Text>
+                      </View>
+                      <View style={styles.nameFlex}>
+                        <Text
+                          style={{
+                            marginBottom: 5,
+                            color: item.isRead ? colors.Black2 : colors.Black,
+                            fontWeight: item.isRead ? "normal" : "bold",
+                          }}
+                        >
+                          {item.customerName}
+                        </Text>
+                        <Text
+                          style={{
+                            marginBottom: 5,
+                            color: item.isRead ? colors.Black2 : colors.Black,
+                          }}
+                        >
+                          Asked via Email - {getElapsedTime(item.createdAt)}
+                        </Text>
+                      </View>
+                    </View>
+                  </Pressable>
+                )}
+              />
+            </View>
           ) : (
-            <ThreeDot style={styles.threeDot}></ThreeDot>
+            <NoReview></NoReview>
           )}
-        </View>
-        <RRTextInput
-          placeholder="Search .."
-          onChangeText={searchReviewResponse}
-        ></RRTextInput>
-        <FlatList
-          data={searchedReviewResponseList}
-          renderItem={({ item, index }) => (
-            <Pressable onPress={() => goToReviewResponse(item)}>
-              <View style={styles.inboxContainer}>
-                <View
-                  style={[
-                    styles.rounded,
-                    { backgroundColor: colorList[index % 4] },
-                  ]}
-                >
-                  <Text style={styles.textColor}>
-                    {item.customerName.charAt(0).toUpperCase()}
-                  </Text>
-                </View>
-                <View style={styles.nameFlex}>
-                  <Text
-                    style={{
-                      marginBottom: 5,
-                      color: item.isRead ? colors.Black2 : colors.Black,
-                      fontWeight: item.isRead ? "normal" : "bold",
-                    }}
-                  >
-                    {item.customerName}
-                  </Text>
-                  <Text
-                    style={{
-                      marginBottom: 5,
-                      color: item.isRead ? colors.Black2 : colors.Black,
-                    }}
-                  >
-                    Asked via Email - {getElapsedTime(item.createdAt)}
-                  </Text>
-                </View>
-              </View>
-            </Pressable>
-          )}
-        />
-        <View
-          style={{
-            position: "absolute",
-            bottom: 0,
-            alignSelf: "center",
-          }}
-        >
-          <RRButton
-            title="Ask for Review"
-            onPress={() => navigation.push("ReviewRequest")}
-          ></RRButton>
-        </View>
-        {/* <Button
+          <View style={styles.askBtn}>
+            <RRButton
+              title="Ask for Review"
+              onPress={() => navigation.push("ReviewRequest")}
+            ></RRButton>
+          </View>
+          {/* <Button
           title="Share Request"
           onPress={() => navigation.push("ShareRequest")}
         ></Button>
@@ -145,23 +159,35 @@ export default function HomeScreen({
             authDispatch(set(SET_TOKEN, ""));
           }}
         ></Button> */}
-      </View>
+        </View>
+      ) : isAskMessageCreated == false ? (
+        <NoAskMessage navigation={navigation}></NoAskMessage>
+      ) : (
+        <View>
+          <Text>Loaading</Text>
+        </View>
+      )}
     </RRAppWrapper>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 24,
+    padding: 24,
+    flex: 1,
+    backgroundColor: colors.White,
   },
   title: {
-    fontSize: 20,
-    fontWeight: "bold",
+    fontSize: 24,
+    fontWeight: "700",
+    fontFamily: "karla",
+    lineHeight: 32,
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginBottom: 16,
   },
   rounded: {
     width: 40,
@@ -187,4 +213,9 @@ const styles = StyleSheet.create({
   },
   customerName: { marginBottom: 5 },
   threeDot: { width: 10, height: 10 },
+  askBtn: {
+    position: "absolute",
+    bottom: 24,
+    alignSelf: "center",
+  },
 });
