@@ -1,5 +1,12 @@
 import * as React from "react";
-import { StyleSheet, Text, View, Platform, Pressable } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Platform,
+  Pressable,
+  Image,
+} from "react-native";
 import { RootStackParamList } from "../../types";
 import { StackScreenProps } from "@react-navigation/stack";
 import { S3_URL } from "constants/apiUrls";
@@ -11,6 +18,7 @@ import { RRAppWrapper } from "components";
 import colors from "constants/Colors";
 import { getElapsedTime } from "utils/daysJsUtils";
 import { scaleSize } from "constants/Layout";
+import PlayButton from "assets/svg/PlayButton.svg";
 
 export default function ReviewResponseDetails({
   navigation,
@@ -50,18 +58,34 @@ export default function ReviewResponseDetails({
             }
           >
             {reviewResponse.videoUrl && (
-              <Video
-                source={{
-                  uri: S3_URL + reviewResponse.videoUrl,
-                }}
-                style={styles.rounded}
-                rate={1.0}
-                isMuted={false}
-                resizeMode="cover"
-                volume={0.5}
-                isLooping
-                shouldPlay
-              />
+              // <Video
+              //   source={{
+              //     uri: S3_URL + reviewResponse.videoUrl,
+              //   }}
+              //   style={styles.rounded}
+              //   rate={1.0}
+              //   isMuted={false}
+              //   resizeMode="cover"
+              //   volume={0.5}
+              //   isLooping
+              //   shouldPlay
+              // />
+              <View style={styles.overlay}>
+                <Image
+                  style={styles.rounded}
+                  source={{ uri: S3_URL + reviewResponse?.imageUrl }}
+                />
+                {Platform.OS == "web" ? (
+                  <img
+                    src={PlayButton}
+                    style={{ position: "absolute", top: "50%", left: "40%" }}
+                  />
+                ) : (
+                  <PlayButton
+                    style={{ position: "absolute", top: "50%", left: "40%" }}
+                  ></PlayButton>
+                )}
+              </View>
             )}
           </Pressable>
           <Text>{getElapsedTime(reviewResponse.createdAt)}</Text>
@@ -107,11 +131,16 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
   rounded: {
-    width: scaleSize(279),
-    aspectRatio: 9 / 16,
+    width: scaleSize(240),
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     borderBottomRightRadius: 16,
     borderBottomLeftRadius: 2,
+    height: 450,
+  },
+  overlay: {
+    width: scaleSize(240),
+    height: 450,
+    marginBottom: 8,
   },
 });

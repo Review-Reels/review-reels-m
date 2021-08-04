@@ -56,12 +56,7 @@ export default function HomeScreen({
   }, [isFocused]);
 
   React.useEffect(() => {
-    getReviewRequest().then((res) => {
-      if (res.data.length) {
-        setReviewRequest(res.data[0]);
-        setAskMessageCreated(true);
-      } else setAskMessageCreated(false);
-    });
+    getReviewRequests();
   }, []);
   const getReviewResponses = () => {
     setRefreshing(true);
@@ -70,11 +65,24 @@ export default function HomeScreen({
         if (res.data.length) {
           setReviewResponseList(res.data);
           setSearchedReviewResponseList(res.data);
+        } else {
+          setReviewResponseList([]);
         }
       })
       .finally(() => {
         setRefreshing(false);
       });
+  };
+
+  const getReviewRequests = () => {
+    getReviewRequest().then((res) => {
+      if (res.data.length) {
+        setReviewRequest(res.data[0]);
+        setAskMessageCreated(true);
+      } else {
+        setAskMessageCreated(false);
+      }
+    });
   };
   const goToReviewResponse = (item) => {
     if (!item.isRead)
@@ -97,7 +105,9 @@ export default function HomeScreen({
 
   const onRefresh = React.useCallback(() => {
     getReviewResponses();
+    getReviewRequests();
   }, []);
+
   return (
     <RRAppWrapper>
       {isAskMessageCreated == true ? (
@@ -163,7 +173,16 @@ export default function HomeScreen({
               />
             </View>
           ) : (
-            <NoReview></NoReview>
+            <ScrollView
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
+            >
+              <NoReview
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              ></NoReview>
+            </ScrollView>
           )}
           <View style={styles.askBtn}>
             <RRButton
@@ -184,11 +203,7 @@ export default function HomeScreen({
           ></Button> */}
         </View>
       ) : isAskMessageCreated == false ? (
-        <NoAskMessage
-          navigation={navigation}
-          refreshing={refreshing}
-          onRefresh={onRefresh}
-        ></NoAskMessage>
+        <NoAskMessage navigation={navigation}></NoAskMessage>
       ) : (
         <View>
           <Text>Loaading</Text>
