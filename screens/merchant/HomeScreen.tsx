@@ -184,7 +184,11 @@ export default function HomeScreen({
           ></Button> */}
         </View>
       ) : isAskMessageCreated == false ? (
-        <NoAskMessage navigation={navigation}></NoAskMessage>
+        <NoAskMessage
+          navigation={navigation}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+        ></NoAskMessage>
       ) : (
         <View>
           <Text>Loaading</Text>

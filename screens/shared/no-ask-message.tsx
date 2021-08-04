@@ -1,5 +1,12 @@
 import * as React from "react";
-import { StyleSheet, View, Text, Platform } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Platform,
+  ScrollView,
+  RefreshControl,
+} from "react-native";
 import Chat from "assets/svg/Chat.svg";
 import RRButton from "components/RRButton";
 import { Video } from "expo-av";
@@ -7,7 +14,14 @@ import { scaleSize } from "constants/Layout";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "types";
 
-export default function NoAskMessage({ navigation }: { navigation: any }) {
+export default function NoAskMessage(
+  {
+    navigation,
+  }: {
+    navigation: any;
+  },
+  props
+) {
   return (
     <View style={styles.container}>
       <View style={styles.askVideoCntnr}>
@@ -30,19 +44,28 @@ export default function NoAskMessage({ navigation }: { navigation: any }) {
           useNativeControls
         />
       </View>
-      <View style={styles.askCntnr}>
-        <Text style={styles.askTxt1}>
-          Its easy, create your ask message, share it with your customers using
-          our unique link, get video replies in your inbox.
-        </Text>
-        <Text style={styles.askTxt2}>
-          Let’s get started right away by creating your ask message.
-        </Text>
-        <RRButton
-          title="Create Ask Message"
-          onPress={() => navigation.push("ReviewRequest")}
-        ></RRButton>
-      </View>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={props.refreshing}
+            onRefresh={props.onRefresh}
+          />
+        }
+      >
+        <View style={styles.askCntnr}>
+          <Text style={styles.askTxt1}>
+            Its easy, create your ask message, share it with your customers
+            using our unique link, get video replies in your inbox.
+          </Text>
+          <Text style={styles.askTxt2}>
+            Let’s get started right away by creating your ask message.
+          </Text>
+          <RRButton
+            title="Create Ask Message"
+            onPress={() => navigation.push("ReviewRequest")}
+          ></RRButton>
+        </View>
+      </ScrollView>
     </View>
   );
 }
