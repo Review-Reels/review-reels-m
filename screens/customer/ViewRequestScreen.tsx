@@ -27,8 +27,10 @@ import CustomerVideoInfo from "screens/shared/customer-video-info";
 import CustomerInfo from "screens/shared/customer-info";
 import { getReviewRequestWithUsername } from "services/api/review-request";
 import { submitReview } from "services/api/review-request";
+import PlayButton from "assets/svg/PlayButton.svg";
 
 import { S3_URL } from "constants/apiUrls";
+import { boolean } from "yargs";
 export default function ViewRequestScreen({
   navigation,
   route,
@@ -44,6 +46,7 @@ export default function ViewRequestScreen({
     askMessage: "",
     id: "",
   });
+  const [showVideo, setShowVideo] = React.useState(false);
 
   useEffect(() => {
     getReviewRequestWithUsername(route.params.username).then((res) => {
@@ -105,29 +108,49 @@ export default function ViewRequestScreen({
       <View style={{ flex: 1 }}>
         <ScrollView style={styles.container}>
           <View style={styles.addVideoCntnr}>
-            {/* {reviewRequest?.videoUrl && (
-              <Video
-                source={{ uri: S3_URL + reviewRequest?.videoUrl }}
-                style={[
-                  {
-                    width: scaleSize(279),
-                    aspectRatio: 9 / 16,
-                    borderRadius: 16,
-                  },
-                ]}
-                rate={1.0}
-                isMuted={false}
-                resizeMode="contain"
-                volume={0.5}
-                shouldPlay
-                
-              />
-            )} */}
-            <Image
-              style={{ width: 300, height: 500 }}
-              // style={styles.tinyLogo}
-              source={{ uri: S3_URL + reviewRequest?.imageUrl }}
-            />
+            {showVideo && reviewRequest.videoUrl ? (
+              <Pressable
+                style={{ height: 300, width: 200, flex: 1 }}
+                onPress={() => setShowVideo(!showVideo)}
+              >
+                <Video
+                  source={{ uri: S3_URL + reviewRequest.videoUrl }}
+                  // style={[
+                  //   {
+                  //     width: scaleSize(279),
+                  //     aspectRatio: 9 / 16,
+                  //     borderRadius: 16,
+                  //   },
+                  // ]}
+                  style={styles.rounded}
+                  rate={1.0}
+                  isMuted={false}
+                  resizeMode="contain"
+                  volume={0.5}
+                  shouldPlay
+                />
+              </Pressable>
+            ) : (
+              <Pressable
+                style={styles.overlay}
+                onPress={() => setShowVideo(!showVideo)}
+              >
+                <Image
+                  style={styles.rounded}
+                  source={{ uri: S3_URL + reviewRequest?.imageUrl }}
+                />
+                {Platform.OS == "web" ? (
+                  <img
+                    src={PlayButton}
+                    style={{ position: "absolute", top: "50%", left: "40%" }}
+                  />
+                ) : (
+                  <PlayButton
+                    style={{ position: "absolute", top: "50%", left: "40%" }}
+                  ></PlayButton>
+                )}
+              </Pressable>
+            )}
           </View>
           <View style={{ alignItems: "center" }}>
             <View style={styles.requestMsgCntnr}>
@@ -223,5 +246,19 @@ const styles = StyleSheet.create({
   },
   fileInput: {
     display: "none",
+  },
+  rounded: {
+    width: 300,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    borderBottomRightRadius: 16,
+    borderBottomLeftRadius: 2,
+    height: 450,
+    aspectRatio: 9 / 16,
+  },
+  overlay: {
+    width: 300,
+    height: 450,
+    marginBottom: 8,
   },
 });
