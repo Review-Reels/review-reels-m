@@ -9,6 +9,8 @@ import {
   FlatList,
   Pressable,
   Platform,
+  ScrollView,
+  RefreshControl,
 } from "react-native";
 import { RootStackParamList } from "../../types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -45,25 +47,35 @@ export default function HomeScreen({
   const [isAskMessageCreated, setAskMessageCreated] = React.useState<
     boolean | null
   >(null);
+  const [reviewRequest, setReviewRequest] = React.useState({});
+  const [refreshing, setRefreshing] = React.useState(false);
   const isFocused = useIsFocused();
 
   React.useEffect(() => {
-    getReviewResponse().then((res) => {
-      if (res.data.length) {
-        setReviewResponseList(res.data);
-        setSearchedReviewResponseList(res.data);
-      }
-    });
+    getReviewResponses();
   }, [isFocused]);
 
   React.useEffect(() => {
     getReviewRequest().then((res) => {
       if (res.data.length) {
+        setReviewRequest(res.data[0]);
         setAskMessageCreated(true);
       } else setAskMessageCreated(false);
     });
   }, []);
-
+  const getReviewResponses = () => {
+    setRefreshing(true);
+    getReviewResponse()
+      .then((res) => {
+        if (res.data.length) {
+          setReviewResponseList(res.data);
+          setSearchedReviewResponseList(res.data);
+        }
+      })
+      .finally(() => {
+        setRefreshing(false);
+      });
+  };
   const goToReviewResponse = (item) => {
     if (!item.isRead)
       updateReviewResponse({ isRead: true }, item.id)
@@ -82,6 +94,10 @@ export default function HomeScreen({
     );
     setSearchedReviewResponseList(searchedList);
   };
+
+  const onRefresh = React.useCallback(() => {
+    getReviewResponses();
+  }, []);
   return (
     <RRAppWrapper>
       {isAskMessageCreated == true ? (
@@ -101,7 +117,14 @@ export default function HomeScreen({
                 onChangeText={searchReviewResponse}
               ></RRTextInput>
               <FlatList
+                style={{ height: "100%" }}
                 data={searchedReviewResponseList}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                  />
+                }
                 renderItem={({ item, index }) => (
                   <Pressable onPress={() => goToReviewResponse(item)}>
                     <View style={styles.inboxContainer}>
@@ -145,20 +168,20 @@ export default function HomeScreen({
           <View style={styles.askBtn}>
             <RRButton
               title="Ask for Review"
-              onPress={() => navigation.push("ReviewRequest")}
+              onPress={() => navigation.push("ReviewRequest", reviewRequest)}
             ></RRButton>
           </View>
           {/* <Button
-          title="Share Request"
-          onPress={() => navigation.push("ShareRequest")}
-        ></Button>
-        <Button
-          title="Sign Out"
-          onPress={async () => {
-            await AsyncStorage.removeItem("@token");
-            authDispatch(set(SET_TOKEN, ""));
-          }}
-        ></Button> */}
+            title="Share Request"
+            onPress={() => navigation.push("ShareRequest")}
+          ></Button>
+          <Button
+            title="Sign Out"
+            onPress={async () => {
+              await AsyncStorage.removeItem("@token");
+              authDispatch(set(SET_TOKEN, ""));
+            }}
+          ></Button> */}
         </View>
       ) : isAskMessageCreated == false ? (
         <NoAskMessage navigation={navigation}></NoAskMessage>

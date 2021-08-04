@@ -10,6 +10,7 @@ import {
   StyleSheet,
   Text,
   View,
+  Image,
 } from "react-native";
 import colors from "constants/Colors";
 import { Camera } from "expo-camera";
@@ -119,8 +120,14 @@ export default function ViewRequestScreen({
                 resizeMode="contain"
                 volume={0.5}
                 shouldPlay
+                
               />
             )} */}
+            <Image
+              style={{ width: 300, height: 500 }}
+              // style={styles.tinyLogo}
+              source={{ uri: S3_URL + reviewRequest?.imageUrl }}
+            />
           </View>
           <View style={{ alignItems: "center" }}>
             <View style={styles.requestMsgCntnr}>
