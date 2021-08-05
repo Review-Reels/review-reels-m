@@ -6,6 +6,7 @@ import { Video } from "expo-av";
 import { scaleSize } from "constants/Layout";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "types";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function NoAskMessage({ navigation }: { navigation: any }) {
   return (
@@ -13,13 +14,12 @@ export default function NoAskMessage({ navigation }: { navigation: any }) {
       <View style={styles.askVideoCntnr}>
         <Video
           source={{
-            uri: " https://assets.mixkit.co/videos/preview/mixkit-portrait-of-a-woman-in-a-pool-1259-large.mp4",
+            uri: "https://assets.mixkit.co/videos/preview/mixkit-woman-running-above-the-camera-on-a-running-track-32807-small.mp4",
           }}
           style={{
             borderRadius: 16,
-            width: scaleSize(310),
+            width: 279,
             aspectRatio: 9 / 16,
-            alignSelf: "center",
           }}
           rate={1.0}
           isMuted={false}
@@ -27,7 +27,7 @@ export default function NoAskMessage({ navigation }: { navigation: any }) {
           volume={0.5}
           isLooping
           shouldPlay
-          useNativeControls
+          useNativeControls={false}
         />
       </View>
       <View style={styles.askCntnr}>
@@ -50,17 +50,21 @@ export default function NoAskMessage({ navigation }: { navigation: any }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 24,
+    paddingHorizontal: 24,
   },
   askVideoCntnr: {
     flex: 3,
     padding: 16,
     borderRadius: 16,
+    justifyContent: "center",
+    alignItems: "center",
   },
   askCntnr: {
-    flex: 2,
-    justifyContent: "flex-end",
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
+    marginTop: 16,
+    marginBottom: 24,
   },
   askTxt1: {
     fontFamily: "karla",

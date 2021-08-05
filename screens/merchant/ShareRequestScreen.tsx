@@ -22,6 +22,7 @@ import { getReviewRequest } from "services/api/review-request";
 import { WEB_APP_URL } from "constants/apiUrls";
 import { authContext } from "context/AuthContext";
 import { useFocusEffect } from "@react-navigation/native";
+import { useEffect } from "react";
 
 export default function ShareRequestScreen({
   navigation,
@@ -30,12 +31,15 @@ export default function ShareRequestScreen({
   const { authState } = React.useContext(authContext);
   const shareUrl = WEB_APP_URL + "request/" + authState.user.username;
 
-  useFocusEffect(() => {
+  useEffect(() => {
     getReviewRequest().then((res) => {
-      console.log(res.data);
-      if (res.data.length) setReviewRequests(res.data[0]);
+      if (res.data.length) saveReviewRequest(res.data[0]);
     });
-  });
+  }, []);
+
+  const saveReviewRequest = (data: any) => {
+    setReviewRequests(data);
+  };
 
   const onPressShare = async () => {
     try {

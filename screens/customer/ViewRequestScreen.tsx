@@ -31,6 +31,9 @@ import PlayButton from "assets/svg/PlayButton.svg";
 
 import { S3_URL } from "constants/apiUrls";
 import { boolean } from "yargs";
+import { DataURIToBlob } from "utils/convertToBlob";
+import { authContext } from "context/AuthContext";
+import { set, SET_LOADER } from "context/authActions";
 export default function ViewRequestScreen({
   navigation,
   route,
@@ -47,6 +50,7 @@ export default function ViewRequestScreen({
     id: "",
   });
   const [showVideo, setShowVideo] = React.useState(false);
+  const { authState, authDispatch } = React.useContext(authContext);
 
   useEffect(() => {
     getReviewRequestWithUsername(route.params.username).then((res) => {
@@ -79,29 +83,17 @@ export default function ViewRequestScreen({
     formData.append("customerName", info.name);
     formData.append("whatYouDo", info.job);
     formData.append("reviewRequestId", reviewRequest.id);
+    authDispatch(set(SET_LOADER, true));
     submitReview(formData)
       .then((res) => {
+        authDispatch(set(SET_LOADER, false));
         navigation.navigate("SubmitSuccess");
       })
       .catch((err) => {
+        authDispatch(set(SET_LOADER, false));
         console.log("err", err);
       });
   };
-
-  function DataURIToBlob(dataURI: string) {
-    const splitDataURI = dataURI.split(",");
-    const byteString =
-      splitDataURI[0].indexOf("base64") >= 0
-        ? atob(splitDataURI[1])
-        : decodeURI(splitDataURI[1]);
-    const mimeString = splitDataURI[0].split(":")[1].split(";")[0];
-
-    const ia = new Uint8Array(byteString.length);
-    for (let i = 0; i < byteString.length; i++)
-      ia[i] = byteString.charCodeAt(i);
-
-    return new Blob([ia], { type: mimeString });
-  }
 
   return (
     <RRAppWrapper style={{ backgroundColor: colors.Athens_Gray }}>

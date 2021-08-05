@@ -36,7 +36,11 @@ export default function ReviewResponseDetails({
       <View>
         <View style={styles.header}>
           <View style={styles.nameAndBack}>
-            {Platform.OS !== "web" && (
+            {Platform.OS == "web" ? (
+              <Pressable onPress={() => navigation.goBack()}>
+                <img style={{ marginRight: 16 }} src={Back}></img>
+              </Pressable>
+            ) : (
               <Pressable onPress={() => navigation.goBack()}>
                 <Back style={styles.back}></Back>
               </Pressable>
@@ -44,7 +48,7 @@ export default function ReviewResponseDetails({
             <Text style={styles.title}> {reviewResponse?.customerName}</Text>
           </View>
           {Platform.OS == "web" ? (
-            <img style={{ width: 10, height: 10 }} src={ThreeDotVertical}></img>
+            <img style={{ width: 4, height: 16 }} src={ThreeDotVertical}></img>
           ) : (
             <ThreeDotVertical style={styles.threeDot}></ThreeDotVertical>
           )}
@@ -58,18 +62,6 @@ export default function ReviewResponseDetails({
             }
           >
             {reviewResponse.videoUrl && (
-              // <Video
-              //   source={{
-              //     uri: S3_URL + reviewResponse.videoUrl,
-              //   }}
-              //   style={styles.rounded}
-              //   rate={1.0}
-              //   isMuted={false}
-              //   resizeMode="cover"
-              //   volume={0.5}
-              //   isLooping
-              //   shouldPlay
-              // />
               <View style={styles.overlay}>
                 <Image
                   style={styles.rounded}
@@ -88,7 +80,9 @@ export default function ReviewResponseDetails({
               </View>
             )}
           </Pressable>
-          <Text>{getElapsedTime(reviewResponse.createdAt)}</Text>
+          <Text style={styles.timeTxt}>
+            {getElapsedTime(reviewResponse.createdAt)}
+          </Text>
         </View>
       </View>
     </RRAppWrapper>
@@ -100,17 +94,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   title: {
-    fontSize: 20,
+    fontSize: 24,
+    lineHeight: 32,
+    fontFamily: "karla",
     fontWeight: "bold",
   },
   separator: {
-    marginVertical: 30,
+    marginVertical: 24,
     height: 1,
     width: "80%",
   },
-
   header: {
-    paddingHorizontal: 24,
+    padding: 24,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -120,8 +115,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   threeDot: {
-    width: 10,
-    height: 10,
+    width: 4,
+    height: 16,
   },
   nameAndBack: {
     flexDirection: "row",
@@ -139,8 +134,14 @@ const styles = StyleSheet.create({
     height: 450,
   },
   overlay: {
-    width: scaleSize(240),
-    height: 450,
+    width: 279,
+    aspectRatio: 9 / 16,
     marginBottom: 8,
+  },
+  timeTxt: {
+    fontSize: 12,
+    lineHeight: 16,
+    fontFamily: "karla",
+    color: colors.Black2,
   },
 });

@@ -87,12 +87,6 @@ export default function LoginScreen({
   };
 
   const proceedSignin = async () => {
-    // let data = {
-    //   email: "hari@gmail.com",
-    //   name: "Hariprasad K B",
-    //   password: "thisis@complecated",
-    //   username: "newuser",
-    // };
     try {
       const updatedUser = await userClient.updateUser({ username });
       console.log(updatedUser.data);

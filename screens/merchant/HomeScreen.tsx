@@ -11,6 +11,7 @@ import {
   Platform,
   ScrollView,
   RefreshControl,
+  ActivityIndicator,
 } from "react-native";
 import { RootStackParamList } from "../../types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -174,20 +175,18 @@ export default function HomeScreen({
             </View>
           ) : (
             <ScrollView
+              contentContainerStyle={{ flex: 1 }}
               refreshControl={
                 <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
               }
             >
-              <NoReview
-                refreshing={refreshing}
-                onRefresh={onRefresh}
-              ></NoReview>
+              <NoReview></NoReview>
             </ScrollView>
           )}
           <View style={styles.askBtn}>
             <RRButton
               title="Ask for Review"
-              onPress={() => navigation.push("ReviewRequest", reviewRequest)}
+              onPress={() => navigation.push("ShareRequest")}
             ></RRButton>
           </View>
           {/* <Button

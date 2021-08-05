@@ -8,6 +8,7 @@ import { Video } from "expo-av";
 import { RRAppWrapper } from "components";
 
 import { scaleSize } from "constants/Layout";
+import colors from "constants/Colors";
 
 export default function PublishReview({
   navigation,
@@ -23,7 +24,14 @@ export default function PublishReview({
 
   return (
     <RRAppWrapper>
-      <View style={{ height: 300, width: 200, flex: 1 }}>
+      <View
+        style={{
+          height: "100%",
+          width: "100%",
+          flex: 1,
+          backgroundColor: colors.Black,
+        }}
+      >
         {/* <View> */}
         {reviewResponse.videoUrl && (
           <Video
@@ -33,6 +41,7 @@ export default function PublishReview({
             style={{
               width: scaleSize(375),
               aspectRatio: 9 / 16,
+              borderRadius: 16,
             }}
             rate={1.0}
             isMuted={false}
@@ -42,19 +51,35 @@ export default function PublishReview({
             shouldPlay
           />
         )}
+        <View style={styles.btnCntnr}>
+          <Pressable style={styles.publishBtn}>
+            <Text style={styles.btnTxt}>Publish Review</Text>
+          </Pressable>
+        </View>
       </View>
       {/* </View> */}
     </RRAppWrapper>
   );
 }
 
-// const styles = StyleSheet.create({
-//   rounded: {
-//     width: scaleSize(279),
-//     aspectRatio: 9 / 16,
-//     borderTopLeftRadius: 16,
-//     borderTopRightRadius: 16,
-//     borderBottomRightRadius: 16,
-//     borderBottomLeftRadius: 2,
-//   },
-// });
+const styles = StyleSheet.create({
+  btnCntnr: {
+    position: "absolute",
+    bottom: 24,
+    alignSelf: "center",
+    justifyContent: "center",
+  },
+  publishBtn: {
+    paddingHorizontal: 32,
+    paddingVertical: 12,
+    backgroundColor: colors.Peach_Cream,
+    width: "100%",
+    borderRadius: 64,
+  },
+  btnTxt: {
+    fontFamily: "karla",
+    fontWeight: "bold",
+    fontSize: 16,
+    lineHeight: 24,
+  },
+});

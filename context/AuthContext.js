@@ -1,10 +1,11 @@
 import React, { createContext, useReducer } from "react";
 import { produce } from "immer";
-import { SET_USER, SET_TOKEN } from "./authActions";
+import { SET_USER, SET_TOKEN, SET_LOADER } from "./authActions";
 
 const InitialState = {
   user: {},
   token: "",
+  isLoading: false,
 };
 
 const authReducer = produce((draft, { type, payload }) => {
@@ -14,6 +15,9 @@ const authReducer = produce((draft, { type, payload }) => {
       break;
     case SET_TOKEN:
       draft.token = payload;
+      break;
+    case SET_LOADER:
+      draft.isLoading = payload;
       break;
     default:
       break;

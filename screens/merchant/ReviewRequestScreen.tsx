@@ -28,6 +28,9 @@ import {
   reviewRequest,
   updateReviewRequestApi,
 } from "services/api/review-request";
+import { authContext } from "context/AuthContext";
+import { set, SET_LOADER } from "context/authActions";
+import { DataURIToBlob } from "utils/convertToBlob";
 
 export default function ReviewRequestScreen({
   navigation,
@@ -41,6 +44,7 @@ export default function ReviewRequestScreen({
   const [isShowInfoTxt, setShowInfoTxt] = useState(false);
   const [isOpen, setOpenStatus] = useState(false);
   const [video, setVideo] = useState(null);
+  const { authState, authDispatch } = React.useContext(authContext);
 
   useEffect(() => {
     Keyboard.addListener("keyboardDidShow", hideBtn);
@@ -97,18 +101,25 @@ export default function ReviewRequestScreen({
   const createReviewRequest = (videoPayload) => {
     let formData = new FormData();
     const name = new Date().toISOString() + ".mp4";
-    formData.append("fileName", {
-      name: name,
-      uri: videoPayload.uri,
-      type: "video",
-    });
+    if (Platform.OS == "web") {
+      const file = DataURIToBlob(videoPayload.uri);
+      formData.append("fileName", file);
+    } else {
+      formData.append("fileName", {
+        name: name,
+        uri: videoPayload.uri,
+        type: "video",
+      });
+    }
     formData.append("askMessage", requestMessage);
+    authDispatch(set(SET_LOADER, true));
     reviewRequest(formData)
       .then((res) => {
-        console.log("res", res.data);
+        authDispatch(set(SET_LOADER, false));
         navigation.navigate("ShareRequest");
       })
       .catch((err) => {
+        authDispatch(set(SET_LOADER, false));
         console.log("err", err);
       });
   };
@@ -116,17 +127,25 @@ export default function ReviewRequestScreen({
   const updateReviewRequest = (videoPayload) => {
     let formData = new FormData();
     const name = new Date().toISOString() + ".mp4";
-    formData.append("fileName", {
-      name: name,
-      uri: videoPayload.uri,
-      type: "video",
-    });
+    if (Platform.OS == "web") {
+      const file = DataURIToBlob(videoPayload.uri);
+      formData.append("fileName", file);
+    } else {
+      formData.append("fileName", {
+        name: name,
+        uri: videoPayload.uri,
+        type: "video",
+      });
+    }
     formData.append("askMessage", requestMessage);
+    authDispatch(set(SET_LOADER, true));
     updateReviewRequestApi(formData, route?.params?.id)
       .then((res) => {
+        authDispatch(set(SET_LOADER, false));
         navigation.navigate("ShareRequest");
       })
       .catch((err) => {
+        authDispatch(set(SET_LOADER, false));
         console.log("err", err);
       });
   };
