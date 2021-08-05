@@ -206,6 +206,13 @@ export default function HomeScreen({
       ) : (
         <View>
           <Text>Loaading</Text>
+          <Button
+            title="Sign Out"
+            onPress={async () => {
+              await AsyncStorage.removeItem("@token");
+              authDispatch(set(SET_TOKEN, ""));
+            }}
+          ></Button>
         </View>
       )}
     </RRAppWrapper>
