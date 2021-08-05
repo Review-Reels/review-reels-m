@@ -115,10 +115,24 @@ export default function HomeScreen({
         <View style={styles.container}>
           <View style={styles.header}>
             <Text style={styles.title}> Inbox</Text>
+
             {Platform.OS == "web" ? (
-              <img src={ThreeDot}></img>
+              <Pressable
+                onPress={async () => {
+                  await AsyncStorage.removeItem("@token");
+                  authDispatch(set(SET_TOKEN, ""));
+                }}
+              >
+                <img src={ThreeDot}></img>
+              </Pressable>
             ) : (
-              <ThreeDot style={styles.threeDot}></ThreeDot>
+              <ThreeDot
+                style={styles.threeDot}
+                onPress={async () => {
+                  await AsyncStorage.removeItem("@token");
+                  authDispatch(set(SET_TOKEN, ""));
+                }}
+              ></ThreeDot>
             )}
           </View>
           {reviewResponseList.length > 0 ? (
