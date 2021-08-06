@@ -94,6 +94,7 @@ export default function ReviewRequestScreen({
     });
     console.log(result);
     if (!result.cancelled) {
+      setOpenStatus(false);
       setVideo(result);
     }
   };
@@ -192,8 +193,6 @@ export default function ReviewRequestScreen({
                   isMuted={false}
                   resizeMode="cover"
                   volume={0.5}
-                  isLooping
-                  shouldPlay
                 />
               ) : (
                 <View style={{ alignItems: "center" }}>

@@ -16,7 +16,7 @@ import {
 import { RootStackParamList } from "../../types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { authContext } from "context/AuthContext";
-import { set, SET_TOKEN } from "context/authActions";
+import { set, SET_LOADER, SET_TOKEN } from "context/authActions";
 import {
   getReviewResponse,
   updateReviewResponse,
@@ -59,8 +59,10 @@ export default function HomeScreen({
   React.useEffect(() => {
     getReviewRequests();
   }, []);
+
   const getReviewResponses = () => {
     setRefreshing(true);
+    authDispatch(set(SET_LOADER, true));
     getReviewResponse()
       .then((res) => {
         if (res.data.length) {
@@ -76,14 +78,23 @@ export default function HomeScreen({
   };
 
   const getReviewRequests = () => {
-    getReviewRequest().then((res) => {
-      if (res.data.length) {
-        setReviewRequest(res.data[0]);
-        setAskMessageCreated(true);
-      } else {
-        setAskMessageCreated(false);
-      }
-    });
+    authDispatch(set(SET_LOADER, true));
+    getReviewRequest()
+      .then(
+        (res) => {
+          authDispatch(set(SET_LOADER, false));
+          if (res.data.length) {
+            setReviewRequest(res.data[0]);
+            setAskMessageCreated(true);
+          } else {
+            setAskMessageCreated(false);
+          }
+        },
+        (err) => {
+          authDispatch(set(SET_LOADER, false));
+        }
+      )
+      .catch((error) => authDispatch(set(SET_LOADER, true)));
   };
   const goToReviewResponse = (item) => {
     if (!item.isRead)
@@ -114,8 +125,7 @@ export default function HomeScreen({
       {isAskMessageCreated == true ? (
         <View style={styles.container}>
           <View style={styles.header}>
-            <Text style={styles.title}> Inbox</Text>
-
+            <Text style={styles.title}>Inbox</Text>
             {Platform.OS == "web" ? (
               <Pressable
                 onPress={async () => {
@@ -203,31 +213,11 @@ export default function HomeScreen({
               onPress={() => navigation.push("ShareRequest")}
             ></RRButton>
           </View>
-          {/* <Button
-            title="Share Request"
-            onPress={() => navigation.push("ShareRequest")}
-          ></Button>
-          <Button
-            title="Sign Out"
-            onPress={async () => {
-              await AsyncStorage.removeItem("@token");
-              authDispatch(set(SET_TOKEN, ""));
-            }}
-          ></Button> */}
         </View>
       ) : isAskMessageCreated == false ? (
         <NoAskMessage navigation={navigation}></NoAskMessage>
       ) : (
-        <View>
-          <Text>Loaading</Text>
-          <Button
-            title="Sign Out"
-            onPress={async () => {
-              await AsyncStorage.removeItem("@token");
-              authDispatch(set(SET_TOKEN, ""));
-            }}
-          ></Button>
-        </View>
+        <View></View>
       )}
     </RRAppWrapper>
   );

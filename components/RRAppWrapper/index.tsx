@@ -5,8 +5,8 @@ import {
   StyleProp,
   ActivityIndicator,
   View,
+  Dimensions,
 } from "react-native";
-import Loader from "react-native-modal-loader";
 import Colors from "constants/Colors";
 import { authContext } from "context/AuthContext";
 
@@ -37,8 +37,8 @@ const styles = StyleSheet.create({
   },
   loaderCntnr: {
     position: "absolute",
-    width: "100%",
-    height: "100%",
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
     justifyContent: "center",
     zIndex: 999,
     backgroundColor: Colors.White2,
