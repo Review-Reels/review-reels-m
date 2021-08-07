@@ -31,6 +31,8 @@ import RRButton from "components/RRButton";
 import NoReview from "screens/shared/no-review";
 import { getReviewRequest } from "services/api/review-request";
 import NoAskMessage from "screens/shared/no-ask-message";
+import EventEmitter from "react-native-eventemitter";
+
 //added dayjs because its lighter than moment.js so the app  size will decrease
 const colorList = [
   colors.Anakiwa,
@@ -58,6 +60,15 @@ export default function HomeScreen({
 
   React.useEffect(() => {
     getReviewRequests();
+  }, []);
+
+  React.useEffect(() => {
+    EventEmitter.on("LOGOUT_USER", () => {
+      authDispatch(set(LOGOUT_USER));
+    });
+    return () => {
+      EventEmitter.removeAllListeners("LOGOUT_USER");
+    };
   }, []);
 
   const getReviewResponses = () => {
