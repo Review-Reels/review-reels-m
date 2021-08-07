@@ -2,6 +2,7 @@ import { RRAppWrapper, RRCamera, RRTextInput } from "components";
 import * as React from "react";
 import {
   Keyboard,
+  KeyboardAvoidingView,
   Modal,
   Platform,
   Pressable,
@@ -30,6 +31,7 @@ import {
 import { authContext } from "context/AuthContext";
 import { set, SET_LOADER } from "context/authActions";
 import { DataURIToBlob } from "utils/convertToBlob";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function ReviewRequestScreen({
   navigation,
@@ -47,8 +49,8 @@ export default function ReviewRequestScreen({
   const { authState, authDispatch } = React.useContext(authContext);
 
   useEffect(() => {
-    Keyboard.addListener("keyboardDidShow", hideBtn);
-    Keyboard.addListener("keyboardDidHide", showBtn);
+    // Keyboard.addListener("keyboardDidShow", hideBtn);
+    // Keyboard.addListener("keyboardDidHide", showBtn);
     (async () => {
       if (Platform.OS !== "web") {
         const { status } =
@@ -59,8 +61,8 @@ export default function ReviewRequestScreen({
       }
     })();
     return () => {
-      Keyboard.removeListener("keyboardDidShow", hideBtn);
-      Keyboard.removeListener("keyboardDidHide", showBtn);
+      // Keyboard.removeListener("keyboardDidShow", hideBtn);
+      // Keyboard.removeListener("keyboardDidHide", showBtn);
     };
   }, []);
 
@@ -155,7 +157,12 @@ export default function ReviewRequestScreen({
   return (
     <RRAppWrapper>
       <View style={{ flex: 1 }}>
-        <ScrollView style={styles.container}>
+        {/* <ScrollView style={styles.container}> */}
+        <KeyboardAwareScrollView
+          resetScrollToCoords={{ x: 0, y: 0 }}
+          contentContainerStyle={styles.container}
+          scrollEnabled={false}
+        >
           <View style={styles.headerCntnr}>
             <Text style={styles.title}>Create Your Ask Message</Text>
             <Pressable onPress={() => navigation.goBack()}>
@@ -215,7 +222,9 @@ export default function ReviewRequestScreen({
               ></RRTextInput>
             </View>
           </View>
-        </ScrollView>
+          {/* </ScrollView> */}
+        </KeyboardAwareScrollView>
+
         {isShowBtn == true ? (
           <View
             style={{
@@ -223,6 +232,7 @@ export default function ReviewRequestScreen({
               bottom: 0,
               alignSelf: "center",
               marginBottom: 16,
+              marginTop: 16,
             }}
           >
             <RRButton title="Proceed" onPress={onPressProceed}></RRButton>
