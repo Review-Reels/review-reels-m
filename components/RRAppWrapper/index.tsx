@@ -42,7 +42,7 @@ export default function CSAppWrapper({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.Athens_Gray,
+    backgroundColor: Colors.White,
   },
   loaderCntnr: {
     position: "absolute",

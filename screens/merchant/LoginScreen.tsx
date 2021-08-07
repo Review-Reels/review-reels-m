@@ -243,6 +243,7 @@ const styles = StyleSheet.create({
     fontFamily: "karla",
     fontWeight: "700",
     marginBottom: 16,
+    color: colors.Black5,
   },
   title: {
     fontSize: 20,
@@ -258,6 +259,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     alignSelf: "center",
     textAlign: "center",
+    color: colors.Black2,
   },
   userNameTxt: {
     fontSize: 14,
@@ -294,5 +296,6 @@ const styles = StyleSheet.create({
     fontFamily: "karla",
     fontSize: 16,
     lineHeight: 24,
+    color: colors.Black5,
   },
 });
