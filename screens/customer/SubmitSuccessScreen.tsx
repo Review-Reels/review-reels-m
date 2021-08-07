@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "bold",
-    fontFamily: "karla",
+    fontFamily: "Karla",
   },
   titleIcon: {
     position: "absolute",
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     textAlign: "center",
     marginTop: 8,
-    fontFamily: "karla",
+    fontFamily: "Karla",
   },
   footer: {
     alignItems: "center",
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     bottom: 40,
   },
   footerTxt: {
-    fontFamily: "karla",
+    fontFamily: "Karla",
     fontWeight: "400",
     lineHeight: 20,
     fontSize: 14,

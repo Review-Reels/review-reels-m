@@ -28,6 +28,7 @@ export type TextInputProps = {
   disabled?: boolean;
   numberOfLines?: number;
   multiline?: boolean;
+  ref?: any;
 };
 
 export type ButtonProps = {

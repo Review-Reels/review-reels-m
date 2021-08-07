@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    fontFamily: "karla",
+    fontFamily: "Karla",
     flexWrap: "wrap",
     width: scaleSize(200),
   },
@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
   infoText: {
     fontSize: 14,
     fontWeight: "normal",
-    fontFamily: "karla",
+    fontFamily: "Karla",
   },
   mainContainer: {
     padding: 24,
@@ -328,7 +328,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   addVideoTxt: {
-    fontFamily: "karla",
+    fontFamily: "Karla",
     fontWeight: "bold",
     fontSize: 16,
     lineHeight: 24,
@@ -361,7 +361,7 @@ const styles = StyleSheet.create({
     width: scaleSize(167),
     fontSize: 14,
     fontWeight: "700",
-    fontFamily: "karla",
+    fontFamily: "Karla",
     lineHeight: 20,
     marginLeft: 36,
   },
@@ -379,6 +379,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 14,
     lineHeight: 16,
-    fontFamily: "karla",
+    fontFamily: "Karla",
   },
 });

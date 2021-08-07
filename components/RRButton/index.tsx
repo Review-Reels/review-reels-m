@@ -57,6 +57,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: colors.White,
     lineHeight: 24,
-    fontFamily: "karla",
+    fontFamily: "Karla",
   },
 });

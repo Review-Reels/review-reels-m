@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: 24,
     lineHeight: 32,
-    fontFamily: "karla",
+    fontFamily: "Karla",
   },
   headerCntnr: {
     flexDirection: "row",
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     borderRadius: 64,
   },
   btnTxt: {
-    fontFamily: "karla",
+    fontFamily: "Karla",
     fontWeight: "bold",
     fontSize: 16,
     lineHeight: 24,
@@ -199,14 +199,14 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 16,
     fontWeight: "700",
-    fontFamily: "karla",
+    fontFamily: "Karla",
     color: colors.Black2,
   },
   cardTxt2: {
     fontSize: 14,
     lineHeight: 20,
     fontWeight: "400",
-    fontFamily: "karla",
+    fontFamily: "Karla",
     flexWrap: "wrap",
     maxWidth: scaleSize(200),
     marginTop: 8,
@@ -227,6 +227,6 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: 14,
     lineHeight: 20,
-    fontFamily: "karla",
+    fontFamily: "Karla",
   },
 });
