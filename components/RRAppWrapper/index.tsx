@@ -5,6 +5,9 @@ import {
   StyleProp,
   ActivityIndicator,
   View,
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard,
 } from "react-native";
 import Loader from "react-native-modal-loader";
 import Colors from "constants/Colors";
@@ -20,12 +23,18 @@ export default function CSAppWrapper({
   const { authState, authDispatch } = useContext(authContext);
   return (
     <SafeAreaView style={[styles.container, style]}>
-      {authState.isLoading && (
-        <View style={styles.loaderCntnr}>
-          <ActivityIndicator size="large" color={Colors.Alizarin_Crimson} />
-        </View>
-      )}
-      {children}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+      >
+        {authState.isLoading && (
+          <View style={styles.loaderCntnr}>
+            <ActivityIndicator size="large" color={Colors.Alizarin_Crimson} />
+          </View>
+        )}
+
+        {children}
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
