@@ -79,21 +79,23 @@ export default function LoginScreen({
       return;
     } else setUsernameError("");
     authDispatch(set(SET_LOADER, true));
-    userClient.updateUser({ username }, userDetails.Authorization).then(
-      () => {
-        let userInfo = userDetails;
-        userInfo.username = username;
-        userInfo.merchantName = merchantName;
-        saveAuthDetails(userInfo);
-        authDispatch(set(SET_LOADER, false));
-      },
-      (err) => {
-        console.log(err.response);
-        if (err.response?.data?.message)
-          setUsernameError(err.response?.data?.message || "");
-        authDispatch(set(SET_LOADER, false));
-      }
-    );
+    userClient
+      .updateUser({ username, merchantName }, userDetails.Authorization)
+      .then(
+        () => {
+          let userInfo = userDetails;
+          userInfo.username = username;
+          userInfo.merchantName = merchantName;
+          saveAuthDetails(userInfo);
+          authDispatch(set(SET_LOADER, false));
+        },
+        (err) => {
+          console.log(err.response);
+          if (err.response?.data?.message)
+            setUsernameError(err.response?.data?.message || "");
+          authDispatch(set(SET_LOADER, false));
+        }
+      );
   };
 
   const responseGoogle = (response: any) => {

@@ -1,8 +1,6 @@
 import axios from "axios";
 import { API_URL } from "@env";
-// import {getAuthToken} from '_utils';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-// import Snackbar from 'react-native-snackbar';
 
 const apiClient = axios.create({
   // baseURL: `${process.env.API_URL}`,
@@ -36,6 +34,11 @@ apiClient.interceptors.response.use(
     return response;
   },
   function (error) {
+    // console.log(error);
+    // console.log(error.response);
+    // if (error.response?.status === 401) {
+    //   authDispatch(set(LOGOUT_USER));
+    // }
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
     return Promise.reject(error);

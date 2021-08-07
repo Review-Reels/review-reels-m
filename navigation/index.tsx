@@ -76,7 +76,6 @@ function RootNavigator() {
         <>
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="ReviewRequest" component={ReviewRequestScreen} />
-          <Stack.Screen name="ReviewDetails" component={ReviewDetailsScreen} />
           <Stack.Screen name="ShareRequest" component={ShareRequestScreen} />
           <Stack.Screen
             name="ReviewResponseDetails"

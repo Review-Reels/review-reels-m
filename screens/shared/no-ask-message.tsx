@@ -18,8 +18,7 @@ export default function NoAskMessage({ navigation }: { navigation: any }) {
           }}
           style={{
             borderRadius: 16,
-            width: 279,
-            aspectRatio: 9 / 16,
+            width: scaleSize(295),
           }}
           rate={1.0}
           isMuted={false}
@@ -50,11 +49,11 @@ export default function NoAskMessage({ navigation }: { navigation: any }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 24,
+    paddingHorizontal: 40,
+    paddingVertical: 24,
   },
   askVideoCntnr: {
     flex: 3,
-    padding: 16,
     borderRadius: 16,
     justifyContent: "center",
     alignItems: "center",
@@ -63,7 +62,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 16,
+    marginTop: 24,
     marginBottom: 24,
   },
   askTxt1: {

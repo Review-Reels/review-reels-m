@@ -43,6 +43,13 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 64,
     width: "100%",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowColor: colors.Alizarin_Crimson,
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
   },
   buttonTitle: {
     fontSize: 16,

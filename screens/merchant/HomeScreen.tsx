@@ -16,7 +16,7 @@ import {
 import { RootStackParamList } from "../../types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { authContext } from "context/AuthContext";
-import { set, SET_LOADER, SET_TOKEN } from "context/authActions";
+import { LOGOUT_USER, set, SET_LOADER, SET_TOKEN } from "context/authActions";
 import {
   getReviewResponse,
   updateReviewResponse,
@@ -62,9 +62,9 @@ export default function HomeScreen({
 
   const getReviewResponses = () => {
     setRefreshing(true);
-    authDispatch(set(SET_LOADER, true));
     getReviewResponse()
       .then((res) => {
+        authDispatch(set(SET_LOADER, false));
         if (res.data.length) {
           setReviewResponseList(res.data);
           setSearchedReviewResponseList(res.data);
@@ -96,6 +96,7 @@ export default function HomeScreen({
       )
       .catch((error) => authDispatch(set(SET_LOADER, true)));
   };
+
   const goToReviewResponse = (item) => {
     if (!item.isRead)
       updateReviewResponse({ isRead: true }, item.id)
@@ -120,6 +121,10 @@ export default function HomeScreen({
     getReviewRequests();
   }, []);
 
+  const onPressLogout = () => {
+    authDispatch(set(LOGOUT_USER));
+  };
+
   return (
     <RRAppWrapper>
       {isAskMessageCreated == true ? (
@@ -136,13 +141,9 @@ export default function HomeScreen({
                 <img src={ThreeDot}></img>
               </Pressable>
             ) : (
-              <ThreeDot
-                style={styles.threeDot}
-                onPress={async () => {
-                  await AsyncStorage.removeItem("@token");
-                  authDispatch(set(SET_TOKEN, ""));
-                }}
-              ></ThreeDot>
+              <Pressable onPress={onPressLogout}>
+                <ThreeDot style={styles.threeDot}></ThreeDot>
+              </Pressable>
             )}
           </View>
           {reviewResponseList.length > 0 ? (

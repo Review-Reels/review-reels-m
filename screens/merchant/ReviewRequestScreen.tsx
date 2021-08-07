@@ -23,7 +23,6 @@ import * as ImagePicker from "expo-image-picker";
 import MerchantVideoInfo from "screens/shared/merchant-video-info";
 import { Video } from "expo-av";
 import { S3_URL } from "constants/apiUrls";
-
 import {
   reviewRequest,
   updateReviewRequestApi,
@@ -44,6 +43,7 @@ export default function ReviewRequestScreen({
   const [isShowInfoTxt, setShowInfoTxt] = useState(false);
   const [isOpen, setOpenStatus] = useState(false);
   const [video, setVideo] = useState(null);
+  const [isNewVideo, setIsNewVideo] = useState(false);
   const { authState, authDispatch } = React.useContext(authContext);
 
   useEffect(() => {
@@ -58,7 +58,6 @@ export default function ReviewRequestScreen({
         }
       }
     })();
-    // cleanup function
     return () => {
       Keyboard.removeListener("keyboardDidShow", hideBtn);
       Keyboard.removeListener("keyboardDidHide", showBtn);
@@ -66,7 +65,6 @@ export default function ReviewRequestScreen({
   }, []);
 
   useEffect(() => {
-    console.log(route.params);
     if (route.params) {
       setRequestMessage(route.params.askMessage);
       setVideo({ uri: S3_URL + route.params.videoUrl });
@@ -96,10 +94,12 @@ export default function ReviewRequestScreen({
     if (!result.cancelled) {
       setOpenStatus(false);
       setVideo(result);
+      setIsNewVideo(true);
     }
   };
 
   const createReviewRequest = (videoPayload) => {
+    if (!videoPayload?.uri) return;
     let formData = new FormData();
     const name = new Date().toISOString() + ".mp4";
     if (Platform.OS == "web") {
@@ -121,22 +121,24 @@ export default function ReviewRequestScreen({
       })
       .catch((err) => {
         authDispatch(set(SET_LOADER, false));
-        console.log("err", err);
       });
   };
 
   const updateReviewRequest = (videoPayload) => {
+    if (!videoPayload?.uri) return;
     let formData = new FormData();
-    const name = new Date().toISOString() + ".mp4";
-    if (Platform.OS == "web") {
-      const file = DataURIToBlob(videoPayload.uri);
-      formData.append("fileName", file);
-    } else {
-      formData.append("fileName", {
-        name: name,
-        uri: videoPayload.uri,
-        type: "video",
-      });
+    if (isNewVideo) {
+      const name = new Date().toISOString() + ".mp4";
+      if (Platform.OS == "web") {
+        const file = DataURIToBlob(videoPayload.uri);
+        formData.append("fileName", file);
+      } else {
+        formData.append("fileName", {
+          name: name,
+          uri: videoPayload.uri,
+          type: "video",
+        });
+      }
     }
     formData.append("askMessage", requestMessage);
     authDispatch(set(SET_LOADER, true));
@@ -147,7 +149,6 @@ export default function ReviewRequestScreen({
       })
       .catch((err) => {
         authDispatch(set(SET_LOADER, false));
-        console.log("err", err);
       });
   };
 
@@ -184,14 +185,13 @@ export default function ReviewRequestScreen({
                   style={[
                     styles.image,
                     {
-                      width: scaleSize(279),
-                      aspectRatio: 9 / 16,
+                      width: scaleSize(295),
                       borderRadius: 16,
                     },
                   ]}
                   rate={1.0}
                   isMuted={false}
-                  resizeMode="cover"
+                  resizeMode="contain"
                   volume={0.5}
                 />
               ) : (
@@ -251,7 +251,7 @@ export default function ReviewRequestScreen({
             onCapture={(video: any) => {
               setVideo(video);
               setCameraStatus(false);
-              console.log(video);
+              setIsNewVideo(true);
             }}
           ></RRCamera>
         )}
@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
   },
   addVideoCntnr: {
     backgroundColor: colors.Dove_Grey,
-    height: 280,
+    minHeight: 280,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 16,
