@@ -36,6 +36,7 @@ export type ButtonProps = {
   style?: StyleProp<any>;
   isDisabled?: boolean;
   mode?: string;
+  icon?: string;
 };
 
 export type CameraProps = {

@@ -9,9 +9,12 @@ import {
   Platform,
   ScrollView,
   Keyboard,
+  Pressable,
 } from "react-native";
 import { RootStackParamList, SignupPayload, googleSignUpPayload } from "types";
 import Logo from "assets/svg/Logo.svg";
+import GoogleIcon from "assets/svg/Google.svg";
+import AppleIcon from "assets/svg/Apple.svg";
 import Statement from "assets/svg/Statement.svg";
 import RRButton from "components/RRButton";
 import * as Google from "expo-google-app-auth";
@@ -20,6 +23,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { authContext } from "context/AuthContext";
 import { set, SET_LOADER, SET_TOKEN, SET_USER } from "context/authActions";
 import { GoogleLogin } from "react-google-login";
+import colors from "constants/Colors";
 
 export default function LoginScreen({
   navigation,
@@ -126,7 +130,7 @@ export default function LoginScreen({
   };
 
   return (
-    <RRAppWrapper style={{ flex: 1, padding: 24 }}>
+    <RRAppWrapper style={{ flex: 1, padding: 40 }}>
       <>
         {isEnterUsername ? (
           <View style={{ flex: 1, marginTop: 24 }}>
@@ -162,39 +166,53 @@ export default function LoginScreen({
           </View>
         ) : (
           <ScrollView contentContainerStyle={styles.container}>
-            <View style={{ position: "absolute", top: 48 }}>
+            <View style={styles.logoCntnr}>
               {Platform.OS == "web" ? <img src={Logo}></img> : <Logo></Logo>}
             </View>
-            <View style={{ position: "absolute", bottom: 0 }}>
-              <View style={styles.statementCntnr}>
-                {Platform.OS == "web" ? (
-                  <img src={Statement}></img>
-                ) : (
-                  <Statement></Statement>
-                )}
-              </View>
+            <View style={{ flex: 1, justifyContent: "flex-end" }}>
+              <Text style={styles.statement}>
+                Collect short video reviews, quickly.
+              </Text>
               {Platform.OS === "web" ? (
                 <GoogleLogin
                   clientId="821902754014-fm9npqchn7ja27eagrrr76bk91ikspsg.apps.googleusercontent.com"
                   render={(renderProps) => (
-                    <RRButton
+                    <Pressable
                       style={styles.button}
-                      title="Connect with Google"
                       onPress={renderProps.onClick}
-                    ></RRButton>
+                    >
+                      <img src={GoogleIcon}></img>
+                      <Text style={styles.buttonTxt}>Continue with Google</Text>
+                    </Pressable>
                   )}
                   onSuccess={responseGoogle}
                   onFailure={onGoogleLoginFailed}
                   cookiePolicy={"single_host_origin"}
                 />
               ) : (
-                <RRButton
-                  style={styles.button}
-                  title="Connect with Google"
-                  onPress={() => signInAsync()}
-                ></RRButton>
+                <Pressable style={styles.button} onPress={() => signInAsync()}>
+                  <GoogleIcon></GoogleIcon>
+                  <Text style={styles.buttonTxt}>Continue with Google</Text>
+                </Pressable>
               )}
-
+              <Pressable
+                style={[styles.button, { backgroundColor: colors.Black }]}
+              >
+                {Platform.OS == "web" ? (
+                  <img src={AppleIcon}></img>
+                ) : (
+                  <AppleIcon></AppleIcon>
+                )}
+                <Text style={styles.buttonTxt}>Continue with Apple</Text>
+              </Pressable>
+              <Pressable>
+                <Text style={styles.emailTxt}>
+                  You can also{" "}
+                  <Text style={{ textDecorationLine: "underline" }}>
+                    continue with email
+                  </Text>
+                </Text>
+              </Pressable>
               <Text style={[styles.signInTxt]}>
                 By signing up you agree to our terms and conditions
               </Text>
@@ -213,17 +231,22 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 24,
   },
-  logoCntnr: {},
-  statementCntnr: {
-    marginTop: 185,
+  logoCntnr: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  statement: {
+    textAlign: "center",
+    fontSize: 24,
+    lineHeight: 32,
+    fontFamily: "karla",
+    fontWeight: "700",
+    marginBottom: 16,
   },
   title: {
     fontSize: 20,
     fontWeight: "bold",
-  },
-  button: {
-    width: 270,
-    marginTop: 24,
   },
   signInTxt: {
     fontSize: 14,
@@ -248,5 +271,28 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 0,
     alignSelf: "center",
+  },
+  button: {
+    flexDirection: "row",
+    borderRadius: 64,
+    paddingHorizontal: 48,
+    paddingVertical: 18,
+    backgroundColor: colors.Alizarin_Crimson,
+    marginTop: 32,
+  },
+  buttonTxt: {
+    marginLeft: 14,
+    color: colors.White,
+    fontFamily: "karla",
+    fontSize: 16,
+    lineHeight: 20,
+    fontWeight: "bold",
+  },
+  emailTxt: {
+    textAlign: "center",
+    marginTop: 24,
+    fontFamily: "karla",
+    fontSize: 16,
+    lineHeight: 24,
   },
 });
