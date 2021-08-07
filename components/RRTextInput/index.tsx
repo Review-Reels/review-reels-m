@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   errorTxt: {
     color: "red",
     fontSize: 12,
-    marginLeft: 16,
+    marginTop: 8,
   },
   label: {
     fontWeight: "bold",

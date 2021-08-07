@@ -62,6 +62,6 @@ export type googleSignUpPayload = {
 };
 
 export type updateUserPayload = {
-  username?: string;
+  username: string;
+  merchantName: string;
 };
-

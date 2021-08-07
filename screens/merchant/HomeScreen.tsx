@@ -16,7 +16,7 @@ import {
 import { RootStackParamList } from "../../types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { authContext } from "context/AuthContext";
-import { set, SET_TOKEN } from "context/authActions";
+import { LOGOUT_USER, set, SET_LOADER, SET_TOKEN } from "context/authActions";
 import {
   getReviewResponse,
   updateReviewResponse,
@@ -59,10 +59,12 @@ export default function HomeScreen({
   React.useEffect(() => {
     getReviewRequests();
   }, []);
+
   const getReviewResponses = () => {
     setRefreshing(true);
     getReviewResponse()
       .then((res) => {
+        authDispatch(set(SET_LOADER, false));
         if (res.data.length) {
           setReviewResponseList(res.data);
           setSearchedReviewResponseList(res.data);
@@ -76,15 +78,25 @@ export default function HomeScreen({
   };
 
   const getReviewRequests = () => {
-    getReviewRequest().then((res) => {
-      if (res.data.length) {
-        setReviewRequest(res.data[0]);
-        setAskMessageCreated(true);
-      } else {
-        setAskMessageCreated(false);
-      }
-    });
+    authDispatch(set(SET_LOADER, true));
+    getReviewRequest()
+      .then(
+        (res) => {
+          authDispatch(set(SET_LOADER, false));
+          if (res.data.length) {
+            setReviewRequest(res.data[0]);
+            setAskMessageCreated(true);
+          } else {
+            setAskMessageCreated(false);
+          }
+        },
+        (err) => {
+          authDispatch(set(SET_LOADER, false));
+        }
+      )
+      .catch((error) => authDispatch(set(SET_LOADER, true)));
   };
+
   const goToReviewResponse = (item) => {
     if (!item.isRead)
       updateReviewResponse({ isRead: true }, item.id)
@@ -109,13 +121,16 @@ export default function HomeScreen({
     getReviewRequests();
   }, []);
 
+  const onPressLogout = () => {
+    authDispatch(set(LOGOUT_USER));
+  };
+
   return (
     <RRAppWrapper>
       {isAskMessageCreated == true ? (
         <View style={styles.container}>
           <View style={styles.header}>
-            <Text style={styles.title}> Inbox</Text>
-
+            <Text style={styles.title}>Inbox</Text>
             {Platform.OS == "web" ? (
               <Pressable
                 onPress={async () => {
@@ -126,13 +141,9 @@ export default function HomeScreen({
                 <img src={ThreeDot}></img>
               </Pressable>
             ) : (
-              <ThreeDot
-                style={styles.threeDot}
-                onPress={async () => {
-                  await AsyncStorage.removeItem("@token");
-                  authDispatch(set(SET_TOKEN, ""));
-                }}
-              ></ThreeDot>
+              <Pressable onPress={onPressLogout}>
+                <ThreeDot style={styles.threeDot}></ThreeDot>
+              </Pressable>
             )}
           </View>
           {reviewResponseList.length > 0 ? (
@@ -203,31 +214,11 @@ export default function HomeScreen({
               onPress={() => navigation.push("ShareRequest")}
             ></RRButton>
           </View>
-          {/* <Button
-            title="Share Request"
-            onPress={() => navigation.push("ShareRequest")}
-          ></Button>
-          <Button
-            title="Sign Out"
-            onPress={async () => {
-              await AsyncStorage.removeItem("@token");
-              authDispatch(set(SET_TOKEN, ""));
-            }}
-          ></Button> */}
         </View>
       ) : isAskMessageCreated == false ? (
         <NoAskMessage navigation={navigation}></NoAskMessage>
       ) : (
-        <View>
-          <Text>Loaading</Text>
-          <Button
-            title="Sign Out"
-            onPress={async () => {
-              await AsyncStorage.removeItem("@token");
-              authDispatch(set(SET_TOKEN, ""));
-            }}
-          ></Button>
-        </View>
+        <View></View>
       )}
     </RRAppWrapper>
   );

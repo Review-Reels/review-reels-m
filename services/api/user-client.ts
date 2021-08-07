@@ -14,7 +14,10 @@ export default {
   googleSignIn(payload: googleSignUpPayload | undefined) {
     return axios.post("auth/google_sign_in", payload);
   },
-  updateUser(payload: updateUserPayload | undefined) {
-    return axios.post("user/update_user", payload);
+  updateUser(payload: updateUserPayload | undefined, auth: string) {
+    const headers = {
+      Authorization: "Bearer " + auth,
+    };
+    return axios.post("user/update_user", payload, { headers: headers });
   },
 };

@@ -1,6 +1,7 @@
 import React, { createContext, useReducer } from "react";
 import { produce } from "immer";
-import { SET_USER, SET_TOKEN, SET_LOADER } from "./authActions";
+import { SET_USER, SET_TOKEN, SET_LOADER, LOGOUT_USER } from "./authActions";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const InitialState = {
   user: {},
@@ -19,6 +20,11 @@ const authReducer = produce((draft, { type, payload }) => {
     case SET_LOADER:
       draft.isLoading = payload;
       break;
+    case LOGOUT_USER:
+      draft.token = "";
+      draft.user = {};
+      AsyncStorage.removeItem("@user");
+      AsyncStorage.removeItem("@token");
     default:
       break;
   }
