@@ -161,7 +161,7 @@ export default function ReviewRequestScreen({
         <KeyboardAwareScrollView
           resetScrollToCoords={{ x: 0, y: 0 }}
           contentContainerStyle={styles.container}
-          scrollEnabled={false}
+          scrollEnabled={true}
         >
           <View style={styles.headerCntnr}>
             <Text style={styles.title}>Create Your Ask Message</Text>

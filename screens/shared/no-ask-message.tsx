@@ -20,6 +20,7 @@ export default function NoAskMessage({ navigation }: { navigation: any }) {
           style={{
             borderRadius: 16,
             width: scaleSize(295),
+            aspectRatio: 2 / 3,
           }}
           rate={1.0}
           isMuted={false}
@@ -38,10 +39,12 @@ export default function NoAskMessage({ navigation }: { navigation: any }) {
         <Text style={styles.askTxt2}>
           Let’s get started right away by creating your ask message.
         </Text>
-        <RRButton
-          title="Create Ask Message"
-          onPress={() => navigation.push("ReviewRequest")}
-        ></RRButton>
+        <View style={{ alignSelf: "center" }}>
+          <RRButton
+            title="Create Ask Message"
+            onPress={() => navigation.push("ReviewRequest")}
+          ></RRButton>
+        </View>
       </View>
     </View>
   );
