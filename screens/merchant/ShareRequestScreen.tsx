@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    fontFamily: "karla",
+    fontFamily: "Karla",
     flexWrap: "wrap",
     width: scaleSize(224),
     lineHeight: 32,
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
   infoText: {
     fontSize: 14,
     fontWeight: "normal",
-    fontFamily: "karla",
+    fontFamily: "Karla",
     color: colors.Black2,
     marginTop: 8,
   },
@@ -217,14 +217,14 @@ const styles = StyleSheet.create({
   },
   shareHeaderTxt: {
     fontSize: 12,
-    fontFamily: "karla",
+    fontFamily: "Karla",
     lineHeight: 16,
     fontWeight: "700",
     color: colors.Black2,
   },
   shareLinkTxt: {
     fontSize: 20,
-    fontFamily: "karla",
+    fontFamily: "Karla",
     lineHeight: 24,
     color: colors.Charade,
     marginTop: 8,
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: 14,
     lineHeight: 20,
-    fontFamily: "karla",
+    fontFamily: "Karla",
   },
   headerAction: {
     paddingHorizontal: 24,
@@ -266,6 +266,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 14,
     lineHeight: 16,
-    fontFamily: "karla",
+    fontFamily: "Karla",
   },
 });

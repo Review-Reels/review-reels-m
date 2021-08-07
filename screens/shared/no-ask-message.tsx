@@ -7,6 +7,7 @@ import { scaleSize } from "constants/Layout";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "types";
 import { ScrollView } from "react-native-gesture-handler";
+import colors from "constants/Colors";
 
 export default function NoAskMessage({ navigation }: { navigation: any }) {
   return (
@@ -19,6 +20,7 @@ export default function NoAskMessage({ navigation }: { navigation: any }) {
           style={{
             borderRadius: 16,
             width: scaleSize(295),
+            aspectRatio: 2 / 3,
           }}
           rate={1.0}
           isMuted={false}
@@ -37,10 +39,12 @@ export default function NoAskMessage({ navigation }: { navigation: any }) {
         <Text style={styles.askTxt2}>
           Let’s get started right away by creating your ask message.
         </Text>
-        <RRButton
-          title="Create Ask Message"
-          onPress={() => navigation.push("ReviewRequest")}
-        ></RRButton>
+        <View style={{ alignSelf: "center" }}>
+          <RRButton
+            title="Create Ask Message"
+            onPress={() => navigation.push("ReviewRequest")}
+          ></RRButton>
+        </View>
       </View>
     </View>
   );
@@ -53,32 +57,34 @@ const styles = StyleSheet.create({
     paddingVertical: 24,
   },
   askVideoCntnr: {
-    flex: 3,
+    flex: 2,
     borderRadius: 16,
     justifyContent: "center",
     alignItems: "center",
   },
   askCntnr: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "flex-end",
     alignItems: "center",
     marginTop: 24,
     marginBottom: 24,
   },
   askTxt1: {
-    fontFamily: "karla",
+    fontFamily: "Karla",
     fontSize: 16,
     fontWeight: "400",
     lineHeight: 24,
     textAlign: "center",
+    color: colors.Black5,
   },
   askTxt2: {
-    fontFamily: "karla",
+    fontFamily: "Karla",
     fontWeight: "700",
     fontSize: 16,
     lineHeight: 24,
     textAlign: "center",
     marginTop: 24,
     marginBottom: 24,
+    color: colors.Black5,
   },
 });

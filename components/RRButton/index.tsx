@@ -9,6 +9,7 @@ export default function RRButton({
   style,
   isDisabled,
   mode,
+  icon = "",
 }: ButtonProps) {
   const onPressOk = () => {
     if (!isDisabled) {
@@ -56,5 +57,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: colors.White,
     lineHeight: 24,
+    fontFamily: "Karla",
   },
 });

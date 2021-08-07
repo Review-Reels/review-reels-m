@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   },
   chatTxt: {
     textAlign: "center",
-    fontFamily: "karla",
+    fontFamily: "Karla",
     fontSize: 16,
     lineHeight: 24,
     fontWeight: "400",

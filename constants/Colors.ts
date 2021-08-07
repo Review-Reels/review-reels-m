@@ -10,6 +10,7 @@ export default {
   Black2: "rgba(0, 0, 0, 0.5)",
   Black3: "rgba(0, 0, 0, 0.25)",
   Black4: "rgba(0, 0, 0, 0.08)",
+  Black5: "rgba(0, 0, 0, 0.8)",
   Athens_Gray: "#F8F9FA",
   Peach_Cream: "#FFEEDD",
   Dove_Grey: "rgba(0, 0, 0, 0.1)",

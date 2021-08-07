@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     lineHeight: 32,
-    fontFamily: "karla",
+    fontFamily: "Karla",
     fontWeight: "bold",
   },
   separator: {
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
   timeTxt: {
     fontSize: 12,
     lineHeight: 16,
-    fontFamily: "karla",
+    fontFamily: "Karla",
     color: colors.Black2,
   },
 });

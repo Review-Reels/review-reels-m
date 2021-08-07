@@ -22,11 +22,13 @@ export default function RRTextInput({
   disabled,
   numberOfLines,
   multiline,
+  ref,
 }: TextInputProps) {
   return (
     <View style={[style]}>
       <Text style={styles.label}>{label}</Text>
       <TextInput
+        ref={ref}
         editable={!disabled}
         style={[
           styles.input,
@@ -57,7 +59,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.Concrete,
     color: colors.Black,
     lineHeight: 24,
-    fontFamily: "karla",
+    fontFamily: "Karla",
   },
   errorInput: {
     borderColor: "red",
@@ -72,7 +74,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 14,
     lineHeight: 16,
-    fontFamily: "karla",
+    fontFamily: "Karla",
     marginBottom: 8,
     color: colors.Black2,
   },

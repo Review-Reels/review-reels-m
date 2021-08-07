@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   headerTxt: {
     fontSize: 24,
     fontWeight: "bold",
-    fontFamily: "karla",
+    fontFamily: "Karla",
     lineHeight: 32,
   },
 });

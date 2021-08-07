@@ -28,6 +28,7 @@ export type TextInputProps = {
   disabled?: boolean;
   numberOfLines?: number;
   multiline?: boolean;
+  ref?: any;
 };
 
 export type ButtonProps = {
@@ -36,6 +37,7 @@ export type ButtonProps = {
   style?: StyleProp<any>;
   isDisabled?: boolean;
   mode?: string;
+  icon?: string;
 };
 
 export type CameraProps = {
