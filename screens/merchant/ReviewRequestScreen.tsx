@@ -82,6 +82,7 @@ export default function ReviewRequestScreen({
   };
 
   const onPressProceed = () => {
+    console.log(route?.params?.id, video);
     if (route?.params?.id) updateReviewRequest(video);
     else createReviewRequest(video);
   };
@@ -122,6 +123,7 @@ export default function ReviewRequestScreen({
         navigation.navigate("ShareRequest");
       })
       .catch((err) => {
+        console.log(err);
         authDispatch(set(SET_LOADER, false));
       });
   };

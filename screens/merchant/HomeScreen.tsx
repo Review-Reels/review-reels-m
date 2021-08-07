@@ -56,11 +56,8 @@ export default function HomeScreen({
 
   React.useEffect(() => {
     getReviewResponses();
-  }, [isFocused]);
-
-  React.useEffect(() => {
     getReviewRequests();
-  }, []);
+  }, [isFocused]);
 
   React.useEffect(() => {
     EventEmitter.on("LOGOUT_USER", () => {
