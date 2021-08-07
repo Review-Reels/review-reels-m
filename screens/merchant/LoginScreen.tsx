@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 48,
     paddingVertical: 18,
     backgroundColor: colors.Alizarin_Crimson,
-    marginTop: 32,
+    marginTop: 16,
   },
   buttonTxt: {
     marginLeft: 14,
