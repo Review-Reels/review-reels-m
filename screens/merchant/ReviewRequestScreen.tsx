@@ -141,7 +141,7 @@ export default function ReviewRequestScreen({
         formData.append("fileName", {
           name: name,
           uri: videoPayload.uri,
-          type: "video",
+          type: mime.getType(videoPayload.uri),
         });
       }
     }
