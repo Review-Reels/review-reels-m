@@ -29,7 +29,7 @@ export default function ShareRequestScreen({
   const [reviewRequests, setReviewRequests] = React.useState({});
   const { authState } = React.useContext(authContext);
   const isFocused = useIsFocused();
-  const shareUrl = WEB_APP_URL + "request/" + authState.user.username;
+  const shareUrl = WEB_APP_URL + authState.user.username;
 
   React.useEffect(() => {
     getReviewRequest().then((res) => {

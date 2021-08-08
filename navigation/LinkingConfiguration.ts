@@ -17,7 +17,7 @@ export default {
       ReviewDetails: "review",
       ReviewResponseDetails: "review-response",
       NotFound: "*",
-      ViewRequest: "request/:username",
+      ViewRequest: ":username",
       SubmitSuccess: "success",
       PublishReview: "publish-review",
     },
