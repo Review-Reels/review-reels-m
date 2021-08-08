@@ -21,8 +21,6 @@ import * as Clipboard from "expo-clipboard";
 import { getReviewRequest } from "services/api/review-request";
 import { WEB_APP_URL } from "constants/apiUrls";
 import { authContext } from "context/AuthContext";
-import { useFocusEffect } from "@react-navigation/native";
-import { useEffect } from "react";
 
 export default function ShareRequestScreen({
   navigation,
@@ -31,7 +29,7 @@ export default function ShareRequestScreen({
   const { authState } = React.useContext(authContext);
   const shareUrl = WEB_APP_URL + "request/" + authState.user.username;
 
-  useEffect(() => {
+  React.useEffect(() => {
     getReviewRequest().then((res) => {
       if (res.data.length) saveReviewRequest(res.data[0]);
     });
@@ -65,7 +63,7 @@ export default function ShareRequestScreen({
   };
 
   const onPressClose = () => {
-    navigation.goBack();
+    navigation.navigate("Home", reviewRequests);
   };
   const onPressPreview = () => {
     navigation.navigate("ReviewDetails", reviewRequests);
@@ -75,8 +73,8 @@ export default function ShareRequestScreen({
   };
 
   return (
-    <RRAppWrapper style={styles.container}>
-      <View>
+    <RRAppWrapper style={styles.container} backgroundColor={colors.Peach_Cream}>
+      <View style={{ backgroundColor: "white" }}>
         <View style={styles.headerCntnr}>
           <View style={styles.headerRow}>
             <Text style={styles.title}>Your ask message is saved here</Text>
@@ -204,6 +202,7 @@ const styles = StyleSheet.create({
   shareCntnr: {
     paddingHorizontal: 24,
     marginTop: -48,
+    height: "100%",
   },
   linkShareCntnr: {
     backgroundColor: colors.Anakiwa,

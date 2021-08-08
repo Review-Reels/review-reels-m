@@ -32,6 +32,7 @@ import { authContext } from "context/AuthContext";
 import { set, SET_LOADER } from "context/authActions";
 import { DataURIToBlob } from "utils/convertToBlob";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import mime from "mime";
 
 export default function ReviewRequestScreen({
   navigation,
@@ -82,6 +83,7 @@ export default function ReviewRequestScreen({
   };
 
   const onPressProceed = () => {
+    console.log(route?.params?.id, video);
     if (route?.params?.id) updateReviewRequest(video);
     else createReviewRequest(video);
   };
@@ -111,7 +113,7 @@ export default function ReviewRequestScreen({
       formData.append("fileName", {
         name: name,
         uri: videoPayload.uri,
-        type: "video",
+        type: mime.getType(videoPayload.uri),
       });
     }
     formData.append("askMessage", requestMessage);
@@ -122,6 +124,7 @@ export default function ReviewRequestScreen({
         navigation.navigate("ShareRequest");
       })
       .catch((err) => {
+        console.log(err);
         authDispatch(set(SET_LOADER, false));
       });
   };
@@ -138,7 +141,7 @@ export default function ReviewRequestScreen({
         formData.append("fileName", {
           name: name,
           uri: videoPayload.uri,
-          type: "video",
+          type: mime.getType(videoPayload.uri),
         });
       }
     }

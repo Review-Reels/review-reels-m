@@ -12,6 +12,7 @@ import {
   ScrollView,
   RefreshControl,
   ActivityIndicator,
+  Image,
 } from "react-native";
 import { RootStackParamList } from "../../types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -31,6 +32,10 @@ import RRButton from "components/RRButton";
 import NoReview from "screens/shared/no-review";
 import { getReviewRequest } from "services/api/review-request";
 import NoAskMessage from "screens/shared/no-ask-message";
+import EventEmitter from "react-native-eventemitter";
+import { S3_URL } from "constants/apiUrls";
+import { backgroundColor } from "styled-system";
+
 //added dayjs because its lighter than moment.js so the app  size will decrease
 const colorList = [
   colors.Anakiwa,
@@ -54,10 +59,16 @@ export default function HomeScreen({
 
   React.useEffect(() => {
     getReviewResponses();
+    getReviewRequests();
   }, [isFocused]);
 
   React.useEffect(() => {
-    getReviewRequests();
+    EventEmitter.on("LOGOUT_USER", () => {
+      authDispatch(set(LOGOUT_USER));
+    });
+    return () => {
+      EventEmitter.removeAllListeners("LOGOUT_USER");
+    };
   }, []);
 
   const getReviewResponses = () => {
@@ -154,6 +165,8 @@ export default function HomeScreen({
               ></RRTextInput>
               <FlatList
                 style={{ height: "100%" }}
+                ListFooterComponent={<View />}
+                ListFooterComponentStyle={{ height: 200 }}
                 data={searchedReviewResponseList}
                 refreshControl={
                   <RefreshControl
@@ -164,35 +177,69 @@ export default function HomeScreen({
                 renderItem={({ item, index }) => (
                   <Pressable onPress={() => goToReviewResponse(item)}>
                     <View style={styles.inboxContainer}>
-                      <View
-                        style={[
-                          styles.rounded,
-                          { backgroundColor: colorList[index % 4] },
-                        ]}
-                      >
-                        <Text style={styles.textColor}>
-                          {item.customerName.charAt(0).toUpperCase()}
-                        </Text>
-                      </View>
-                      <View style={styles.nameFlex}>
-                        <Text
-                          style={{
-                            marginBottom: 5,
-                            color: item.isRead ? colors.Black2 : colors.Black,
-                            fontWeight: item.isRead ? "normal" : "bold",
-                          }}
+                      <View style={styles.secondInboxCntr}>
+                        <View
+                          style={[
+                            styles.rounded,
+                            { backgroundColor: colorList[index % 4] },
+                          ]}
                         >
-                          {item.customerName}
-                        </Text>
-                        <Text
-                          style={{
-                            marginBottom: 5,
-                            color: item.isRead ? colors.Black2 : colors.Black,
-                          }}
-                        >
-                          Asked via Email - {getElapsedTime(item.createdAt)}
-                        </Text>
+                          <Text style={styles.textColor}>
+                            {item.customerName.charAt(0).toUpperCase()}
+                          </Text>
+                        </View>
+                        <View style={styles.nameFlex}>
+                          <Text
+                            style={{
+                              marginBottom: 5,
+                              color: item.isRead ? colors.Black2 : colors.Black,
+                              fontWeight: item.isRead ? "normal" : "bold",
+                            }}
+                          >
+                            {item.customerName}
+                          </Text>
+                          <View style={styles.textWrapper}>
+                            <Text
+                              style={{
+                                color: item.isRead
+                                  ? colors.Black2
+                                  : colors.Black,
+                              }}
+                            >
+                              Shared a video review
+                            </Text>
+
+                            <View
+                              style={{
+                                width: 4,
+                                height: 4,
+                                backgroundColor: colors.Black3,
+                                borderRadius: "50%",
+                                marginHorizontal: 8,
+                                top: 8,
+                              }}
+                            ></View>
+
+                            <Text
+                              style={{
+                                color: item.isRead
+                                  ? colors.Black2
+                                  : colors.Black,
+                              }}
+                            >
+                              {getElapsedTime(item.createdAt)}
+                            </Text>
+                          </View>
+                        </View>
                       </View>
+                      {!item.isRead && (
+                        <View>
+                          <Image
+                            style={{ height: 40, width: 32, borderRadius: 4 }}
+                            source={{ uri: S3_URL + item.imageUrl }}
+                          />
+                        </View>
+                      )}
                     </View>
                   </Pressable>
                 )}
@@ -259,10 +306,16 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
   inboxContainer: {
+    marginTop: 16,
     flexDirection: "row",
     borderBottomWidth: 1,
     borderBottomColor: colors.Dove_Grey,
     padding: 10,
+    justifyContent: "space-between",
+  },
+  secondInboxCntr: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   customerName: { marginBottom: 5 },
   threeDot: { width: 10, height: 10 },
@@ -270,5 +323,10 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 24,
     alignSelf: "center",
+  },
+  textWrapper: {
+    marginBottom: 5,
+    flexDirection: "row",
+    justifyContent: "space-evenly",
   },
 });

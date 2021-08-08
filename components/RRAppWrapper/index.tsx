@@ -9,6 +9,7 @@ import {
   Platform,
   Keyboard,
   Dimensions,
+  StatusBar,
 } from "react-native";
 import Colors from "constants/Colors";
 import { authContext } from "context/AuthContext";
@@ -16,13 +17,28 @@ import { authContext } from "context/AuthContext";
 export default function CSAppWrapper({
   style,
   children,
+  backgroundColor,
 }: {
   style?: StyleProp<any>;
   children: ReactElement;
+  backgroundColor: string;
 }) {
   const { authState, authDispatch } = useContext(authContext);
   return (
-    <SafeAreaView style={[styles.container, style]}>
+    <SafeAreaView
+      style={[
+        styles.container,
+        style,
+        {
+          backgroundColor: backgroundColor ? backgroundColor : Colors.White,
+        },
+      ]}
+    >
+      <StatusBar
+        animated={true}
+        backgroundColor={backgroundColor ? backgroundColor : Colors.White}
+        barStyle={"dark-content"}
+      />
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1 }}
