@@ -275,6 +275,7 @@ const styles = StyleSheet.create({
     shadowColor: colors.Alizarin_Crimson,
     shadowOpacity: 0.15,
     shadowRadius: 4,
+    alignSelf: "center",
   },
   buttonTxt: {
     marginLeft: 14,
