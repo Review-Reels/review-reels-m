@@ -7,6 +7,7 @@ import {
   Text,
   Pressable,
   StyleProp,
+  Platform,
 } from "react-native";
 import { fontFamily } from "styled-system";
 import { TextInputProps } from "types";
@@ -39,7 +40,7 @@ export default function RRTextInput({
         onChangeText={(text) => onChangeText(text)}
         placeholder={placeholder}
         onSubmitEditing={onSubmitEditing}
-        numberOfLines={numberOfLines}
+        numberOfLines={Platform.OS == "web" ? numberOfLines : undefined}
         multiline={multiline}
         placeholderTextColor={colors.Black3}
       />
@@ -52,8 +53,8 @@ const styles = StyleSheet.create({
   input: {
     borderRadius: 8,
     // height: 56,
-    paddingHorizontal: 24,
-    paddingVertical: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
     fontSize: 16,
     fontWeight: "400",
     backgroundColor: colors.Concrete,

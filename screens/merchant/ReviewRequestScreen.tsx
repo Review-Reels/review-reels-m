@@ -15,7 +15,8 @@ import colors from "constants/Colors";
 import { useEffect, useState } from "react";
 import RRButton from "components/RRButton";
 import Close from "assets/svg/Close.svg";
-import AddPhoto from "assets/svg/AddPhoto.svg";
+import VideoCap from "assets/svg/VideoCap.svg";
+import VideoCam from "assets/svg/VideoCam.svg";
 import { scaleSize } from "constants/Layout";
 import { Actionsheet, useDisclose } from "native-base";
 import { StackScreenProps } from "@react-navigation/stack";
@@ -159,7 +160,13 @@ export default function ReviewRequestScreen({
 
   return (
     <RRAppWrapper>
-      <View style={{ flex: 1 }}>
+      <View
+        style={{
+          flex: 1,
+          paddingBottom: 24,
+          backgroundColor: colors.Athens_Gray,
+        }}
+      >
         {/* <ScrollView style={styles.container}> */}
         <KeyboardAwareScrollView
           resetScrollToCoords={{ x: 0, y: 0 }}
@@ -197,6 +204,7 @@ export default function ReviewRequestScreen({
                     {
                       width: scaleSize(295),
                       borderRadius: 16,
+                      aspectRatio: 9 / 16,
                     },
                   ]}
                   rate={1.0}
@@ -207,11 +215,11 @@ export default function ReviewRequestScreen({
               ) : (
                 <View style={{ alignItems: "center" }}>
                   {Platform.OS == "web" ? (
-                    <img style={{ width: 32, height: 32 }} src={AddPhoto}></img>
+                    <img style={{ width: 32, height: 32 }} src={VideoCap}></img>
                   ) : (
-                    <AddPhoto width={32} height={32}></AddPhoto>
+                    <VideoCap width={32} height={32}></VideoCap>
                   )}
-                  <Text style={styles.addVideoTxt}>Add a Video or Image</Text>
+                  <Text style={styles.addVideoTxt}>Add a Short Video</Text>
                 </View>
               )}
             </Pressable>
@@ -219,26 +227,31 @@ export default function ReviewRequestScreen({
               <RRTextInput
                 numberOfLines={4}
                 multiline={true}
-                label="Message"
+                label="MESSAGE"
                 value={requestMessage}
+                placeholder="Write your message here"
                 onChangeText={(value: string) => setRequestMessage(value)}
               ></RRTextInput>
             </View>
+            <View style={{ alignSelf: "center" }}>
+              <Pressable style={styles.button}>
+                {Platform.OS == "web" ? (
+                  <img src={VideoCam}></img>
+                ) : (
+                  <VideoCam></VideoCam>
+                )}
+                <Text style={styles.buttonTxt}>Reply with Video</Text>
+              </Pressable>
+            </View>
           </View>
-          {/* </ScrollView> */}
         </KeyboardAwareScrollView>
 
         {isShowBtn == true ? (
-          <View
-            style={{
-              position: "absolute",
-              bottom: 0,
-              alignSelf: "center",
-              marginBottom: 16,
-              marginTop: 16,
-            }}
-          >
-            <RRButton title="Proceed" onPress={onPressProceed}></RRButton>
+          <View style={styles.proceedBtnCntnr}>
+            <RRButton
+              title="Save Ask Message"
+              onPress={onPressProceed}
+            ></RRButton>
           </View>
         ) : null}
         <Actionsheet isOpen={isOpen} onClose={() => setOpenStatus(false)}>
@@ -285,7 +298,8 @@ export default function ReviewRequestScreen({
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 24,
-    marginTop: 40,
+    paddingTop: 24,
+    paddingBottom: 32,
   },
   image: {
     flex: 1,
@@ -305,6 +319,32 @@ const styles = StyleSheet.create({
     fontFamily: "Karla",
     flexWrap: "wrap",
     width: scaleSize(200),
+    color: colors.Black5,
+  },
+  button: {
+    flexDirection: "row",
+    borderRadius: 64,
+    paddingHorizontal: 48,
+    paddingVertical: 18,
+    backgroundColor: colors.Alizarin_Crimson,
+    marginTop: 24,
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowColor: colors.Alizarin_Crimson,
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    opacity: 0.2,
+    alignItems: "center",
+  },
+  buttonTxt: {
+    marginLeft: 14,
+    color: colors.White,
+    fontFamily: "Karla",
+    fontSize: 16,
+    lineHeight: 20,
+    fontWeight: "700",
   },
   infoContainer: {
     padding: 24,
@@ -314,8 +354,10 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontSize: 14,
-    fontWeight: "normal",
+    fontWeight: "400",
     fontFamily: "Karla",
+    lineHeight: 20,
+    color: colors.Black5,
   },
   mainContainer: {
     padding: 24,
@@ -325,17 +367,18 @@ const styles = StyleSheet.create({
   },
   addVideoCntnr: {
     backgroundColor: colors.Dove_Grey,
-    minHeight: 280,
+    minHeight: 344,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 16,
+    borderRadius: 8,
   },
   addVideoTxt: {
     fontFamily: "Karla",
-    fontWeight: "bold",
+    fontWeight: "700",
     fontSize: 16,
     lineHeight: 24,
     marginTop: 8,
+    color: colors.Black5,
   },
   msgCntnr: {
     marginTop: 24,
@@ -383,5 +426,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 16,
     fontFamily: "Karla",
+  },
+  proceedBtnCntnr: {
+    position: "absolute",
+    bottom: 16,
+    alignSelf: "center",
+    marginBottom: 24,
   },
 });
