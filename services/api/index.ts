@@ -15,7 +15,6 @@ apiClient.interceptors.request.use(
     // const authToken = "";
     try {
       const authToken = await AsyncStorage.getItem("@token");
-      console.log(authToken);
       if (authToken) config.headers.Authorization = "Bearer " + authToken;
     } catch (e) {
       console.log(e);
