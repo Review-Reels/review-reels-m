@@ -34,6 +34,7 @@ import { set, SET_LOADER } from "context/authActions";
 import { DataURIToBlob } from "utils/convertToBlob";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import mime from "mime";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function ReviewRequestScreen({
   navigation,
@@ -42,7 +43,6 @@ export default function ReviewRequestScreen({
   const [requestMessage, setRequestMessage] = useState(
     "Hope you enjoyed using our product. It will be great if you can tell us how much you like our product with a short video."
   );
-  const [isShowBtn, setBtnStatus] = useState(true);
   const [isOpenCamera, setCameraStatus] = useState(false);
   const [isShowInfoTxt, setShowInfoTxt] = useState(false);
   const [isOpen, setOpenStatus] = useState(false);
@@ -51,8 +51,6 @@ export default function ReviewRequestScreen({
   const { authState, authDispatch } = React.useContext(authContext);
 
   useEffect(() => {
-    // Keyboard.addListener("keyboardDidShow", hideBtn);
-    // Keyboard.addListener("keyboardDidHide", showBtn);
     (async () => {
       if (Platform.OS !== "web") {
         const { status } =
@@ -62,10 +60,7 @@ export default function ReviewRequestScreen({
         }
       }
     })();
-    return () => {
-      // Keyboard.removeListener("keyboardDidShow", hideBtn);
-      // Keyboard.removeListener("keyboardDidHide", showBtn);
-    };
+    return () => {};
   }, []);
 
   useEffect(() => {
@@ -74,14 +69,6 @@ export default function ReviewRequestScreen({
       setVideo({ uri: S3_URL + route.params.videoUrl });
     }
   }, [route]);
-
-  const hideBtn = () => {
-    setBtnStatus(false);
-  };
-
-  const showBtn = () => {
-    setBtnStatus(true);
-  };
 
   const onPressProceed = () => {
     console.log(route?.params?.id, video);
@@ -245,15 +232,24 @@ export default function ReviewRequestScreen({
             </View>
           </View>
         </KeyboardAwareScrollView>
-
-        {isShowBtn == true ? (
+        <LinearGradient
+          style={{
+            height: 200,
+            position: "absolute",
+            bottom: 0,
+            width: "100%",
+            alignItems: "center",
+            justifyContent: "flex-end",
+          }}
+          colors={["rgba(255,255,255,0)", "rgba(255,255,255,1)"]}
+        >
           <View style={styles.proceedBtnCntnr}>
             <RRButton
               title="Save Ask Message"
               onPress={onPressProceed}
             ></RRButton>
           </View>
-        ) : null}
+        </LinearGradient>
         <Actionsheet isOpen={isOpen} onClose={() => setOpenStatus(false)}>
           <Actionsheet.Content>
             <Actionsheet.Item onPressIn={() => pickVideo()}>
@@ -364,6 +360,14 @@ const styles = StyleSheet.create({
     marginTop: 24,
     backgroundColor: colors.White,
     borderRadius: 16,
+    marginBottom: 48,
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowColor: colors.Black,
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
   },
   addVideoCntnr: {
     backgroundColor: colors.Dove_Grey,
@@ -428,8 +432,6 @@ const styles = StyleSheet.create({
     fontFamily: "Karla",
   },
   proceedBtnCntnr: {
-    position: "absolute",
-    bottom: 16,
     alignSelf: "center",
     marginBottom: 24,
   },
