@@ -13,6 +13,7 @@ import {
   RefreshControl,
   ActivityIndicator,
   Image,
+  Dimensions,
 } from "react-native";
 import { RootStackParamList } from "../../types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -214,7 +215,11 @@ export default function HomeScreen({
                                 width: 4,
                                 height: 4,
                                 backgroundColor: colors.Black3,
-                                borderRadius: "50%",
+                                borderRadius:
+                                  Math.round(
+                                    Dimensions.get("window").width +
+                                      Dimensions.get("window").height
+                                  ) / 2,
                                 marginHorizontal: 8,
                                 top: 8,
                               }}
