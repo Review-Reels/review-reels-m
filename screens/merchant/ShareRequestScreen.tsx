@@ -21,19 +21,21 @@ import * as Clipboard from "expo-clipboard";
 import { getReviewRequest } from "services/api/review-request";
 import { WEB_APP_URL } from "constants/apiUrls";
 import { authContext } from "context/AuthContext";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function ShareRequestScreen({
   navigation,
 }: StackScreenProps<RootStackParamList, "NotFound">) {
   const [reviewRequests, setReviewRequests] = React.useState({});
   const { authState } = React.useContext(authContext);
-  const shareUrl = WEB_APP_URL + "request/" + authState.user.username;
+  const isFocused = useIsFocused();
+  const shareUrl = WEB_APP_URL + authState.user.username;
 
   React.useEffect(() => {
     getReviewRequest().then((res) => {
       if (res.data.length) saveReviewRequest(res.data[0]);
     });
-  }, []);
+  }, [isFocused]);
 
   const saveReviewRequest = (data: any) => {
     setReviewRequests(data);
