@@ -7,6 +7,7 @@ export default {
   White: "#FFFFFF",
   White2: "rgba(255, 255, 255, 0.5)",
   Black: "#000000",
+  Black1: "rgba(0, 0, 0, 0.1)",
   Black2: "rgba(0, 0, 0, 0.5)",
   Black3: "rgba(0, 0, 0, 0.25)",
   Black4: "rgba(0, 0, 0, 0.08)",

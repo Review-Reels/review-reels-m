@@ -35,6 +35,7 @@ import { DataURIToBlob } from "utils/convertToBlob";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import mime from "mime";
 import { LinearGradient } from "expo-linear-gradient";
+import Library from "assets/svg/Library.svg";
 
 export default function ReviewRequestScreen({
   navigation,
@@ -45,7 +46,7 @@ export default function ReviewRequestScreen({
   );
   const [isOpenCamera, setCameraStatus] = useState(false);
   const [isShowInfoTxt, setShowInfoTxt] = useState(false);
-  const [isOpen, setOpenStatus] = useState(false);
+  const [isOpen, setOpenStatus] = useState(true);
   const [video, setVideo] = useState(null);
   const [isNewVideo, setIsNewVideo] = useState(false);
   const { authState, authDispatch } = React.useContext(authContext);
@@ -251,20 +252,41 @@ export default function ReviewRequestScreen({
           </View>
         </LinearGradient>
         <Actionsheet isOpen={isOpen} onClose={() => setOpenStatus(false)}>
-          <Actionsheet.Content>
-            <Actionsheet.Item onPressIn={() => pickVideo()}>
-              Choose from Gallery
-            </Actionsheet.Item>
-            <Actionsheet.Item
+          <View style={styles.actionCntnr}>
+            <Pressable
+              style={[
+                styles.bottomAction,
+                {
+                  paddingRight: 6,
+                  borderBottomWidth: 1,
+                  borderBottomColor: colors.Black1,
+                },
+              ]}
+              onPressIn={() => pickVideo()}
+            >
+              <Text style={styles.bottomActionTxt}>Choose from Gallery</Text>
+              {Platform.OS == "web" ? (
+                <img src={Library}></img>
+              ) : (
+                <Library></Library>
+              )}
+            </Pressable>
+            <Pressable
+              style={styles.bottomAction}
               onPressIn={() => {
                 setCameraStatus(true);
                 setOpenStatus(false);
                 setVideo(null);
               }}
             >
-              Capture Video
-            </Actionsheet.Item>
-          </Actionsheet.Content>
+              <Text style={styles.bottomActionTxt}>Capture Video</Text>
+              {Platform.OS == "web" ? (
+                <img src={VideoCap}></img>
+              ) : (
+                <VideoCap></VideoCap>
+              )}
+            </Pressable>
+          </View>
         </Actionsheet>
         {isOpenCamera && (
           <RRCamera
@@ -296,6 +318,26 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingTop: 24,
     paddingBottom: 32,
+  },
+  actionCntnr: {
+    backgroundColor: colors.White,
+    paddingHorizontal: 32,
+    borderTopRightRadius: 16,
+    borderTopLeftRadius: 16,
+  },
+  bottomAction: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+
+    alignItems: "center",
+  },
+  bottomActionTxt: {
+    fontWeight: "700",
+    fontFamily: "Karla",
+    fontSize: 16,
+    lineHeight: 24,
+    alignSelf: "flex-start",
+    marginVertical: 20,
   },
   image: {
     flex: 1,

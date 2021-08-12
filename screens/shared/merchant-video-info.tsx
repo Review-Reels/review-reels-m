@@ -9,7 +9,7 @@ import {
   View,
 } from "react-native";
 
-import Close from "assets/svg/Close.svg";
+import ClosePlain from "assets/svg/ClosePlain.svg";
 import AddPhoto from "assets/svg/AddPhoto.svg";
 import VideoTimer from "assets/svg/VideoTimer.svg";
 import VideoInfo1 from "assets/svg/VideoInfo1.svg";
@@ -29,27 +29,27 @@ export default function MerchantVideoInfo({
       <View style={styles.videoInfoTxtCntnr}>
         <Pressable style={{ alignSelf: "flex-end" }} onPress={onPressClose}>
           {Platform.OS == "web" ? (
-            <img style={{ width: 48, height: 48 }} src={Close}></img>
+            <img style={{ width: 24, height: 24 }} src={ClosePlain}></img>
           ) : (
-            <Close width={32} height={32}></Close>
+            <ClosePlain width={24} height={24}></ClosePlain>
           )}
         </Pressable>
-        <View style={styles.videoInfoRow}>
+        <View style={styles.videoInfoRow1}>
           {Platform.OS == "web" ? (
-            <img style={{ width: 48, height: 48 }} src={VideoTimer}></img>
+            <img style={{ width: 40, height: 40 }} src={VideoTimer}></img>
           ) : (
-            <VideoTimer width={48} height={48}></VideoTimer>
+            <VideoTimer width={40} height={40}></VideoTimer>
           )}
-          <Text style={styles.videoInfoText}>
+          <Text style={[styles.videoInfoText]}>
             You can reply with a short video of duration less than 30 seconds
           </Text>
         </View>
         <View style={styles.videoInfoRow}>
           <View>
             {Platform.OS == "web" ? (
-              <img style={{ width: 48, height: 48 }} src={VideoInfo1}></img>
+              <img style={{ width: 40, height: 40 }} src={VideoInfo1}></img>
             ) : (
-              <VideoInfo1 width={48} height={48}></VideoInfo1>
+              <VideoInfo1 width={40} height={40}></VideoInfo1>
             )}
           </View>
           <View>
@@ -62,9 +62,9 @@ export default function MerchantVideoInfo({
         <View style={styles.videoInfoRow}>
           <View>
             {Platform.OS == "web" ? (
-              <img style={{ width: 48, height: 48 }} src={VideoInfo2}></img>
+              <img style={{ width: 40, height: 40 }} src={VideoInfo2}></img>
             ) : (
-              <VideoInfo2 width={48} height={48}></VideoInfo2>
+              <VideoInfo2 width={40} height={40}></VideoInfo2>
             )}
           </View>
           <View>
@@ -87,27 +87,34 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-    padding: 20,
   },
   videoInfoCntnr: {
     left: 0,
     right: 0,
     alignSelf: "center",
     position: "absolute",
-    backgroundColor: colors.Black2,
+    backgroundColor: colors.Black5,
     height: "100%",
     alignItems: "center",
     justifyContent: "center",
   },
   videoInfoTxtCntnr: {
     backgroundColor: colors.Peach_Cream,
-    padding: 24,
+    paddingLeft: 44,
+    paddingTop: 30,
+    paddingRight: 30,
+    paddingBottom: 40,
     borderRadius: 16,
   },
-  videoInfoRow: {
+  videoInfoRow1: {
     flexDirection: "row",
     alignItems: "center",
+    marginTop: 30,
+  },
+  videoInfoRow: {
     marginTop: 48,
+    flexDirection: "row",
+    alignItems: "center",
   },
   videoInfoText: {
     width: scaleSize(167),
