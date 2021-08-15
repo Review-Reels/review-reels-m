@@ -36,15 +36,13 @@ export default function ReviewResponseDetails({
       <View>
         <View style={styles.header}>
           <View style={styles.nameAndBack}>
-            {Platform.OS == "web" ? (
-              <Pressable onPress={() => navigation.goBack()}>
+            <Pressable onPress={() => navigation.goBack()}>
+              {Platform.OS == "web" ? (
                 <img style={{ marginRight: 16 }} src={Back}></img>
-              </Pressable>
-            ) : (
-              <Pressable onPress={() => navigation.goBack()}>
+              ) : (
                 <Back style={styles.back}></Back>
-              </Pressable>
-            )}
+              )}
+            </Pressable>
             <Text style={styles.title}> {reviewResponse?.customerName}</Text>
           </View>
           {Platform.OS == "web" ? (
@@ -96,7 +94,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     lineHeight: 32,
-    fontFamily: "Karla",
+    fontFamily: "Karla-Bold",
     fontWeight: "bold",
   },
   separator: {
