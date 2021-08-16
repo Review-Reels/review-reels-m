@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     color: colors.Black5,
   },
   askTxt2: {
-    fontFamily: "Karla",
+    fontFamily: "Karla-Bold",
     fontWeight: "700",
     fontSize: 16,
     lineHeight: 24,

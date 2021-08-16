@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     width: scaleSize(167),
     fontSize: 14,
     fontWeight: "700",
-    fontFamily: "Karla",
+    fontFamily: "Karla-Bold",
     lineHeight: 20,
     marginLeft: 36,
   },
@@ -138,6 +138,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 14,
     lineHeight: 16,
-    fontFamily: "Karla",
+    fontFamily: "Karla-Bold",
   },
 });

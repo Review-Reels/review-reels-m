@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    fontFamily: "Karla",
+    fontFamily: "Karla-Bold",
     flexWrap: "wrap",
     width: scaleSize(200),
   },
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   addVideoTxt: {
-    fontFamily: "Karla",
+    fontFamily: "Karla-Bold",
     fontWeight: "bold",
     fontSize: 16,
     lineHeight: 24,

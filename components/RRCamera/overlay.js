@@ -77,5 +77,6 @@ const styles = StyleSheet.create({
     fontSize: 50,
     fontWeight: "bold",
     color: "white",
+    fontFamily: "Karla-Bold",
   },
 });
