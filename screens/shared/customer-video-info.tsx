@@ -9,7 +9,7 @@ import {
   View,
 } from "react-native";
 
-import Close from "assets/svg/Close.svg";
+import ClosePlain from "assets/svg/ClosePlain.svg";
 import AddPhoto from "assets/svg/AddPhoto.svg";
 import VideoTimer from "assets/svg/VideoTimer.svg";
 import VideoInfo1 from "assets/svg/VideoInfo1.svg";
@@ -29,9 +29,9 @@ export default function CustomerVideoInfo({
       <View style={styles.videoInfoTxtCntnr}>
         <Pressable style={{ alignSelf: "flex-end" }} onPress={onPressClose}>
           {Platform.OS == "web" ? (
-            <img style={{ width: 48, height: 48 }} src={Close}></img>
+            <img style={{ width: 24, height: 24 }} src={ClosePlain}></img>
           ) : (
-            <Close width={32} height={32}></Close>
+            <ClosePlain width={24} height={24}></ClosePlain>
           )}
         </Pressable>
         <View style={styles.videoInfoRow}>
@@ -87,27 +87,34 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-    padding: 20,
   },
   videoInfoCntnr: {
     left: 0,
     right: 0,
     alignSelf: "center",
     position: "absolute",
-    backgroundColor: colors.Black2,
+    backgroundColor: colors.Black5,
     height: "100%",
     alignItems: "center",
     justifyContent: "center",
   },
   videoInfoTxtCntnr: {
     backgroundColor: colors.Peach_Cream,
-    padding: 24,
+    paddingLeft: 44,
+    paddingTop: 30,
+    paddingRight: 30,
+    paddingBottom: 40,
     borderRadius: 16,
   },
-  videoInfoRow: {
+  videoInfoRow1: {
     flexDirection: "row",
     alignItems: "center",
+    marginTop: 30,
+  },
+  videoInfoRow: {
     marginTop: 48,
+    flexDirection: "row",
+    alignItems: "center",
   },
   videoInfoText: {
     width: scaleSize(167),
@@ -120,7 +127,7 @@ const styles = StyleSheet.create({
   videoInfoAction: {
     paddingHorizontal: 24,
     paddingVertical: 12,
-    backgroundColor: colors.Black4,
+    backgroundColor: colors.Black6,
     borderRadius: 24,
     marginRight: 8,
     alignSelf: "center",

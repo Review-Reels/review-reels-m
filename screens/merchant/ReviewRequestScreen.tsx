@@ -46,9 +46,10 @@ export default function ReviewRequestScreen({
   );
   const [isOpenCamera, setCameraStatus] = useState(false);
   const [isShowInfoTxt, setShowInfoTxt] = useState(false);
-  const [isOpen, setOpenStatus] = useState(true);
+  const [isOpen, setOpenStatus] = useState(false);
   const [video, setVideo] = useState(null);
   const [isNewVideo, setIsNewVideo] = useState(false);
+  const [isShowedInfo, setShowedInfo] = useState(false);
   const { authState, authDispatch } = React.useContext(authContext);
 
   useEffect(() => {
@@ -181,7 +182,9 @@ export default function ReviewRequestScreen({
             <Pressable
               style={styles.addVideoCntnr}
               onPress={() => {
-                setShowInfoTxt(true);
+                if (isShowedInfo) {
+                  setOpenStatus(true);
+                } else setShowInfoTxt(true);
               }}
             >
               {video ? (
@@ -234,14 +237,7 @@ export default function ReviewRequestScreen({
           </View>
         </KeyboardAwareScrollView>
         <LinearGradient
-          style={{
-            height: 200,
-            position: "absolute",
-            bottom: 0,
-            width: "100%",
-            alignItems: "center",
-            justifyContent: "flex-end",
-          }}
+          style={styles.buttonGradient}
           colors={["rgba(255,255,255,0)", "rgba(255,255,255,1)"]}
         >
           <View style={styles.proceedBtnCntnr}>
@@ -264,7 +260,7 @@ export default function ReviewRequestScreen({
               ]}
               onPressIn={() => pickVideo()}
             >
-              <Text style={styles.bottomActionTxt}>Choose from Gallery</Text>
+              <Text style={styles.bottomActionTxt}>Upload from library</Text>
               {Platform.OS == "web" ? (
                 <img src={Library}></img>
               ) : (
@@ -279,7 +275,7 @@ export default function ReviewRequestScreen({
                 setVideo(null);
               }}
             >
-              <Text style={styles.bottomActionTxt}>Capture Video</Text>
+              <Text style={styles.bottomActionTxt}>Make a video</Text>
               {Platform.OS == "web" ? (
                 <img src={VideoCap}></img>
               ) : (
@@ -299,11 +295,12 @@ export default function ReviewRequestScreen({
             }}
           ></RRCamera>
         )}
-        {isShowInfoTxt && (
+        {isShowInfoTxt && !isShowedInfo && (
           <MerchantVideoInfo
             onPressOk={() => {
               setShowInfoTxt(false);
               setOpenStatus(true);
+              setShowedInfo(true);
             }}
             onPressClose={() => setShowInfoTxt(false)}
           />
@@ -476,5 +473,13 @@ const styles = StyleSheet.create({
   proceedBtnCntnr: {
     alignSelf: "center",
     marginBottom: 24,
+  },
+  buttonGradient: {
+    height: 200,
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "flex-end",
   },
 });

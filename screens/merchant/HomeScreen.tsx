@@ -14,6 +14,7 @@ import {
   ActivityIndicator,
   Image,
   Dimensions,
+  Keyboard,
 } from "react-native";
 import { RootStackParamList } from "../../types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -56,7 +57,19 @@ export default function HomeScreen({
   >(null);
   const [reviewRequest, setReviewRequest] = React.useState({});
   const [refreshing, setRefreshing] = React.useState(false);
+  const [isShowAsk, setShowAsk] = React.useState(true);
   const isFocused = useIsFocused();
+
+  React.useEffect(() => {
+    Keyboard.addListener("keyboardDidShow", _keyboardDidShow);
+    Keyboard.addListener("keyboardDidHide", _keyboardDidHide);
+
+    //  Don't forget to cleanup with remove listeners
+    return () => {
+      Keyboard.removeListener("keyboardDidShow", _keyboardDidShow);
+      Keyboard.removeListener("keyboardDidHide", _keyboardDidHide);
+    };
+  }, []);
 
   React.useEffect(() => {
     getReviewResponses();
@@ -71,6 +84,14 @@ export default function HomeScreen({
       EventEmitter.removeAllListeners("LOGOUT_USER");
     };
   }, []);
+
+  const _keyboardDidShow = () => {
+    setShowAsk(false);
+  };
+
+  const _keyboardDidHide = () => {
+    setShowAsk(true);
+  };
 
   const getReviewResponses = () => {
     setRefreshing(true);
@@ -165,7 +186,7 @@ export default function HomeScreen({
                 onChangeText={searchReviewResponse}
               ></RRTextInput>
               <FlatList
-                style={{ height: "100%" }}
+                style={{ height: "100%", marginTop: 16 }}
                 ListFooterComponent={<View />}
                 ListFooterComponentStyle={{ height: 200 }}
                 data={searchedReviewResponseList}
@@ -192,7 +213,7 @@ export default function HomeScreen({
                         <View style={styles.nameFlex}>
                           <Text
                             style={{
-                              marginBottom: 5,
+                              marginBottom: 6,
                               color: item.isRead ? colors.Black2 : colors.Black,
                               fontWeight: item.isRead ? "normal" : "bold",
                               fontFamily: "Karla-Bold",
@@ -206,31 +227,18 @@ export default function HomeScreen({
                                 color: item.isRead
                                   ? colors.Black2
                                   : colors.Black,
+                                fontFamily: "Karla",
                               }}
                             >
                               Shared a video review
                             </Text>
-
-                            <View
-                              style={{
-                                width: 4,
-                                height: 4,
-                                backgroundColor: colors.Black3,
-                                borderRadius:
-                                  Math.round(
-                                    Dimensions.get("window").width +
-                                      Dimensions.get("window").height
-                                  ) / 2,
-                                marginHorizontal: 8,
-                                top: 8,
-                              }}
-                            ></View>
-
+                            <View style={styles.inboxSeperator}></View>
                             <Text
                               style={{
                                 color: item.isRead
                                   ? colors.Black2
                                   : colors.Black,
+                                fontFamily: "Karla",
                               }}
                             >
                               {getElapsedTime(item.createdAt)}
@@ -261,12 +269,14 @@ export default function HomeScreen({
               <NoReview></NoReview>
             </ScrollView>
           )}
-          <View style={styles.askBtn}>
-            <RRButton
-              title="Ask for Review"
-              onPress={() => navigation.push("ShareRequest")}
-            ></RRButton>
-          </View>
+          {isShowAsk && (
+            <View style={styles.askBtn}>
+              <RRButton
+                title="Ask for Review"
+                onPress={() => navigation.push("ShareRequest")}
+              ></RRButton>
+            </View>
+          )}
         </View>
       ) : isAskMessageCreated == false ? (
         <NoAskMessage navigation={navigation}></NoAskMessage>
@@ -313,11 +323,11 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
   inboxContainer: {
-    marginTop: 16,
     flexDirection: "row",
     borderBottomWidth: 1,
     borderBottomColor: colors.Dove_Grey,
-    padding: 10,
+    paddingTop: 12,
+    paddingBottom: 16,
     justifyContent: "space-between",
   },
   secondInboxCntr: {
@@ -332,8 +342,18 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   textWrapper: {
-    marginBottom: 5,
     flexDirection: "row",
     justifyContent: "space-evenly",
+  },
+  inboxSeperator: {
+    width: 4,
+    height: 4,
+    backgroundColor: colors.Black3,
+    borderRadius:
+      Math.round(
+        Dimensions.get("window").width + Dimensions.get("window").height
+      ) / 2,
+    marginHorizontal: 8,
+    top: 8,
   },
 });

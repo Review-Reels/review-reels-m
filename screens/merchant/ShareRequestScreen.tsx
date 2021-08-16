@@ -22,6 +22,8 @@ import { getReviewRequest } from "services/api/review-request";
 import { WEB_APP_URL } from "constants/apiUrls";
 import { authContext } from "context/AuthContext";
 import { useIsFocused } from "@react-navigation/native";
+import { useToast } from "native-base";
+import * as Linking from "expo-linking";
 
 export default function ShareRequestScreen({
   navigation,
@@ -30,6 +32,7 @@ export default function ShareRequestScreen({
   const { authState } = React.useContext(authContext);
   const isFocused = useIsFocused();
   const shareUrl = WEB_APP_URL + authState.user.username;
+  const toast = useToast();
 
   React.useEffect(() => {
     getReviewRequest().then((res) => {
@@ -62,13 +65,14 @@ export default function ShareRequestScreen({
 
   const onPressCopy = () => {
     Clipboard.default.setString(shareUrl);
+    toast.show({ title: "Copied to clipboard" });
   };
 
   const onPressClose = () => {
     navigation.navigate("Home", reviewRequests);
   };
   const onPressPreview = () => {
-    navigation.navigate("ReviewDetails", reviewRequests);
+    Linking.openURL(shareUrl);
   };
   const onPressEdit = () => {
     navigation.navigate("ReviewRequest", reviewRequests);
@@ -191,15 +195,17 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontFamily: "Karla-Bold",
     flexWrap: "wrap",
-    width: scaleSize(224),
+    width: 224,
     lineHeight: 32,
   },
   infoText: {
     fontSize: 14,
-    fontWeight: "normal",
+    fontWeight: "400",
     fontFamily: "Karla",
     color: colors.Black2,
     marginTop: 8,
+    width: 224,
+    lineHeight: 20,
   },
   shareCntnr: {
     paddingHorizontal: 24,
