@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     top: 24,
     fontSize: 16,
     fontWeight: "700",
-    fontFamily: "Karla",
+    fontFamily: "Karla-Bold",
     lineHeight: 24,
   },
   actionButtons: {

@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 24,
     lineHeight: 32,
-    fontFamily: "Karla",
+    fontFamily: "Karla-Bold",
     fontWeight: "700",
     marginBottom: 16,
     color: colors.Black5,
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "700",
-    fontFamily: "Karla",
+    fontFamily: "Karla-Bold",
     lineHeight: 32,
     color: colors.Black5,
   },
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
   buttonTxt: {
     marginLeft: 14,
     color: colors.White,
-    fontFamily: "Karla",
+    fontFamily: "Karla-Bold",
     fontSize: 16,
     lineHeight: 20,
     fontWeight: "bold",

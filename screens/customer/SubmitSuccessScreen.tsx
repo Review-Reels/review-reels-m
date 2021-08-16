@@ -29,7 +29,10 @@ export default function SubmitSuccessScreen({
           <Text style={styles.content}>
             Thank you so much for your response. Hope you had a great expereince
             with
-            <Text style={{ fontWeight: "700" }}> Carnival Collections.</Text>
+            <Text style={{ fontWeight: "700", fontFamily: "Karla-Bold" }}>
+              {" "}
+              Carnival Collections.
+            </Text>
           </Text>
         </View>
         <View style={styles.footer}>
@@ -60,7 +63,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "bold",
-    fontFamily: "Karla",
+    fontFamily: "Karla-Bold",
   },
   titleIcon: {
     position: "absolute",

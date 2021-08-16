@@ -216,7 +216,7 @@ export default function HomeScreen({
                               marginBottom: 6,
                               color: item.isRead ? colors.Black2 : colors.Black,
                               fontWeight: item.isRead ? "normal" : "bold",
-                              fontFamily: "Karla",
+                              fontFamily: "Karla-Bold",
                             }}
                           >
                             {item.customerName}
@@ -317,6 +317,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     fontSize: 16,
+    fontFamily: "Karla-Bold",
   },
   nameFlex: {
     flexDirection: "column",

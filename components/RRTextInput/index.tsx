@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.Concrete,
     color: colors.Black,
     lineHeight: 24,
-    fontFamily: "Karla",
+    fontFamily: "Karla-Bold",
   },
   errorInput: {
     borderColor: "red",
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 14,
     lineHeight: 16,
-    fontFamily: "Karla",
+    fontFamily: "Karla-Bold",
     marginBottom: 8,
     color: colors.Black2,
   },

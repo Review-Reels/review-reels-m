@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     color: "white",
     fontWeight: "bold",
+    fontFamily: "Karla-Bold",
   },
   inner: {
     flexDirection: "row",

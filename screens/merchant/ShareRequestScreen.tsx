@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
   },
   shareHeaderTxt: {
     fontSize: 12,
-    fontFamily: "Karla",
+    fontFamily: "Karla-Bold",
     lineHeight: 16,
     fontWeight: "700",
     color: colors.Black2,
@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: 14,
     lineHeight: 20,
-    fontFamily: "Karla",
+    fontFamily: "Karla-Bold",
   },
   headerAction: {
     paddingHorizontal: 24,
@@ -274,6 +274,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 14,
     lineHeight: 16,
-    fontFamily: "Karla",
+    fontFamily: "Karla-Bold",
   },
 });

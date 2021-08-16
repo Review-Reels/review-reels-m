@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "bold",
+    fontFamily: "Karla-Bold",
   },
   link: {
     marginTop: 15,
