@@ -51,7 +51,6 @@ function RootNavigator() {
 
   const checkLogin = async () => {
     const authToken = await AsyncStorage.getItem("@token");
-
     if (authToken) {
       const decodedToken = jwt_decode<JwtPayload>(authToken);
       let currentDate = new Date();
@@ -64,6 +63,7 @@ function RootNavigator() {
     const user = await AsyncStorage.getItem("@user");
     if (user) authDispatch(set(SET_USER, JSON.parse(user)));
   };
+
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {!authState.token ? (
@@ -77,6 +77,8 @@ function RootNavigator() {
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="ReviewRequest" component={ReviewRequestScreen} />
           <Stack.Screen name="ShareRequest" component={ShareRequestScreen} />
+          <Stack.Screen name="ViewRequest" component={ViewRequestScreen} />
+          <Stack.Screen name="SubmitSuccess" component={SubmitSuccessScreen} />
           <Stack.Screen
             name="ReviewResponseDetails"
             component={ReviewResponseDetails}

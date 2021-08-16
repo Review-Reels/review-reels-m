@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   videoInfoAction: {
     paddingHorizontal: 24,
     paddingVertical: 12,
-    backgroundColor: colors.Black4,
+    backgroundColor: colors.Black6,
     borderRadius: 24,
     marginRight: 8,
     alignSelf: "center",

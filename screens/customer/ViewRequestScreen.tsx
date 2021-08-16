@@ -73,7 +73,9 @@ export default function ViewRequestScreen({
   const onPressReply = () => {
     setShowInfoTxt(true);
     setShowVideo(false);
-    video.current.stopAsync();
+    if (showVideo) {
+      video.current.stopAsync();
+    }
   };
 
   const onProceedCustomerInfo = (info: any) => {
