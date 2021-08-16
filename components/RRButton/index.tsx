@@ -1,6 +1,6 @@
 import colors from "constants/Colors";
 import React from "react";
-import { StyleSheet, View, Text, Pressable } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { ButtonProps } from "types";
 
 export default function RRButton({
@@ -18,7 +18,7 @@ export default function RRButton({
   };
 
   return (
-    <Pressable
+    <TouchableOpacity
       style={[
         styles.container,
         style,
@@ -30,7 +30,7 @@ export default function RRButton({
       onPress={onPressOk}
     >
       <Text style={[styles.buttonTitle]}>{title}</Text>
-    </Pressable>
+    </TouchableOpacity>
   );
 }
 

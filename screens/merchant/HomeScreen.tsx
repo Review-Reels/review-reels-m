@@ -284,8 +284,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: "700",
-    fontFamily: "Karla",
+    fontWeight: "bold",
+    fontFamily: "Karla-Bold",
     lineHeight: 32,
   },
   header: {

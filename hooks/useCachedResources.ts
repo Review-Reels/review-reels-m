@@ -16,6 +16,7 @@ export default function useCachedResources() {
         await Font.loadAsync({
           ...Ionicons.font,
           Karla: require("../assets/fonts/Karla.ttf"),
+          "Karla-Bold": require("../assets/fonts/Karla-Bold.ttf"),
         });
       } catch (e) {
         // We might want to provide this error information to an error reporting service
