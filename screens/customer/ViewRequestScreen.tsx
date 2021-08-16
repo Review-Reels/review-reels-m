@@ -51,10 +51,10 @@ export default function ViewRequestScreen({
   });
   const [showVideo, setShowVideo] = React.useState(false);
   const { authState, authDispatch } = React.useContext(authContext);
+  const video = React.useRef(null);
 
   useEffect(() => {
     getReviewRequestWithUsername(route.params.username).then((res) => {
-      console.log(res);
       if (res.data.length) setReviewRequest(res.data[0]);
     });
   }, [route]);
@@ -72,6 +72,8 @@ export default function ViewRequestScreen({
 
   const onPressReply = () => {
     setShowInfoTxt(true);
+    setShowVideo(false);
+    video.current.stopAsync();
   };
 
   const onProceedCustomerInfo = (info: any) => {
@@ -106,12 +108,14 @@ export default function ViewRequestScreen({
                 onPress={() => setShowVideo(!showVideo)}
               >
                 <Video
+                  ref={video}
                   source={{ uri: S3_URL + reviewRequest.videoUrl }}
                   // style={[
                   //   {
                   //     width: scaleSize(279),
                   //     aspectRatio: 9 / 16,
                   //     borderRadius: 16,
+                  //     alignSelf: "center",
                   //   },
                   // ]}
                   style={styles.rounded}
@@ -125,12 +129,16 @@ export default function ViewRequestScreen({
             ) : (
               <Pressable
                 style={styles.overlay}
-                onPress={() => setShowVideo(!showVideo)}
+                onPress={() => {
+                  setShowVideo(!showVideo);
+                }}
               >
-                <Image
-                  style={styles.rounded}
-                  source={{ uri: S3_URL + reviewRequest?.imageUrl }}
-                />
+                {reviewRequest?.imageUrl && (
+                  <Image
+                    style={styles.rounded}
+                    source={{ uri: S3_URL + reviewRequest?.imageUrl }}
+                  />
+                )}
                 {Platform.OS == "web" ? (
                   <img
                     src={PlayButton}
@@ -240,13 +248,11 @@ const styles = StyleSheet.create({
     display: "none",
   },
   rounded: {
-    width: 300,
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-    borderBottomRightRadius: 16,
-    borderBottomLeftRadius: 2,
-    height: 450,
+    height: "100%",
+    width: scaleSize(279),
     aspectRatio: 9 / 16,
+    borderRadius: 16,
+    alignSelf: "center",
   },
   overlay: {
     width: 300,
