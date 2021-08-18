@@ -15,6 +15,7 @@ export type RootStackParamList = {
   ShareRequest: undefined;
   ViewRequest: { merchant: string };
   SubmitSuccess: undefined;
+  Loading: undefined;
 };
 
 export type TextInputProps = {

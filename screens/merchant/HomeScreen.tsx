@@ -37,6 +37,7 @@ import NoAskMessage from "screens/shared/no-ask-message";
 import EventEmitter from "react-native-eventemitter";
 import { S3_URL } from "constants/apiUrls";
 import { backgroundColor } from "styled-system";
+import { LinearGradient } from "expo-linear-gradient";
 
 //added dayjs because its lighter than moment.js so the app  size will decrease
 const colorList = [
@@ -187,6 +188,7 @@ export default function HomeScreen({
               ></RRTextInput>
               <FlatList
                 style={{ height: "100%", marginTop: 16 }}
+                showsVerticalScrollIndicator={false}
                 ListFooterComponent={<View />}
                 ListFooterComponentStyle={{ height: 200 }}
                 data={searchedReviewResponseList}
@@ -269,19 +271,24 @@ export default function HomeScreen({
               <NoReview></NoReview>
             </ScrollView>
           )}
-          {isShowAsk && (
-            <View style={styles.askBtn}>
-              <RRButton
-                title="Ask for Review"
-                onPress={() => navigation.push("ShareRequest")}
-              ></RRButton>
-            </View>
-          )}
         </View>
       ) : isAskMessageCreated == false ? (
         <NoAskMessage navigation={navigation}></NoAskMessage>
       ) : (
         <View></View>
+      )}
+      {isShowAsk && isAskMessageCreated && (
+        <LinearGradient
+          style={styles.buttonGradient}
+          colors={["rgba(255,255,255,0)", "rgba(255,255,255,1)"]}
+        >
+          <View style={styles.proceedBtnCntnr}>
+            <RRButton
+              title="Ask for Review"
+              onPress={() => navigation.push("ShareRequest")}
+            ></RRButton>
+          </View>
+        </LinearGradient>
       )}
     </RRAppWrapper>
   );
@@ -303,7 +310,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 16,
+    // marginBottom: 16,
   },
   rounded: {
     width: 40,
@@ -355,5 +362,17 @@ const styles = StyleSheet.create({
       ) / 2,
     marginHorizontal: 8,
     top: 8,
+  },
+  proceedBtnCntnr: {
+    alignSelf: "center",
+    marginBottom: 24,
+  },
+  buttonGradient: {
+    height: 200,
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "flex-end",
   },
 });
