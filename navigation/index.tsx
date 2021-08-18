@@ -29,6 +29,7 @@ import jwt_decode, { JwtPayload } from "jwt-decode";
 import { useState, useContext } from "react";
 import { authContext } from "../context/AuthContext";
 import { set, SET_TOKEN, SET_USER } from "context/authActions";
+import LoadingScreen from "screens/merchant/LoadingScreen";
 
 export default function Navigation() {
   return (
@@ -44,6 +45,7 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   const { authState, authDispatch } = useContext(authContext);
+  const [isLoadNav, setLoadNav] = useState(false);
 
   React.useEffect(() => {
     checkLogin();
@@ -62,35 +64,47 @@ function RootNavigator() {
     }
     const user = await AsyncStorage.getItem("@user");
     if (user) authDispatch(set(SET_USER, JSON.parse(user)));
+    setLoadNav(true);
   };
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {!authState.token ? (
+      {!isLoadNav && (
+        <Stack.Screen name="Loading" component={LoadingScreen}></Stack.Screen>
+      )}
+      {isLoadNav && !authState.token ? (
         <>
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="ViewRequest" component={ViewRequestScreen} />
           <Stack.Screen name="SubmitSuccess" component={SubmitSuccessScreen} />
         </>
       ) : (
-        <>
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="ReviewRequest" component={ReviewRequestScreen} />
-          <Stack.Screen name="ShareRequest" component={ShareRequestScreen} />
-          <Stack.Screen name="ViewRequest" component={ViewRequestScreen} />
-          <Stack.Screen name="SubmitSuccess" component={SubmitSuccessScreen} />
-          <Stack.Screen
-            name="ReviewResponseDetails"
-            component={ReviewResponseDetails}
-          />
-          <Stack.Screen name="PublishReview" component={PublishReview} />
+        isLoadNav && (
+          <>
+            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen
+              name="ReviewRequest"
+              component={ReviewRequestScreen}
+            />
+            <Stack.Screen name="ShareRequest" component={ShareRequestScreen} />
+            <Stack.Screen name="ViewRequest" component={ViewRequestScreen} />
+            <Stack.Screen
+              name="SubmitSuccess"
+              component={SubmitSuccessScreen}
+            />
+            <Stack.Screen
+              name="ReviewResponseDetails"
+              component={ReviewResponseDetails}
+            />
+            <Stack.Screen name="PublishReview" component={PublishReview} />
 
-          <Stack.Screen
-            name="NotFound"
-            component={NotFoundScreen}
-            options={{ title: "Oops!" }}
-          />
-        </>
+            <Stack.Screen
+              name="NotFound"
+              component={NotFoundScreen}
+              options={{ title: "Oops!" }}
+            />
+          </>
+        )
       )}
     </Stack.Navigator>
   );
