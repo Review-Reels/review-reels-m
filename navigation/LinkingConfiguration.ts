@@ -20,6 +20,7 @@ export default {
       ViewRequest: ":username",
       SubmitSuccess: "success",
       PublishReview: "publish-review",
+      SendEmails: "send-emails",
     },
   },
 };

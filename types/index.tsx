@@ -16,6 +16,9 @@ export type RootStackParamList = {
   ViewRequest: { merchant: string };
   SubmitSuccess: undefined;
   Loading: undefined;
+  SendEmails: undefined;
+  PublishReview: undefined;
+  ReviewResponseDetails: undefined;
 };
 
 export type TextInputProps = {

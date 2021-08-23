@@ -18,7 +18,7 @@ import Email from "assets/svg/Email.svg";
 import colors from "constants/Colors";
 import { scaleSize } from "constants/Layout";
 import * as Clipboard from "expo-clipboard";
-import { getReviewRequest } from "services/api/review-request";
+import { getReviewRequest, reviewRequest } from "services/api/review-request";
 import { WEB_APP_URL } from "constants/apiUrls";
 import { authContext } from "context/AuthContext";
 import { useIsFocused } from "@react-navigation/native";
@@ -76,6 +76,10 @@ export default function ShareRequestScreen({
   };
   const onPressEdit = () => {
     navigation.navigate("ReviewRequest", reviewRequests);
+  };
+
+  const onPressSendEmails = () => {
+    navigation.navigate("SendEmails", reviewRequests);
   };
 
   return (
@@ -152,7 +156,7 @@ export default function ShareRequestScreen({
               reply with reviews. Also, you can follow-up later.
             </Text>
             <View style={styles.actionsCntnr}>
-              <Pressable style={styles.action}>
+              <Pressable style={styles.action} onPress={onPressSendEmails}>
                 {Platform.OS == "web" ? (
                   <img
                     style={{ width: 20, height: 20, marginRight: 4 }}

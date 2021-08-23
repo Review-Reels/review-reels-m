@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
     color: colors.Black,
     lineHeight: 24,
     fontFamily: "Karla-Bold",
+    marginTop: 8,
   },
   errorInput: {
     borderColor: "red",
@@ -76,7 +77,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 16,
     fontFamily: "Karla-Bold",
-    marginBottom: 8,
     color: colors.Black2,
   },
   view_only: {
