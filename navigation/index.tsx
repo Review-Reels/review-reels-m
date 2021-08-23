@@ -70,7 +70,11 @@ function RootNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {!isLoadNav && (
-        <Stack.Screen name="Loading" component={LoadingScreen}></Stack.Screen>
+        <>
+          <Stack.Screen name="Loading" component={LoadingScreen}></Stack.Screen>
+          <Stack.Screen name="ViewRequest" component={ViewRequestScreen} />
+          <Stack.Screen name="SubmitSuccess" component={SubmitSuccessScreen} />
+        </>
       )}
       {isLoadNav && !authState.token ? (
         <>
