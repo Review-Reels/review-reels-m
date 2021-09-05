@@ -13,11 +13,20 @@ import {
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import Close from "assets/svg/Close.svg";
+import ClosePlain from "assets/svg/ClosePlain.svg";
 import { RootStackParamList } from "types";
 import { scaleSize } from "constants/Layout";
 import colors from "constants/Colors";
 import PlayButton from "assets/svg/PlayButton.svg";
 import VideoCam from "assets/svg/VideoCam.svg";
+import CustomerEmailInfo from "screens/shared/customer-email-info";
+import { LinearGradient } from "expo-linear-gradient";
+import RRButton from "components/RRButton";
+
+export type recepientType = {
+  customerName: string;
+  email: string;
+};
 
 export default function SendEmails({
   navigation,
@@ -27,6 +36,10 @@ export default function SendEmails({
     "Hope you enjoyed using our product. It will be great if you can tell us how much you like our product with a short video."
   );
   const [image, setImage] = React.useState(null);
+  const [isShowCustomerEmailInfo, setCustomerInfo] = React.useState(false);
+  const [toEmailList, setToEmailList] = React.useState<Array<recepientType>>(
+    []
+  );
   const [subject, setSubject] = React.useState<string>("");
   React.useEffect(() => {
     if (route.params) {
@@ -36,92 +49,178 @@ export default function SendEmails({
     }
   }, [route]);
 
+  const onAddCustomerInfo = (info: recepientType) => {
+    let mailList = JSON.parse(JSON.stringify(toEmailList));
+    mailList.push(info);
+    setToEmailList(mailList);
+  };
+
+  const onDeleteToEmail = (info: recepientType) => {
+    let mailList = JSON.parse(JSON.stringify(toEmailList));
+    mailList.splice(mailList.indexOf(info), 1);
+    setToEmailList(mailList);
+    console.log(mailList);
+  };
+
+  const onPressProceed = () => {};
+
   return (
-    <RRAppWrapper style={{ padding: 24 }}>
-      <ScrollView style={{ flex: 1, marginTop: 24, padding: 24 }}>
-        <View style={styles.headerCntnr}>
-          <Text style={styles.title}>Send Emails</Text>
-          <Pressable onPress={() => navigation.goBack()}>
-            {Platform.OS == "web" ? (
-              <img style={{ width: 48, height: 48 }} src={Close}></img>
-            ) : (
-              <Close width={48} height={48}></Close>
-            )}
-          </Pressable>
-        </View>
-        <View style={styles.inputCntnr}>
-          <Text style={styles.label}>TO</Text>
-          <View style={[styles.inputView, styles.emailTo]}></View>
-        </View>
-        <RRTextInput
-          label="SUBJECT"
-          value={subject}
-          onChangeText={(val: string) => setSubject(val)}
-          placeholder="eg:nickfury"
-          //   error={usernameError}
-        ></RRTextInput>
-        <View style={styles.inputCntnr}>
-          <Text style={styles.label}>CONTENT</Text>
-          <View style={styles.inputView}>
-            <View style={styles.contentContainer}>
-              <View style={styles.addVideoCntnr}>
-                <Pressable style={styles.overlay}>
-                  {image && (
-                    <Image
-                      style={styles.rounded}
-                      source={{ uri: S3_URL + image }}
-                    />
-                  )}
-                  {Platform.OS == "web" ? (
-                    <img
-                      src={PlayButton}
-                      style={{
-                        position: "absolute",
-                        top: "50%",
-                        left: "40%",
-                      }}
-                    />
-                  ) : (
-                    <PlayButton
-                      style={{
-                        position: "absolute",
-                        top: "50%",
-                        left: "40%",
-                      }}
-                    ></PlayButton>
-                  )}
-                </Pressable>
-              </View>
-              <View style={{ alignItems: "center" }}>
-                <View style={styles.requestMsgCntnr}>
-                  <Text style={styles.requestMsgTxt}>{requestMessage}</Text>
-                </View>
-                <View style={{ alignSelf: "center" }}>
-                  <Pressable style={styles.button}>
-                    {Platform.OS == "web" ? (
-                      <img src={VideoCam}></img>
-                    ) : (
-                      <VideoCam></VideoCam>
+    <RRAppWrapper>
+      <View style={[{ flex: 1 }]}>
+        {isShowCustomerEmailInfo && (
+          <Pressable
+            onPress={() => setCustomerInfo(false)}
+            style={{
+              height: "100%",
+              width: "100%",
+              position: "absolute",
+              backgroundColor: colors.Black4,
+              zIndex: 999,
+            }}
+          ></Pressable>
+        )}
+        <ScrollView style={[{ flex: 1, padding: 24 }]}>
+          <View style={styles.headerCntnr}>
+            <Text style={styles.title}>Send Emails</Text>
+            <Pressable onPress={() => navigation.goBack()}>
+              {Platform.OS == "web" ? (
+                <img style={{ width: 48, height: 48 }} src={Close}></img>
+              ) : (
+                <Close width={48} height={48}></Close>
+              )}
+            </Pressable>
+          </View>
+          <View style={styles.inputCntnr}>
+            <Text style={styles.label}>TO</Text>
+            <View style={[styles.emailToContainer, styles.emailTo]}>
+              {toEmailList.map((item, i) => {
+                return (
+                  <View key={i} style={styles.toItem}>
+                    <Text style={styles.toItemText}>{item.customerName}</Text>
+                    <Pressable
+                      onPress={() => onDeleteToEmail(item)}
+                      style={styles.toItemIcon}
+                    >
+                      {Platform.OS == "web" ? (
+                        <img
+                          style={{ width: 20, height: 20 }}
+                          src={ClosePlain}
+                        ></img>
+                      ) : (
+                        <ClosePlain width={20} height={20}></ClosePlain>
+                      )}
+                    </Pressable>
+                  </View>
+                );
+              })}
+
+              <Pressable
+                onPress={() => setCustomerInfo(true)}
+                style={styles.toItem}
+              >
+                <Text style={styles.toItemText}>Add Customers</Text>
+              </Pressable>
+            </View>
+          </View>
+          <RRTextInput
+            label="SUBJECT"
+            value={subject}
+            onChangeText={(val: string) => setSubject(val)}
+            placeholder="eg:nickfury"
+            //   error={usernameError}
+          ></RRTextInput>
+          <View style={styles.inputCntnr}>
+            <Text style={styles.label}>CONTENT</Text>
+            <View style={styles.inputView}>
+              <View style={styles.contentContainer}>
+                <View style={styles.addVideoCntnr}>
+                  <Pressable style={styles.overlay}>
+                    {image && (
+                      <Image
+                        style={styles.rounded}
+                        source={{ uri: S3_URL + image }}
+                      />
                     )}
-                    <Text style={styles.buttonTxt}>Reply with Video</Text>
+                    {Platform.OS == "web" ? (
+                      <img
+                        src={PlayButton}
+                        style={{
+                          position: "absolute",
+                          top: "50%",
+                          left: "40%",
+                        }}
+                      />
+                    ) : (
+                      <PlayButton
+                        style={{
+                          position: "absolute",
+                          top: "50%",
+                          left: "40%",
+                        }}
+                      ></PlayButton>
+                    )}
                   </Pressable>
+                </View>
+                <View style={{ alignItems: "center" }}>
+                  <View style={styles.requestMsgCntnr}>
+                    <Text style={styles.requestMsgTxt}>{requestMessage}</Text>
+                  </View>
+                  <View style={{ alignSelf: "center" }}>
+                    <Pressable style={styles.button}>
+                      {Platform.OS == "web" ? (
+                        <img src={VideoCam}></img>
+                      ) : (
+                        <VideoCam></VideoCam>
+                      )}
+                      <Text style={styles.buttonTxt}>Reply with Video</Text>
+                    </Pressable>
+                  </View>
                 </View>
               </View>
             </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+        {
+          <CustomerEmailInfo
+            visible={isShowCustomerEmailInfo}
+            onPressProceed={(info: any) => onAddCustomerInfo(info)}
+            onPressClose={() => {
+              console.log("coool");
+              setCustomerInfo(false);
+            }}
+          ></CustomerEmailInfo>
+        }
+        <LinearGradient
+          style={styles.buttonGradient}
+          colors={["rgba(255,255,255,0)", "rgba(255,255,255,1)"]}
+        >
+          <View style={styles.proceedBtnCntnr}>
+            <RRButton title="Send Emails" onPress={onPressProceed}></RRButton>
+          </View>
+        </LinearGradient>
+      </View>
     </RRAppWrapper>
   );
 }
 
 const styles = StyleSheet.create({
+  proceedBtnCntnr: {
+    alignSelf: "center",
+    marginBottom: 24,
+  },
+  buttonGradient: {
+    height: 200,
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "flex-end",
+  },
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 20,
+    // alignItems: "center",
+    // justifyContent: "center",
   },
   contentContainer: {
     backgroundColor: "#fff",
@@ -187,6 +286,14 @@ const styles = StyleSheet.create({
     marginTop: 8,
     padding: 24,
   },
+  emailToContainer: {
+    borderRadius: 16,
+    backgroundColor: colors.Concrete,
+    marginTop: 8,
+    padding: 16,
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
   emailTo: {
     minHeight: 60,
     borderRadius: 16,
@@ -242,5 +349,26 @@ const styles = StyleSheet.create({
     width: 231,
     height: 450,
     marginBottom: 8,
+  },
+  toItem: {
+    paddingLeft: 24,
+    paddingRight: 16,
+    paddingVertical: 12,
+    backgroundColor: colors.Black4,
+    borderRadius: 64,
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 4,
+    marginHorizontal: 4,
+  },
+  toItemIcon: {
+    marginLeft: 8,
+  },
+  toItemText: {
+    fontSize: 14,
+    fontWeight: "bold",
+    lineHeight: 16,
+    fontFamily: "Karla",
+    color: colors.Black2,
   },
 });
