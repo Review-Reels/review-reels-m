@@ -95,6 +95,7 @@ export default function LoginScreen({
   const googleSignInSignUp = async (idToken: string) => {
     authDispatch(set(SET_LOADER, true));
     const signedInUser = await userClient.googleSignIn({ idToken });
+    console.log(signedInUser);
     authDispatch(set(SET_LOADER, false));
     setUserDetails(signedInUser.data);
     if (!signedInUser.data.username || !signedInUser.data.merchantName) {

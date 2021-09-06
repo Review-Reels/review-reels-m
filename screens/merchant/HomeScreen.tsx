@@ -209,7 +209,12 @@ export default function HomeScreen({
                           ]}
                         >
                           <Text style={styles.textColor}>
-                            {item.customerName.charAt(0).toUpperCase()}
+                            {item.customerName
+                              ? item.customerName.charAt(0).toUpperCase()
+                              : item.EmailTracker.length &&
+                                item.EmailTracker[0].customerName
+                                  .charAt(0)
+                                  .toUpperCase()}
                           </Text>
                         </View>
                         <View style={styles.nameFlex}>
@@ -221,7 +226,10 @@ export default function HomeScreen({
                               fontFamily: "Karla-Bold",
                             }}
                           >
-                            {item.customerName}
+                            {item.customerName
+                              ? item.customerName
+                              : item.EmailTracker.length &&
+                                item.EmailTracker[0].customerName}
                           </Text>
                           <View style={styles.textWrapper}>
                             <Text
@@ -232,7 +240,9 @@ export default function HomeScreen({
                                 fontFamily: "Karla",
                               }}
                             >
-                              Shared a video review
+                              {item.EmailTracker.length
+                                ? "Asked via Email"
+                                : "Shared a video review"}
                             </Text>
                             <View style={styles.inboxSeperator}></View>
                             <Text
@@ -286,6 +296,10 @@ export default function HomeScreen({
             <RRButton
               title="Ask for Review"
               onPress={() => navigation.push("ShareRequest")}
+            ></RRButton>
+            <RRButton
+              title="Subscribe"
+              onPress={() => navigation.push("Subscription")}
             ></RRButton>
           </View>
         </LinearGradient>
