@@ -16,6 +16,9 @@ export type RootStackParamList = {
   ViewRequest: { merchant: string };
   SubmitSuccess: undefined;
   Loading: undefined;
+  SendEmails: undefined;
+  PublishReview: undefined;
+  ReviewResponseDetails: undefined;
 };
 
 export type TextInputProps = {
@@ -67,4 +70,10 @@ export type googleSignUpPayload = {
 export type updateUserPayload = {
   username: string;
   merchantName: string;
+};
+
+export type sendEmailPayload = {
+  subject: string;
+  sendTo: Array<{ email: string; customerName: string }>;
+  reviewRequestId: string;
 };

@@ -31,6 +31,7 @@ import { useState, useContext } from "react";
 import { authContext } from "../context/AuthContext";
 import { set, SET_TOKEN, SET_USER } from "context/authActions";
 import LoadingScreen from "screens/merchant/LoadingScreen";
+import SendEmails from "screens/merchant/SendEmails";
 
 export default function Navigation() {
   return (
@@ -71,7 +72,11 @@ function RootNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {!isLoadNav && (
-        <Stack.Screen name="Loading" component={LoadingScreen}></Stack.Screen>
+        <>
+          <Stack.Screen name="Loading" component={LoadingScreen}></Stack.Screen>
+          <Stack.Screen name="ViewRequest" component={ViewRequestScreen} />
+          <Stack.Screen name="SubmitSuccess" component={SubmitSuccessScreen} />
+        </>
       )}
       {isLoadNav && !authState.token ? (
         <>
@@ -88,6 +93,7 @@ function RootNavigator() {
               component={ReviewRequestScreen}
             />
             <Stack.Screen name="ShareRequest" component={ShareRequestScreen} />
+            <Stack.Screen name="SendEmails" component={SendEmails} />
             <Stack.Screen name="ViewRequest" component={ViewRequestScreen} />
             <Stack.Screen
               name="SubmitSuccess"

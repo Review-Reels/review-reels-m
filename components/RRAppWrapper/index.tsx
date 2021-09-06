@@ -21,7 +21,7 @@ export default function CSAppWrapper({
 }: {
   style?: StyleProp<any>;
   children: ReactElement;
-  backgroundColor: string;
+  backgroundColor?: string;
 }) {
   const { authState, authDispatch } = useContext(authContext);
   return (

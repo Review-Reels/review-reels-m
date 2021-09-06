@@ -26,6 +26,9 @@ export default function RRButton({
           opacity: 90,
           backgroundColor: "rgba(255, 255, 255, 0.2)",
         },
+        mode == "cancel" && {
+          backgroundColor: colors.Peach_Cream,
+        },
       ]}
       onPress={onPressOk}
     >

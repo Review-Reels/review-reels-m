@@ -67,9 +67,12 @@ export default function ViewRequestScreen({
       aspect: [16, 9],
       quality: 1,
       base64: false,
+      videoExportPreset: ImagePicker.VideoExportPreset.H264_1920x1080,
     });
-    setSelectedFile(result);
-    setShowCustomerInfo(true);
+    if (!result.cancelled) {
+      setSelectedFile(result);
+      setShowCustomerInfo(true);
+    }
   };
 
   const onPressReply = () => {

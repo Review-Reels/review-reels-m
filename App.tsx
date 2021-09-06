@@ -7,7 +7,7 @@ import useCachedResources from "./hooks/useCachedResources";
 import Navigation from "./navigation";
 import { NativeBaseProvider } from "native-base";
 
-import AuthContextProvider from "./context/AuthContext"
+import AuthContextProvider from "./context/AuthContext";
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
@@ -19,7 +19,7 @@ export default function App() {
       <SafeAreaProvider>
         <NativeBaseProvider>
           <AuthContextProvider>
-              <Navigation />
+            <Navigation />
           </AuthContextProvider>
         </NativeBaseProvider>
         {/* <StatusBar /> */}
