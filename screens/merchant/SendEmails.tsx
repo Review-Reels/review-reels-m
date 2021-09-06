@@ -79,7 +79,10 @@ export default function SendEmails({
           toast.show({ title: "Emails sent successfully" });
           navigation.replace("Home");
         },
-        (err) => console.log(err)
+        (err) => {
+          authDispatch(set(SET_LOADER, false));
+          toast.show({ title: "Something went wrong" });
+        }
       );
   };
 
