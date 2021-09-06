@@ -26,11 +26,13 @@ import { Video } from "expo-av";
 import CustomerVideoInfo from "screens/shared/customer-video-info";
 import CustomerInfo from "screens/shared/customer-info";
 import { getReviewRequestWithUsername } from "services/api/review-request";
-import { submitReview } from "services/api/review-request";
+import {
+  submitReview,
+  updateReviewResponse,
+} from "services/api/review-response";
 import PlayButton from "assets/svg/PlayButton.svg";
 
 import { S3_URL } from "constants/apiUrls";
-import { boolean } from "yargs";
 import { DataURIToBlob } from "utils/convertToBlob";
 import { authContext } from "context/AuthContext";
 import { set, SET_LOADER } from "context/authActions";
@@ -91,15 +93,27 @@ export default function ViewRequestScreen({
     formData.append("whatYouDo", info.job);
     formData.append("reviewRequestId", reviewRequest.id);
     authDispatch(set(SET_LOADER, true));
-    submitReview(formData)
-      .then((res) => {
-        authDispatch(set(SET_LOADER, false));
-        navigation.navigate("SubmitSuccess");
-      })
-      .catch((err) => {
-        authDispatch(set(SET_LOADER, false));
-        console.log("err", err);
-      });
+    if (route.params.reviewResponseId) {
+      updateReviewResponse(formData)
+        .then((res) => {
+          authDispatch(set(SET_LOADER, false));
+          navigation.navigate("SubmitSuccess");
+        })
+        .catch((err) => {
+          authDispatch(set(SET_LOADER, false));
+          console.log("err", err);
+        });
+    } else {
+      submitReview(formData)
+        .then((res) => {
+          authDispatch(set(SET_LOADER, false));
+          navigation.navigate("SubmitSuccess");
+        })
+        .catch((err) => {
+          authDispatch(set(SET_LOADER, false));
+          console.log("err", err);
+        });
+    }
   };
 
   return (

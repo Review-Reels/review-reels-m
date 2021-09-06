@@ -30,7 +30,7 @@ export default function ReviewResponseDetails({
   React.useEffect(() => {
     setReviewResponse(route.params);
   }, [route]);
-
+  console.log(reviewResponse?.EmailTracker);
   return (
     <RRAppWrapper>
       <View>
@@ -43,7 +43,7 @@ export default function ReviewResponseDetails({
                 <Back style={styles.back}></Back>
               )}
             </Pressable>
-            <Text style={styles.title}> {reviewResponse?.customerName}</Text>
+            <Text style={styles.title}>{reviewResponse?.customerName}</Text>
           </View>
           {Platform.OS == "web" ? (
             <img style={{ width: 4, height: 16 }} src={ThreeDotVertical}></img>
@@ -51,37 +51,53 @@ export default function ReviewResponseDetails({
             <ThreeDotVertical style={styles.threeDot}></ThreeDotVertical>
           )}
         </View>
-        <View style={styles.container}>
-          <Pressable
-            onPress={() =>
-              navigation.navigate("PublishReview", {
-                videoUrl: S3_URL + reviewResponse.videoUrl,
-              })
-            }
-          >
-            {reviewResponse.videoUrl && (
-              <View style={styles.overlay}>
-                <Image
-                  style={styles.rounded}
-                  source={{ uri: S3_URL + reviewResponse?.imageUrl }}
-                />
-                {Platform.OS == "web" ? (
-                  <img
-                    src={PlayButton}
-                    style={{ position: "absolute", top: "50%", left: "40%" }}
-                  />
-                ) : (
-                  <PlayButton
-                    style={{ position: "absolute", top: "50%", left: "40%" }}
-                  ></PlayButton>
-                )}
+        {reviewResponse?.EmailTracker && reviewResponse?.EmailTracker.length ? (
+          <View>
+            {reviewResponse?.EmailTracker.map((item) => (
+              <View>
+                <Text>{item.customerName}</Text>
+                <Text>
+                  {item.status ? "Email Send" : "Error Sending Email"}
+                </Text>
+                <Text style={styles.timeTxt}>
+                  {getElapsedTime(item.createdAt)}
+                </Text>
               </View>
+            ))}
+          </View>
+        ) : (
+          <View style={styles.container}>
+            {reviewResponse.videoUrl !== "" && (
+              <Pressable
+                onPress={() =>
+                  navigation.navigate("PublishReview", {
+                    videoUrl: S3_URL + reviewResponse.videoUrl,
+                  })
+                }
+              >
+                <View style={styles.overlay}>
+                  <Image
+                    style={styles.rounded}
+                    source={{ uri: S3_URL + reviewResponse?.imageUrl }}
+                  />
+                  {Platform.OS == "web" ? (
+                    <img
+                      src={PlayButton}
+                      style={{ position: "absolute", top: "50%", left: "40%" }}
+                    />
+                  ) : (
+                    <PlayButton
+                      style={{ position: "absolute", top: "50%", left: "40%" }}
+                    ></PlayButton>
+                  )}
+                </View>
+              </Pressable>
             )}
-          </Pressable>
-          <Text style={styles.timeTxt}>
-            {getElapsedTime(reviewResponse.createdAt)}
-          </Text>
-        </View>
+            <Text style={styles.timeTxt}>
+              {getElapsedTime(reviewResponse.createdAt)}
+            </Text>
+          </View>
+        )}
       </View>
     </RRAppWrapper>
   );

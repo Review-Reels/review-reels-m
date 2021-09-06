@@ -23,6 +23,7 @@ import ViewRequestScreen from "screens/customer/ViewRequestScreen";
 import SubmitSuccessScreen from "screens/customer/SubmitSuccessScreen";
 import ReviewResponseDetails from "screens/merchant/ReviewResponseDetails";
 import PublishReview from "screens/merchant/PublishReview";
+import SubscriptionScreen from "screens/merchant/SubscriptionScreen";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwt_decode, { JwtPayload } from "jwt-decode";
@@ -103,6 +104,8 @@ function RootNavigator() {
               component={ReviewResponseDetails}
             />
             <Stack.Screen name="PublishReview" component={PublishReview} />
+            <Stack.Screen name="Subscription" component={SubscriptionScreen} />
+
             <Stack.Screen
               name="NotFound"
               component={NotFoundScreen}

@@ -7,3 +7,11 @@ export const getReviewResponse = async () => {
 export const updateReviewResponse = async (payload, reviewResponseId) => {
   return axios.put(`review/reviewResponse/${reviewResponseId}`, payload);
 };
+
+export const submitReview = async (payload) => {
+  return axios.post("review/reviewResponse", payload, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};

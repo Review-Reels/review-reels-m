@@ -19,6 +19,7 @@ export type RootStackParamList = {
   SendEmails: undefined;
   PublishReview: undefined;
   ReviewResponseDetails: undefined;
+  Subscription: undefined;
 };
 
 export type TextInputProps = {
