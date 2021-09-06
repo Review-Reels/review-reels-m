@@ -71,3 +71,9 @@ export type updateUserPayload = {
   username: string;
   merchantName: string;
 };
+
+export type sendEmailPayload = {
+  subject: string;
+  sendTo: Array<{ email: string; customerName: string }>;
+  reviewRequestId: string;
+};

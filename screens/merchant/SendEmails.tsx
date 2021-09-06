@@ -22,6 +22,10 @@ import VideoCam from "assets/svg/VideoCam.svg";
 import CustomerEmailInfo from "screens/shared/customer-email-info";
 import { LinearGradient } from "expo-linear-gradient";
 import RRButton from "components/RRButton";
+import emailClient from "services/api/email-client";
+import { authContext } from "context/AuthContext";
+import { set, SET_LOADER } from "context/authActions";
+import { useToast } from "native-base";
 
 export type recepientType = {
   customerName: string;
@@ -41,9 +45,13 @@ export default function SendEmails({
     []
   );
   const [subject, setSubject] = React.useState<string>("");
+  const [reviewRequestId, setRequestId] = React.useState<string>("");
+  const { authState, authDispatch } = React.useContext(authContext);
+  const toast = useToast();
+
   React.useEffect(() => {
     if (route.params) {
-      console.log(route.params);
+      setRequestId(route.params.id);
       setRequestMessage(route.params.askMessage);
       setImage(route.params.imageUrl);
     }
@@ -59,10 +67,21 @@ export default function SendEmails({
     let mailList = JSON.parse(JSON.stringify(toEmailList));
     mailList.splice(mailList.indexOf(info), 1);
     setToEmailList(mailList);
-    console.log(mailList);
   };
 
-  const onPressProceed = () => {};
+  const onPressProceed = () => {
+    authDispatch(set(SET_LOADER, true));
+    emailClient
+      .sendEmail({ subject, sendTo: toEmailList, reviewRequestId })
+      .then(
+        (res) => {
+          authDispatch(set(SET_LOADER, false));
+          toast.show({ title: "Emails sent successfully" });
+          navigation.replace("Home");
+        },
+        (err) => console.log(err)
+      );
+  };
 
   return (
     <RRAppWrapper>
@@ -75,7 +94,7 @@ export default function SendEmails({
               width: "100%",
               position: "absolute",
               backgroundColor: colors.Black4,
-              zIndex: 999,
+              zIndex: 9,
             }}
           ></Pressable>
         )}
@@ -185,7 +204,6 @@ export default function SendEmails({
             visible={isShowCustomerEmailInfo}
             onPressProceed={(info: any) => onAddCustomerInfo(info)}
             onPressClose={() => {
-              console.log("coool");
               setCustomerInfo(false);
             }}
           ></CustomerEmailInfo>
