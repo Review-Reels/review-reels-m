@@ -88,120 +88,131 @@ export default function SendEmails({
 
   return (
     <RRAppWrapper>
-      <View style={[{ flex: 1 }]}>
-        {isShowCustomerEmailInfo && (
-          <Pressable
-            onPress={() => setCustomerInfo(false)}
-            style={{
-              height: "100%",
-              width: "100%",
-              position: "absolute",
-              backgroundColor: colors.Black4,
-              zIndex: 9,
-            }}
-          ></Pressable>
-        )}
-        <ScrollView style={[{ flex: 1, padding: 24 }]}>
-          <View style={styles.headerCntnr}>
-            <Text style={styles.title}>Send Emails</Text>
-            <Pressable onPress={() => navigation.goBack()}>
-              {Platform.OS == "web" ? (
-                <img style={{ width: 48, height: 48 }} src={Close}></img>
-              ) : (
-                <Close width={48} height={48}></Close>
-              )}
-            </Pressable>
-          </View>
-          <View style={styles.inputCntnr}>
-            <Text style={styles.label}>TO</Text>
-            <View style={[styles.emailToContainer, styles.emailTo]}>
-              {toEmailList.map((item, i) => {
-                return (
-                  <View key={i} style={styles.toItem}>
-                    <Text style={styles.toItemText}>{item.customerName}</Text>
-                    <Pressable
-                      onPress={() => onDeleteToEmail(item)}
-                      style={styles.toItemIcon}
-                    >
-                      {Platform.OS == "web" ? (
-                        <img
-                          style={{ width: 20, height: 20 }}
-                          src={ClosePlain}
-                        ></img>
-                      ) : (
-                        <ClosePlain width={20} height={20}></ClosePlain>
-                      )}
-                    </Pressable>
-                  </View>
-                );
-              })}
-
-              <Pressable
-                onPress={() => setCustomerInfo(true)}
-                style={styles.toItem}
-              >
-                <Text style={styles.toItemText}>Add Customers</Text>
+      <View style={{ flex: 1 }}>
+        <View style={{ flex: 1 }}>
+          {isShowCustomerEmailInfo && (
+            <Pressable
+              onPress={() => setCustomerInfo(false)}
+              style={{
+                height: "100%",
+                width: "100%",
+                position: "absolute",
+                backgroundColor: colors.Black4,
+                zIndex: 9,
+              }}
+            ></Pressable>
+          )}
+          <ScrollView style={[{ flex: 1, padding: 24 }]}>
+            <View style={styles.headerCntnr}>
+              <Text style={styles.title}>Send Emails</Text>
+              <Pressable onPress={() => navigation.goBack()}>
+                {Platform.OS == "web" ? (
+                  <img style={{ width: 48, height: 48 }} src={Close}></img>
+                ) : (
+                  <Close width={48} height={48}></Close>
+                )}
               </Pressable>
             </View>
-          </View>
-          <RRTextInput
-            label="SUBJECT"
-            value={subject}
-            onChangeText={(val: string) => setSubject(val)}
-            placeholder="eg:nickfury"
-            //   error={usernameError}
-          ></RRTextInput>
-          <View style={styles.inputCntnr}>
-            <Text style={styles.label}>CONTENT</Text>
-            <View style={styles.inputView}>
-              <View style={styles.contentContainer}>
-                <View style={styles.addVideoCntnr}>
-                  <Pressable style={styles.overlay}>
-                    {image && (
-                      <Image
-                        style={styles.rounded}
-                        source={{ uri: S3_URL + image }}
-                      />
-                    )}
-                    {Platform.OS == "web" ? (
-                      <img
-                        src={PlayButton}
-                        style={{
-                          position: "absolute",
-                          top: "50%",
-                          left: "40%",
-                        }}
-                      />
-                    ) : (
-                      <PlayButton
-                        style={{
-                          position: "absolute",
-                          top: "50%",
-                          left: "40%",
-                        }}
-                      ></PlayButton>
-                    )}
-                  </Pressable>
-                </View>
-                <View style={{ alignItems: "center" }}>
-                  <View style={styles.requestMsgCntnr}>
-                    <Text style={styles.requestMsgTxt}>{requestMessage}</Text>
-                  </View>
-                  <View style={{ alignSelf: "center" }}>
-                    <Pressable style={styles.button}>
-                      {Platform.OS == "web" ? (
-                        <img src={VideoCam}></img>
-                      ) : (
-                        <VideoCam></VideoCam>
+            <View style={styles.inputCntnr}>
+              <Text style={styles.label}>TO</Text>
+              <View style={[styles.emailToContainer, styles.emailTo]}>
+                {toEmailList.map((item, i) => {
+                  return (
+                    <View key={i} style={styles.toItem}>
+                      <Text style={styles.toItemText}>{item.customerName}</Text>
+                      <Pressable
+                        onPress={() => onDeleteToEmail(item)}
+                        style={styles.toItemIcon}
+                      >
+                        {Platform.OS == "web" ? (
+                          <img
+                            style={{ width: 20, height: 20 }}
+                            src={ClosePlain}
+                          ></img>
+                        ) : (
+                          <ClosePlain width={20} height={20}></ClosePlain>
+                        )}
+                      </Pressable>
+                    </View>
+                  );
+                })}
+
+                <Pressable
+                  onPress={() => setCustomerInfo(true)}
+                  style={styles.toItem}
+                >
+                  <Text style={styles.toItemText}>Add Customers</Text>
+                </Pressable>
+              </View>
+            </View>
+            <RRTextInput
+              label="SUBJECT"
+              value={subject}
+              onChangeText={(val: string) => setSubject(val)}
+              placeholder="eg:nickfury"
+              //   error={usernameError}
+            ></RRTextInput>
+            <View style={styles.inputCntnr}>
+              <Text style={styles.label}>CONTENT</Text>
+              <View style={styles.inputView}>
+                <View style={styles.contentContainer}>
+                  <View style={styles.addVideoCntnr}>
+                    <Pressable style={styles.overlay}>
+                      {image && (
+                        <Image
+                          style={styles.rounded}
+                          source={{ uri: S3_URL + image }}
+                        />
                       )}
-                      <Text style={styles.buttonTxt}>Reply with Video</Text>
+                      {Platform.OS == "web" ? (
+                        <img
+                          src={PlayButton}
+                          style={{
+                            position: "absolute",
+                            top: "50%",
+                            left: "40%",
+                          }}
+                        />
+                      ) : (
+                        <PlayButton
+                          style={{
+                            position: "absolute",
+                            top: "50%",
+                            left: "40%",
+                          }}
+                        ></PlayButton>
+                      )}
                     </Pressable>
+                  </View>
+                  <View style={{ alignItems: "center" }}>
+                    <View style={styles.requestMsgCntnr}>
+                      <Text style={styles.requestMsgTxt}>{requestMessage}</Text>
+                    </View>
+                    <View style={{ alignSelf: "center" }}>
+                      <Pressable style={styles.button}>
+                        {Platform.OS == "web" ? (
+                          <img src={VideoCam}></img>
+                        ) : (
+                          <VideoCam></VideoCam>
+                        )}
+                        <Text style={styles.buttonTxt}>Reply with Video</Text>
+                      </Pressable>
+                    </View>
                   </View>
                 </View>
               </View>
             </View>
-          </View>
-        </ScrollView>
+          </ScrollView>
+
+          <LinearGradient
+            style={styles.buttonGradient}
+            colors={["rgba(255,255,255,0)", "rgba(255,255,255,1)"]}
+          >
+            <View style={styles.proceedBtnCntnr}>
+              <RRButton title="Send Emails" onPress={onPressProceed}></RRButton>
+            </View>
+          </LinearGradient>
+        </View>
         {
           <CustomerEmailInfo
             visible={isShowCustomerEmailInfo}
@@ -211,14 +222,6 @@ export default function SendEmails({
             }}
           ></CustomerEmailInfo>
         }
-        <LinearGradient
-          style={styles.buttonGradient}
-          colors={["rgba(255,255,255,0)", "rgba(255,255,255,1)"]}
-        >
-          <View style={styles.proceedBtnCntnr}>
-            <RRButton title="Send Emails" onPress={onPressProceed}></RRButton>
-          </View>
-        </LinearGradient>
       </View>
     </RRAppWrapper>
   );

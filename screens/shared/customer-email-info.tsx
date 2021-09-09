@@ -16,7 +16,37 @@ export default function CustomerEmailInfo({
   onPressProceed: any;
 }) {
   const [customerName, setCustomerName] = React.useState("");
+  const [customerNameError, setCustomerNameError] = React.useState("");
   const [email, setEmail] = React.useState("");
+  const [emailError, setEmailError] = React.useState("");
+
+  const validateEmail = (email: string) => {
+    const re =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  };
+
+  const onPressDone = () => {};
+
+  const onPressAddNext = () => {
+    if (!customerName) {
+      setCustomerNameError("Required");
+    }
+    if (!email) {
+      setEmailError("Required");
+    }
+    if (customerName && email) {
+      setCustomerNameError("");
+      if (validateEmail(email)) {
+        setEmailError("");
+        onPressProceed({ customerName, email });
+        setCustomerName("");
+        setEmail("");
+      } else {
+        setEmailError("Enter valid email.");
+      }
+    }
+  };
 
   return (
     <View>
@@ -30,6 +60,7 @@ export default function CustomerEmailInfo({
               value={customerName}
               label="CUSTOMER NAME"
               placeholder="eg: Brandon Philip"
+              error={customerNameError}
             ></RRTextInput>
             <RRTextInput
               style={styles.mt_24}
@@ -37,23 +68,19 @@ export default function CustomerEmailInfo({
               value={email}
               label="EMAIL"
               placeholder="eg: brandon@gmail.com"
+              error={emailError}
             ></RRTextInput>
             <View style={styles.actions}>
               <RRButton
                 onPress={() => {
-                  email && onPressProceed({ customerName, email });
                   onPressClose();
                 }}
-                title="Done"
+                title="Close"
                 mode="cancel"
                 style={{ flex: 1 }}
               ></RRButton>
               <RRButton
-                onPress={() => {
-                  email && onPressProceed({ customerName, email });
-                  setCustomerName("");
-                  setEmail("");
-                }}
+                onPress={() => onPressAddNext()}
                 title="Add Next"
                 style={{ flex: 1, marginLeft: 8 }}
               ></RRButton>
