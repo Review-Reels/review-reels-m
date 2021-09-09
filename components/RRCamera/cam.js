@@ -8,6 +8,7 @@ import FlipCamera from "assets/svg/FlipCamera.svg";
 import More from "assets/svg/More.svg";
 import colors from "constants/Colors";
 import CameraClose from "assets/svg/CameraClose.svg";
+import CustomerCountDown from "./countDown";
 
 export default class Cam extends PureComponent {
   render() {
@@ -15,6 +16,7 @@ export default class Cam extends PureComponent {
       handleCameraRef,
       cameraFlipDirection,
       onPressRecord,
+      onPressFlip,
       progressText,
       isRecording,
       onPressStop,
@@ -22,24 +24,24 @@ export default class Cam extends PureComponent {
     } = this.props;
     return (
       <View style={[styles.cameraContainer, { width: scaleSize(375) }]}>
-        {isRecording && (
-          <Text style={styles.videoTimer}>00:{progressText}</Text>
+        {isRecording && <CustomerCountDown></CustomerCountDown>}
+        {!isRecording && (
+          <Pressable
+            onPress={onPressClose}
+            style={{
+              position: "absolute",
+              top: 24,
+              right: 24,
+              zIndex: 999,
+            }}
+          >
+            {Platform.OS == "web" ? (
+              <img style={{ width: 48, height: 48 }} src={CameraClose}></img>
+            ) : (
+              <CameraClose width={48} height={48}></CameraClose>
+            )}
+          </Pressable>
         )}
-        <Pressable
-          onPress={onPressClose}
-          style={{
-            position: "absolute",
-            top: 24,
-            right: 24,
-            zIndex: 999,
-          }}
-        >
-          {Platform.OS == "web" ? (
-            <img style={{ width: 48, height: 48 }} src={CameraClose}></img>
-          ) : (
-            <CameraClose width={48} height={48}></CameraClose>
-          )}
-        </Pressable>
         <Camera
           style={styles.camera}
           type={cameraFlipDirection}
@@ -47,13 +49,7 @@ export default class Cam extends PureComponent {
           ratio="16:9"
         />
         <View style={styles.actionButtons}>
-          <Pressable>
-            {Platform.OS == "web" ? (
-              <img src={More}></img>
-            ) : (
-              <More style={styles.button} height={48} width={48}></More>
-            )}
-          </Pressable>
+          <View style={{ width: 48 }}></View>
           {isRecording ? (
             <Pressable onPress={onPressStop}>
               {Platform.OS == "web" ? (
@@ -79,17 +75,21 @@ export default class Cam extends PureComponent {
               )}
             </Pressable>
           )}
-          <Pressable>
-            {Platform.OS == "web" ? (
-              <img src={FlipCamera}></img>
-            ) : (
-              <FlipCamera
-                style={styles.button}
-                height={24}
-                width={24}
-              ></FlipCamera>
+          <View style={{ width: 24 }}>
+            {!isRecording && (
+              <Pressable onPress={onPressFlip}>
+                {Platform.OS == "web" ? (
+                  <img src={FlipCamera}></img>
+                ) : (
+                  <FlipCamera
+                    style={styles.button}
+                    height={24}
+                    width={24}
+                  ></FlipCamera>
+                )}
+              </Pressable>
             )}
-          </Pressable>
+          </View>
         </View>
       </View>
     );

@@ -92,7 +92,7 @@ export default function ShareRequestScreen({
               {Platform.OS == "web" ? (
                 <img style={{ width: 48, height: 48 }} src={Close}></img>
               ) : (
-                <Close width={32} height={32}></Close>
+                <Close width={48} height={48}></Close>
               )}
             </Pressable>
           </View>

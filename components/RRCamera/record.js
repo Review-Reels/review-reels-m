@@ -27,6 +27,7 @@ export default class Record extends React.Component {
       videoIsLoading: false,
       progressText: VIDEO_DURATION / 1000,
       showPreview: false,
+      cameraType: "back",
     };
 
     this.isRecording = false;
@@ -40,7 +41,6 @@ export default class Record extends React.Component {
     this.cancelMedia = this.cancelMedia.bind(this);
 
     this.updateProgressText = this.updateProgressText.bind(this);
-    this.startCountdown = this.startCountdown.bind(this);
   }
   async onPlaybackStatusUpdate(status) {
     if (status.didJustFinish && !status.isLooping && !status.isPlaying) {
@@ -67,13 +67,13 @@ export default class Record extends React.Component {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       this.setState({ isRecording: true }, async () => {
         this.isRecording = true; // variable used for other functions that need to know if it's recording without waiting for state
-        this.startCountdown();
         // NOTE
         // There appears to be some relationship between maxDuration in recordAsync and this bug.
         const video = await this.camera.recordAsync({
-          maxDuration: VIDEO_DURATION / 1000,
-          codec: Camera.Constants.VideoCodec["H264"],
-          quality: Camera.Constants.VideoQuality["1080p"],
+          maxDuration: 30,
+          VideoCodec: ["H264"],
+          VideoQuality: ["1080p"],
+          mirror: false,
         });
         this.isRecording = false;
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -111,13 +111,6 @@ export default class Record extends React.Component {
     this.setState({ progressText });
   }
 
-  startCountdown() {
-    const endDate = Date.now() + VIDEO_DURATION;
-    this.setState({ progressText: VIDEO_DURATION / 1000 }, () =>
-      countdown(endDate, this.updateProgressText)
-    );
-  }
-
   onPressTakeAgain = () => {
     this.setState({ video: null, videoIsLoading: false, showPreview: false });
   };
@@ -131,8 +124,14 @@ export default class Record extends React.Component {
   };
 
   render() {
-    const { video, isRecording, videoIsLoading, progressText, showPreview } =
-      this.state;
+    const {
+      video,
+      isRecording,
+      videoIsLoading,
+      progressText,
+      showPreview,
+      cameraType,
+    } = this.state;
     return (
       <View style={styles.container}>
         {showPreview ? (
@@ -147,12 +146,17 @@ export default class Record extends React.Component {
         ) : (
           <Cam
             handleCameraRef={this.handleCameraRef}
-            cameraFlipDirection={Camera.Constants.Type.front}
+            cameraFlipDirection={Camera.Constants.Type[cameraType]}
             onPressRecord={this.onPress}
             progressText={progressText}
             isRecording={isRecording}
             onPressStop={this.onStopRecording}
             onPressClose={this.onPressClose}
+            onPressFlip={() => {
+              cameraType == "back"
+                ? this.setState({ cameraType: "front" })
+                : this.setState({ cameraType: "back" });
+            }}
           />
         )}
       </View>
