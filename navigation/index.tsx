@@ -32,6 +32,7 @@ import { authContext } from "../context/AuthContext";
 import { set, SET_TOKEN, SET_USER } from "context/authActions";
 import LoadingScreen from "screens/merchant/LoadingScreen";
 import SendEmails from "screens/merchant/SendEmails";
+import ProfileScreen from "screens/merchant/ProfileScreen";
 
 export default function Navigation() {
   return (
@@ -92,6 +93,10 @@ function RootNavigator() {
               name="ReviewRequest"
               component={ReviewRequestScreen}
             />
+            <Stack.Screen
+              name="Profile"
+              component={ProfileScreen}
+            ></Stack.Screen>
             <Stack.Screen name="ShareRequest" component={ShareRequestScreen} />
             <Stack.Screen name="SendEmails" component={SendEmails} />
             <Stack.Screen name="ViewRequest" component={ViewRequestScreen} />

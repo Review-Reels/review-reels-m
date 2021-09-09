@@ -32,30 +32,30 @@ import NoAskMessage from "screens/shared/no-ask-message";
 import { S3_URL } from "constants/apiUrls";
 
 import { LinearGradient } from "expo-linear-gradient";
-import { StripeProvider } from "@stripe/stripe-react-native";
+// import { StripeProvider } from "@stripe/stripe-react-native";
 import { STRIPE_PUBLISHABLE_KEY, CLIENT_SECRET } from "constants/stripe";
-import { CardField, useConfirmPayment } from "@stripe/stripe-react-native";
+// import { CardField, useConfirmPayment } from "@stripe/stripe-react-native";
 
 export default function HomeScreen({
   navigation,
 }: StackScreenProps<RootStackParamList, "NotFound">) {
-  const { confirmPayment, loading } = useConfirmPayment();
-  const handlePay = async () => {
-    console.log("clicked");
-    const { error, paymentIntent } = await confirmPayment(CLIENT_SECRET, {
-      type: "Card",
-      //   billingDetails: { name: "Hari" },
-    });
-    if (error) {
-      console.log(error);
-      Alert.alert(`Error code:${error.code}`, error.message);
-    } else if (paymentIntent) {
-      Alert.alert("Success", `Payment Successfull ${paymentIntent.id}`);
-    }
-  };
+  // const { confirmPayment, loading } = useConfirmPayment();
+  // const handlePay = async () => {
+  //   console.log("clicked");
+  //   const { error, paymentIntent } = await confirmPayment(CLIENT_SECRET, {
+  //     type: "Card",
+  //     //   billingDetails: { name: "Hari" },
+  //   });
+  //   if (error) {
+  //     console.log(error);
+  //     Alert.alert(`Error code:${error.code}`, error.message);
+  //   } else if (paymentIntent) {
+  //     Alert.alert("Success", `Payment Successfull ${paymentIntent.id}`);
+  //   }
+  // };
   return (
     <RRAppWrapper>
-      <StripeProvider publishableKey={STRIPE_PUBLISHABLE_KEY}>
+      {/* <StripeProvider publishableKey={STRIPE_PUBLISHABLE_KEY}>
         <CardField
           postalCodeEnabled={false}
           placeholder={{
@@ -82,7 +82,7 @@ export default function HomeScreen({
           title="Pay"
           isDisabled={loading}
         ></RRButton>
-      </StripeProvider>
+      </StripeProvider> */}
     </RRAppWrapper>
   );
 }

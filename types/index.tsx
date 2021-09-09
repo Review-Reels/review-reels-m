@@ -20,6 +20,7 @@ export type RootStackParamList = {
   PublishReview: undefined;
   ReviewResponseDetails: undefined;
   Subscription: undefined;
+  Profile: undefined;
 };
 
 export type TextInputProps = {

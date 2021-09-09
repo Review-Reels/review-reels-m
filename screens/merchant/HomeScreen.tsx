@@ -32,7 +32,10 @@ import colors from "constants/Colors";
 import { getElapsedTime } from "utils/daysJsUtils";
 import RRButton from "components/RRButton";
 import NoReview from "screens/shared/no-review";
-import { getReviewRequest } from "services/api/review-request";
+import {
+  getReviewRequest,
+  getReviewRequestWithUsername,
+} from "services/api/review-request";
 import NoAskMessage from "screens/shared/no-ask-message";
 import EventEmitter from "react-native-eventemitter";
 import { S3_URL } from "constants/apiUrls";
@@ -75,6 +78,7 @@ export default function HomeScreen({
   React.useEffect(() => {
     getReviewResponses();
     getReviewRequests();
+    getMerchantInfo();
   }, [isFocused == true]);
 
   React.useEffect(() => {
@@ -92,6 +96,14 @@ export default function HomeScreen({
 
   const _keyboardDidHide = () => {
     setShowAsk(true);
+  };
+
+  const getMerchantInfo = () => {
+    // setRefreshing(true);
+    getReviewRequestWithUsername().then((res) => {
+      if (res.data.length) setReviewRequest(res.data[0]);
+      // setRefreshing(true);
+    });
   };
 
   const getReviewResponses = () => {
@@ -159,6 +171,10 @@ export default function HomeScreen({
     authDispatch(set(LOGOUT_USER));
   };
 
+  const onPressProfile = () => {
+    navigation.navigate("Profile");
+  };
+
   return (
     <RRAppWrapper>
       {isAskMessageCreated == true ? (
@@ -166,16 +182,11 @@ export default function HomeScreen({
           <View style={styles.header}>
             <Text style={styles.title}>Inbox</Text>
             {Platform.OS == "web" ? (
-              <Pressable
-                onPress={async () => {
-                  await AsyncStorage.removeItem("@token");
-                  authDispatch(set(SET_TOKEN, ""));
-                }}
-              >
+              <Pressable onPress={onPressProfile}>
                 <img src={ThreeDot}></img>
               </Pressable>
             ) : (
-              <Pressable onPress={onPressLogout}>
+              <Pressable onPress={onPressProfile}>
                 <ThreeDot style={styles.threeDot}></ThreeDot>
               </Pressable>
             )}
@@ -296,10 +307,6 @@ export default function HomeScreen({
             <RRButton
               title="Ask for Review"
               onPress={() => navigation.push("ShareRequest")}
-            ></RRButton>
-            <RRButton
-              title="Subscribe"
-              onPress={() => navigation.push("Subscription")}
             ></RRButton>
           </View>
         </LinearGradient>
