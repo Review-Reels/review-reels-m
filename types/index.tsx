@@ -18,7 +18,7 @@ export type RootStackParamList = {
   Loading: undefined;
   SendEmails: undefined;
   PublishReview: undefined;
-  ReviewResponseDetails: undefined;
+  ReviewResponseDetails: { reviewRequest: any; reviewResponse: any };
   Subscription: undefined;
   Profile: undefined;
 };

@@ -19,18 +19,20 @@ import colors from "constants/Colors";
 import { getElapsedTime } from "utils/daysJsUtils";
 import { scaleSize } from "constants/Layout";
 import PlayButton from "assets/svg/PlayButton.svg";
+import VideoCam from "assets/svg/VideoCam.svg";
 
 export default function ReviewResponseDetails({
   navigation,
   route,
 }: StackScreenProps<RootStackParamList, "NotFound">) {
   const [reviewResponse, setReviewResponse] = React.useState({});
+  const [reviewRequest, setReviewRequest] = React.useState({});
   const [status, setStatus] = React.useState({});
   const video = React.useRef(null);
   React.useEffect(() => {
-    setReviewResponse(route.params);
+    setReviewResponse(route.params.reviewResponse);
+    setReviewRequest(route.params.reviewRequest);
   }, [route]);
-  console.log(reviewResponse?.EmailTracker);
   return (
     <RRAppWrapper>
       <View>
@@ -43,7 +45,13 @@ export default function ReviewResponseDetails({
                 <Back style={styles.back}></Back>
               )}
             </Pressable>
-            <Text style={styles.title}>{reviewResponse?.customerName}</Text>
+            <Text style={styles.title}>
+              {(reviewResponse &&
+                reviewResponse.EmailTracker &&
+                reviewResponse.EmailTracker.length &&
+                reviewResponse.EmailTracker[0].customerName) ||
+                reviewResponse.customerName}
+            </Text>
           </View>
           {Platform.OS == "web" ? (
             <img style={{ width: 4, height: 16 }} src={ThreeDotVertical}></img>
@@ -52,18 +60,54 @@ export default function ReviewResponseDetails({
           )}
         </View>
         {reviewResponse?.EmailTracker && reviewResponse?.EmailTracker.length ? (
-          <View>
-            {reviewResponse?.EmailTracker.map((item) => (
-              <View>
-                <Text>{item.customerName}</Text>
-                <Text>
-                  {item.status ? "Email Send" : "Error Sending Email"}
-                </Text>
-                <Text style={styles.timeTxt}>
-                  {getElapsedTime(item.createdAt)}
-                </Text>
+          <View style={styles.inputView}>
+            <View style={styles.contentContainer}>
+              <View style={styles.addVideoCntnr}>
+                <Pressable style={styles.overlay}>
+                  {reviewRequest.imageUrl && (
+                    <Image
+                      style={styles.rounded}
+                      source={{ uri: S3_URL + reviewRequest.imageUrl }}
+                    />
+                  )}
+                  {Platform.OS == "web" ? (
+                    <img
+                      src={PlayButton}
+                      style={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "40%",
+                      }}
+                    />
+                  ) : (
+                    <PlayButton
+                      style={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "40%",
+                      }}
+                    ></PlayButton>
+                  )}
+                </Pressable>
               </View>
-            ))}
+              <View style={{ alignItems: "center" }}>
+                <View style={styles.requestMsgCntnr}>
+                  <Text style={styles.requestMsgTxt}>
+                    {reviewRequest.askMessage}
+                  </Text>
+                </View>
+                <View style={{ alignSelf: "center" }}>
+                  <Pressable style={styles.button}>
+                    {Platform.OS == "web" ? (
+                      <img src={VideoCam}></img>
+                    ) : (
+                      <VideoCam></VideoCam>
+                    )}
+                    <Text style={styles.buttonTxt}>Reply with Video</Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
           </View>
         ) : (
           <View style={styles.container}>
@@ -144,7 +188,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     borderBottomRightRadius: 16,
-    borderBottomLeftRadius: 2,
+    borderBottomLeftRadius: 16,
     height: 450,
   },
   overlay: {
@@ -157,5 +201,64 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     fontFamily: "Karla",
     color: colors.Black2,
+  },
+  inputCntnr: {
+    marginVertical: 24,
+  },
+  inputView: {
+    borderRadius: 16,
+    backgroundColor: colors.Concrete,
+    marginTop: 8,
+    padding: 24,
+    margin: 24,
+    flex: 1,
+  },
+  contentContainer: {
+    backgroundColor: "#fff",
+    padding: 24,
+    borderRadius: 16,
+  },
+  addVideoCntnr: {
+    backgroundColor: colors.White,
+    alignItems: "center",
+    borderRadius: 16,
+    paddingHorizontal: 24,
+  },
+  requestMsgCntnr: {
+    marginTop: 24,
+  },
+  requestMsgTxt: {
+    fontFamily: "Karla",
+    fontSize: 16,
+    lineHeight: 24,
+    fontWeight: "400",
+  },
+  video: {
+    borderRadius: 16,
+  },
+  button: {
+    flexDirection: "row",
+    borderRadius: 64,
+    paddingHorizontal: 48,
+    paddingVertical: 18,
+    backgroundColor: colors.Alizarin_Crimson,
+    marginTop: 24,
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowColor: colors.Alizarin_Crimson,
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    opacity: 0.2,
+    alignItems: "center",
+  },
+  buttonTxt: {
+    marginLeft: 14,
+    color: colors.White,
+    fontFamily: "Karla",
+    fontSize: 16,
+    lineHeight: 20,
+    fontWeight: "700",
   },
 });

@@ -100,10 +100,10 @@ export default function HomeScreen({
 
   const getMerchantInfo = () => {
     // setRefreshing(true);
-    getReviewRequestWithUsername().then((res) => {
-      if (res.data.length) setReviewRequest(res.data[0]);
-      // setRefreshing(true);
-    });
+    // getReviewRequestWithUsername().then((res) => {
+    //   if (res.data.length) setReviewRequest(res.data[0]);
+    //   // setRefreshing(true);
+    // });
   };
 
   const getReviewResponses = () => {
@@ -152,7 +152,10 @@ export default function HomeScreen({
         .catch((err) => {
           console.log(err);
         });
-    navigation.navigate("ReviewResponseDetails", item);
+    navigation.navigate("ReviewResponseDetails", {
+      reviewResponse: item,
+      reviewRequest,
+    });
   };
 
   const searchReviewResponse = (value: string) => {
