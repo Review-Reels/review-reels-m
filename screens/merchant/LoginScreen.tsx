@@ -24,6 +24,7 @@ import { authContext } from "context/AuthContext";
 import { set, SET_LOADER, SET_TOKEN, SET_USER } from "context/authActions";
 import { GoogleLogin } from "react-google-login";
 import colors from "constants/Colors";
+import { GoogleClientId } from "constants/Google_Client";
 
 export default function LoginScreen({
   navigation,
@@ -42,9 +43,9 @@ export default function LoginScreen({
       proceedSignin();
     } else {
       const config: Google.GoogleLogInConfig = {
-        clientId: `821902754014-fm9npqchn7ja27eagrrr76bk91ikspsg.apps.googleusercontent.com`,
-        iosClientId: `821902754014-47rd60g2ltm6dj6kl7dmvd5k9kdf0ctj.apps.googleusercontent.com`,
-        androidClientId: `821902754014-d7ssa6q6d21ebo0q069co91dk4bs288k.apps.googleusercontent.com`,
+        clientId: GoogleClientId.web,
+        iosClientId: GoogleClientId.ios,
+        androidClientId: GoogleClientId.android,
       };
       const { type, idToken }: Google.LogInResult = await Google.logInAsync(
         config
@@ -112,6 +113,19 @@ export default function LoginScreen({
     authDispatch(set(SET_USER, user));
   };
 
+  const getGoogleClientId = (): string => {
+    switch (Platform.OS) {
+      case "web":
+        return GoogleClientId.web;
+      case "android":
+        return GoogleClientId.android;
+      case "ios":
+        return GoogleClientId.ios;
+      default:
+        return GoogleClientId.web;
+    }
+  };
+
   return (
     <RRAppWrapper style={{ flex: 1, padding: 24 }}>
       <>
@@ -156,7 +170,7 @@ export default function LoginScreen({
               </Text>
               {Platform.OS === "web" ? (
                 <GoogleLogin
-                  clientId="821902754014-fm9npqchn7ja27eagrrr76bk91ikspsg.apps.googleusercontent.com"
+                  clientId={getGoogleClientId()}
                   render={(renderProps) => (
                     <Pressable
                       style={styles.button}
