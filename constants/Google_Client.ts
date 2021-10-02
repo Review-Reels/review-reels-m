@@ -1,5 +1,7 @@
 export enum GoogleClientId {
-  web = `821902754014-fm9npqchn7ja27eagrrr76bk91ikspsg.apps.googleusercontent.com`,
-  ios = `821902754014-47rd60g2ltm6dj6kl7dmvd5k9kdf0ctj.apps.googleusercontent.com`,
-  android = `821902754014-d7ssa6q6d21ebo0q069co91dk4bs288k.apps.googleusercontent.com`,
+  web = `821902754014-tctjpbduthjrsbjailks1l96qaltnund.apps.googleusercontent.com`,
+  ios = `821902754014-lbutufnbsd34haviortpatfrko0gc1hl.apps.googleusercontent.com`,
+  android = `821902754014-imqaoqkarf16nmu19a41id2ac4ni2oqp.apps.googleusercontent.com`,
+  androidStandalone = "821902754014-egqtsjfkbvekd4chkepo3em81ukvnm2i.apps.googleusercontent.com",
+  iosStandalone = "821902754014-0i0fgudb8r4k5ktdcloj58p7f4lm442i.apps.googleusercontent.com",
 }

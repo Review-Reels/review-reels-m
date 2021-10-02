@@ -39,20 +39,19 @@ export default function LoginScreen({
   const [userDetails, setUserDetails] = React.useState<any>();
 
   const signInAsync = async () => {
-    if (Platform.OS == "web") {
-      proceedSignin();
-    } else {
-      const config: Google.GoogleLogInConfig = {
-        clientId: GoogleClientId.web,
-        iosClientId: GoogleClientId.ios,
-        androidClientId: GoogleClientId.android,
-      };
-      const { type, idToken }: Google.LogInResult = await Google.logInAsync(
-        config
-      );
-      if (type === "success") {
-        googleSignInSignUp(idToken);
-      }
+    const config: Google.GoogleLogInConfig = {
+      clientId: GoogleClientId.web,
+      iosClientId: GoogleClientId.ios,
+      androidClientId: GoogleClientId.android,
+      androidStandaloneAppClientId: GoogleClientId.androidStandalone,
+      iosStandaloneAppClientId: GoogleClientId.iosStandalone,
+      scopes: ["profile", "email"],
+    };
+    const { type, idToken }: Google.LogInResult = await Google.logInAsync(
+      config
+    );
+    if (type === "success") {
+      googleSignInSignUp(idToken);
     }
   };
 
