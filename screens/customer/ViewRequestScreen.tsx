@@ -94,7 +94,8 @@ export default function ViewRequestScreen({
     formData.append("reviewRequestId", reviewRequest.id);
     authDispatch(set(SET_LOADER, true));
     if (route.params.reviewResponseId) {
-      updateReviewResponse(formData)
+      formData.append("isRead", false);
+      updateReviewResponse(formData, route.params.reviewResponseId)
         .then((res) => {
           authDispatch(set(SET_LOADER, false));
           navigation.navigate("SubmitSuccess");
