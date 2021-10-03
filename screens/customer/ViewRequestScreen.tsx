@@ -91,6 +91,7 @@ export default function ViewRequestScreen({
     formData.append("fileName", file);
     formData.append("customerName", info.name);
     formData.append("whatYouDo", info.job);
+    formData.append("reviewRequestId", reviewRequest.id);
     authDispatch(set(SET_LOADER, true));
     if (route.params.reviewResponseId) {
       updateReviewResponse(formData, route.params.reviewResponseId)
@@ -103,7 +104,6 @@ export default function ViewRequestScreen({
           console.log("err", err);
         });
     } else {
-      formData.append("reviewRequestId", reviewRequest.id);
       submitReview(formData)
         .then((res) => {
           authDispatch(set(SET_LOADER, false));
