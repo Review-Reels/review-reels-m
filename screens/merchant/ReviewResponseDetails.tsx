@@ -150,6 +150,7 @@ export default function ReviewResponseDetails({
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 24,
+    flex: 1,
   },
   title: {
     fontSize: 24,
