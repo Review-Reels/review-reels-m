@@ -22,7 +22,7 @@ import { authContext } from "context/AuthContext";
 import { LOGOUT_USER, set, SET_LOADER, SET_TOKEN } from "context/authActions";
 import {
   getReviewResponse,
-  updateReviewResponse,
+  updateReviewResponseNonFormData,
 } from "services/api/review-response";
 import ThreeDot from "assets/svg/ThreeDot.svg";
 import { RRAppWrapper, RRTextInput } from "components";
@@ -145,7 +145,7 @@ export default function HomeScreen({
 
   const goToReviewResponse = (item) => {
     if (!item.isRead)
-      updateReviewResponse({ isRead: true }, item.id)
+      updateReviewResponseNonFormData({ isRead: true }, item.id)
         .then((res) => {
           console.log(res);
         })

@@ -6,6 +6,7 @@ import {
   Platform,
   Pressable,
   Image,
+  ScrollView,
 } from "react-native";
 import { RootStackParamList } from "../../types";
 import { StackScreenProps } from "@react-navigation/stack";
@@ -32,6 +33,7 @@ export default function ReviewResponseDetails({
   React.useEffect(() => {
     setReviewResponse(route.params.reviewResponse);
     setReviewRequest(route.params.reviewRequest);
+    console.log(route.params.reviewResponse);
   }, [route]);
   return (
     <RRAppWrapper>
@@ -59,57 +61,60 @@ export default function ReviewResponseDetails({
             <ThreeDotVertical style={styles.threeDot}></ThreeDotVertical>
           )}
         </View>
-        {reviewResponse?.EmailTracker && reviewResponse?.EmailTracker.length ? (
-          <View style={styles.inputView}>
-            <View style={styles.contentContainer}>
-              <View style={styles.addVideoCntnr}>
-                <Pressable style={styles.overlay}>
-                  {reviewRequest.imageUrl && (
-                    <Image
-                      style={styles.rounded}
-                      source={{ uri: S3_URL + reviewRequest.imageUrl }}
-                    />
-                  )}
-                  {Platform.OS == "web" ? (
-                    <img
-                      src={PlayButton}
-                      style={{
-                        position: "absolute",
-                        top: "50%",
-                        left: "40%",
-                      }}
-                    />
-                  ) : (
-                    <PlayButton
-                      style={{
-                        position: "absolute",
-                        top: "50%",
-                        left: "40%",
-                      }}
-                    ></PlayButton>
-                  )}
-                </Pressable>
-              </View>
-              <View style={{ alignItems: "center" }}>
-                <View style={styles.requestMsgCntnr}>
-                  <Text style={styles.requestMsgTxt}>
-                    {reviewRequest.askMessage}
-                  </Text>
+        <ScrollView contentContainerStyle={{ flex: 1 }}>
+          {Object.values(reviewResponse).length > 0 &&
+            reviewResponse?.EmailTracker &&
+            reviewResponse.EmailTracker.length > 0 && (
+              <View style={styles.inputView}>
+                <View style={styles.contentContainer}>
+                  <View style={styles.addVideoCntnr}>
+                    <Pressable style={styles.overlay}>
+                      {reviewRequest.imageUrl && (
+                        <Image
+                          style={styles.rounded}
+                          source={{ uri: S3_URL + reviewRequest.imageUrl }}
+                        />
+                      )}
+                      {Platform.OS == "web" ? (
+                        <img
+                          src={PlayButton}
+                          style={{
+                            position: "absolute",
+                            top: "50%",
+                            left: "40%",
+                          }}
+                        />
+                      ) : (
+                        <PlayButton
+                          style={{
+                            position: "absolute",
+                            top: "50%",
+                            left: "40%",
+                          }}
+                        ></PlayButton>
+                      )}
+                    </Pressable>
+                  </View>
+                  <View style={{ alignItems: "center" }}>
+                    <View style={styles.requestMsgCntnr}>
+                      <Text style={styles.requestMsgTxt}>
+                        {reviewRequest.askMessage}
+                      </Text>
+                    </View>
+                    <View style={{ alignSelf: "center" }}>
+                      <Pressable style={styles.button}>
+                        {Platform.OS == "web" ? (
+                          <img src={VideoCam}></img>
+                        ) : (
+                          <VideoCam></VideoCam>
+                        )}
+                        <Text style={styles.buttonTxt}>Reply with Video</Text>
+                      </Pressable>
+                    </View>
+                  </View>
                 </View>
-                <View style={{ alignSelf: "center" }}>
-                  <Pressable style={styles.button}>
-                    {Platform.OS == "web" ? (
-                      <img src={VideoCam}></img>
-                    ) : (
-                      <VideoCam></VideoCam>
-                    )}
-                    <Text style={styles.buttonTxt}>Reply with Video</Text>
-                  </Pressable>
-                </View>
               </View>
-            </View>
-          </View>
-        ) : (
+            )}
           <View style={styles.container}>
             {reviewResponse.videoUrl !== "" && (
               <Pressable
@@ -141,7 +146,7 @@ export default function ReviewResponseDetails({
               {getElapsedTime(reviewResponse.createdAt)}
             </Text>
           </View>
-        )}
+        </ScrollView>
       </View>
     </RRAppWrapper>
   );
@@ -151,6 +156,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 24,
     flex: 1,
+    alignItems: "flex-end",
   },
   title: {
     fontSize: 24,
@@ -193,8 +199,8 @@ const styles = StyleSheet.create({
     height: 450,
   },
   overlay: {
-    width: 279,
-    aspectRatio: 9 / 16,
+    width: 231,
+    height: 450,
     marginBottom: 8,
   },
   timeTxt: {
@@ -221,9 +227,7 @@ const styles = StyleSheet.create({
   },
   addVideoCntnr: {
     backgroundColor: colors.White,
-    alignItems: "center",
     borderRadius: 16,
-    paddingHorizontal: 24,
   },
   requestMsgCntnr: {
     marginTop: 24,
@@ -233,6 +237,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
     fontWeight: "400",
+    textAlign: "justify",
   },
   video: {
     borderRadius: 16,
