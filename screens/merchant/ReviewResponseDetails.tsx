@@ -61,7 +61,7 @@ export default function ReviewResponseDetails({
             <ThreeDotVertical style={styles.threeDot}></ThreeDotVertical>
           )}
         </View>
-        <ScrollView contentContainerStyle={{ flex: 1 }}>
+        <ScrollView>
           {Object.values(reviewResponse).length > 0 &&
             reviewResponse?.EmailTracker &&
             reviewResponse.EmailTracker.length > 0 && (
