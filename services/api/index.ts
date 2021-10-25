@@ -2,10 +2,11 @@ import axios from "axios";
 import { API_URL } from "@env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import EventEmitter from "react-native-eventemitter";
+import { BACKEND_URL } from "constants/apiUrls";
 
 const apiClient = axios.create({
   // baseURL: `${process.env.API_URL}`,
-  baseURL: "http://13.127.45.28:3000/api/",
+  baseURL: BACKEND_URL,
   headers: { "Content-Type": "application/json" },
 });
 

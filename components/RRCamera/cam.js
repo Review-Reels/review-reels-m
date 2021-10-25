@@ -47,6 +47,7 @@ export default class Cam extends PureComponent {
           type={cameraFlipDirection}
           ref={handleCameraRef}
           ratio="16:9"
+          autoFocus={true}
         />
         <View style={styles.actionButtons}>
           <View style={{ width: 48 }}></View>

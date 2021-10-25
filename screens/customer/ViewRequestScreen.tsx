@@ -122,7 +122,7 @@ export default function ViewRequestScreen({
           <View style={styles.addVideoCntnr}>
             {showVideo && reviewRequest.videoUrl ? (
               <Pressable
-                style={{ height: 300, width: 200, flex: 1 }}
+                style={styles.overlay}
                 onPress={() => setShowVideo(!showVideo)}
               >
                 <Video
@@ -136,6 +136,7 @@ export default function ViewRequestScreen({
                   //     alignSelf: "center",
                   //   },
                   // ]}
+                  // useNativeControls={true}
                   style={styles.rounded}
                   rate={1.0}
                   isMuted={false}

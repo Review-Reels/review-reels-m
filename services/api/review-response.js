@@ -12,6 +12,13 @@ export const updateReviewResponse = async (payload, reviewResponseId) => {
   });
 };
 
+export const updateReviewResponseNonFormData = async (
+  payload,
+  reviewResponseId
+) => {
+  return axios.put(`review/reviewResponse/${reviewResponseId}`, payload);
+};
+
 export const submitReview = async (payload) => {
   return axios.post("review/reviewResponse", payload, {
     headers: {
