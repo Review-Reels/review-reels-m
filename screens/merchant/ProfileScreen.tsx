@@ -90,7 +90,7 @@ export default function ProfileScreen({
           </View>
           <View style={styles.appInfoCntnr}>
             <Text style={styles.appInfoTxt}>© Review Reels 2021</Text>
-            <Text style={styles.appInfoTxt}>V1.0.4 — Build 1.005</Text>
+            <Text style={styles.appInfoTxt}>V1.0.6 — Build 1.007</Text>
           </View>
         </View>
       </View>
