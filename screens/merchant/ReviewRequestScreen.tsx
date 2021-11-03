@@ -107,6 +107,7 @@ export default function ReviewRequestScreen({
       });
     }
     formData.append("askMessage", requestMessage);
+    formData.append("platform", Platform.OS);
     authDispatch(set(SET_LOADER, true));
     reviewRequest(formData)
       .then((res) => {
@@ -136,6 +137,7 @@ export default function ReviewRequestScreen({
       }
     }
     formData.append("askMessage", requestMessage);
+    formData.append("platform", Platform.OS);
     authDispatch(set(SET_LOADER, true));
     updateReviewRequestApi(formData, route?.params?.id)
       .then((res) => {
