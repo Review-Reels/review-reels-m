@@ -82,5 +82,12 @@ const styles = StyleSheet.create({
     fontFamily: "Karla-Bold",
     lineHeight: 24,
     borderRadius: 8,
+    elevation: 10,
+  },
+  container: {
+    flex: 1,
+    position: "absolute",
+    zIndex: 99,
+    alignSelf: "center",
   },
 });

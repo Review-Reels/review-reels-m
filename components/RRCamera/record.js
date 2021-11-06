@@ -72,7 +72,7 @@ export default class Record extends React.Component {
         const video = await this.camera.recordAsync({
           maxDuration: 30,
           VideoCodec: ["H264"],
-          VideoQuality: ["1080p"],
+          quality: Camera.Constants.VideoQuality["1080p"],
           mirror: false,
         });
         this.isRecording = false;
