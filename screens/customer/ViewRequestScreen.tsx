@@ -77,9 +77,7 @@ export default function ViewRequestScreen({
   const onPressReply = () => {
     setShowInfoTxt(true);
     setShowVideo(false);
-    if (showVideo) {
       video.current.stopAsync();
-    }
   };
 
   const onProceedCustomerInfo = (info: any) => {
@@ -121,11 +119,7 @@ export default function ViewRequestScreen({
       <View style={{ flex: 1 }}>
         <ScrollView style={styles.container}>
           <View style={styles.addVideoCntnr}>
-            {showVideo && reviewRequest.videoUrl ? (
-              <Pressable
-                style={styles.overlay}
-                onPress={() => setShowVideo(!showVideo)}
-              >
+            {reviewRequest.videoUrl &&
                 <Video
                   ref={video}
                   source={{ uri: S3_URL + reviewRequest.videoUrl }}
@@ -143,34 +137,10 @@ export default function ViewRequestScreen({
                   isMuted={false}
                   resizeMode="contain"
                   volume={0.5}
-                  shouldPlay
+                  useNativeControls
                 />
-              </Pressable>
-            ) : (
-              <Pressable
-                style={styles.overlay}
-                onPress={() => {
-                  setShowVideo(!showVideo);
-                }}
-              >
-                {reviewRequest?.imageUrl && (
-                  <Image
-                    style={styles.rounded}
-                    source={{ uri: S3_URL + reviewRequest?.imageUrl }}
-                  />
-                )}
-                {Platform.OS == "web" ? (
-                  <img
-                    src={PlayButton}
-                    style={{ position: "absolute", top: "50%", left: "40%" }}
-                  />
-                ) : (
-                  <PlayButton
-                    style={{ position: "absolute", top: "50%", left: "40%" }}
-                  ></PlayButton>
-                )}
-              </Pressable>
-            )}
+}
+              
           </View>
           <View style={{ alignItems: "center" }}>
             <View style={styles.requestMsgCntnr}>
@@ -275,8 +245,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   overlay: {
-    width: 300,
-    height: 450,
+    width: '100%',
     marginBottom: 8,
   },
 });
