@@ -2,7 +2,7 @@
   "expo": {
     "name": "Review Reels",
     "slug": "ReviewReelsMerchant",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -32,7 +32,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.reviewreels.myapp",
-      "versionCode": 8
+      "versionCode": 9
     },
     "web": {
       "favicon": "./assets/images/icon.png"
