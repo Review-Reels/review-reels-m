@@ -91,6 +91,7 @@ export default function ViewRequestScreen({
     formData.append("customerName", info.name);
     formData.append("whatYouDo", info.job);
     formData.append("reviewRequestId", reviewRequest.id);
+    formData.append("platform", Platform.OS);
     authDispatch(set(SET_LOADER, true));
     if (route.params.reviewResponseId) {
       updateReviewResponse(formData, route.params.reviewResponseId)
