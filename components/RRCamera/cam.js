@@ -48,7 +48,6 @@ export default class Cam extends PureComponent {
           ref={handleCameraRef}
           ratio="16:9"
           autoFocus={Camera.Constants.AutoFocus.on}
-          codec={Camera.Constants.VideoCodec["H264"]}
         />
         <View style={styles.actionButtons}>
           <View style={{ width: 48 }}></View>

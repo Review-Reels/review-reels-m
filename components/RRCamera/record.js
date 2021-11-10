@@ -71,8 +71,6 @@ export default class Record extends React.Component {
         // There appears to be some relationship between maxDuration in recordAsync and this bug.
         const video = await this.camera.recordAsync({
           maxDuration: 30,
-          codec: Camera.Constants.VideoCodec["H264"],
-          quality: Camera.Constants.VideoQuality["2160p"],
           mirror: false,
         });
         this.isRecording = false;

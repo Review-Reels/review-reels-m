@@ -186,11 +186,11 @@ export default function HomeScreen({
             <Text style={styles.title}>Inbox</Text>
             {Platform.OS == "web" ? (
               <Pressable onPress={onPressProfile}>
-                <img src={ThreeDot}></img>
+                <img  height={20} width={20} src={ThreeDot}></img>
               </Pressable>
             ) : (
               <Pressable onPress={onPressProfile}>
-                <ThreeDot style={styles.threeDot}></ThreeDot>
+                <ThreeDot height={20} width={20} style={styles.threeDot}></ThreeDot>
               </Pressable>
             )}
           </View>

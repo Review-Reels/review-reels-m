@@ -72,17 +72,17 @@ export default function ProfileScreen({
           )}
         </Pressable>
         <View style={{ flex: 1, justifyContent: "flex-end" }}>
-          <Text style={styles.title1}>@starkindustries</Text>
-          <Text style={styles.title2}>Stark Industries</Text>
+          {/* <Text style={styles.title1}>@starkindustries</Text>
+          <Text style={styles.title2}>Stark Industries</Text> */}
           <View style={styles.actionsContainer}>
             <Pressable>
-              <Text style={styles.actionItem}>Edit Details</Text>
+              <Text style={[styles.actionItem,{opacity:0.3}]}>Edit Details</Text>
             </Pressable>
             <Pressable>
-              <Text style={styles.actionItem}>Reset Password</Text>
+              <Text style={[styles.actionItem,{opacity:0.3}]}>Reset Password</Text>
             </Pressable>
             <Pressable onPress={onPressSubscription}>
-              <Text style={styles.actionItem}>Subscription</Text>
+              <Text style={[styles.actionItem,{opacity:0.3}]}>Subscription</Text>
             </Pressable>
             <Pressable onPress={onPressLogout}>
               <Text style={styles.actionItem}>Sign out</Text>
