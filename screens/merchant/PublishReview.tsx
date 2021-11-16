@@ -118,13 +118,11 @@ export default function PublishReview({
               source={{
                 uri: reviewResponse.videoUrl,
               }}
-              style={styles.video}
-              rate={1.0}
-              isMuted={false}
-              resizeMode="contain"
-              volume={0.5}
-              isLooping
-              shouldPlay
+                  rate={1.0}
+                  isMuted={false}
+                  resizeMode="contain"
+                  volume={0.5}
+                  useNativeControls
             />
           )}
           <View style={styles.btnCntnr}>
