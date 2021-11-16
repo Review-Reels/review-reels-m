@@ -20,6 +20,7 @@ import { authContext } from "context/AuthContext";
 import { LOGOUT_USER, set, SET_LOADER, SET_TOKEN } from "context/authActions";
 import { useToast } from "native-base";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as MailComposer from 'expo-mail-composer';
 
 export type recepientType = {
   customerName: string;
@@ -58,6 +59,10 @@ export default function ProfileScreen({
     }
   };
 
+  const onPressEmail=()=>{
+    MailComposer.composeAsync({recipients:['admin@reviewreels.app']})
+  }
+
   return (
     <RRAppWrapper>
       <View style={styles.container}>
@@ -75,22 +80,13 @@ export default function ProfileScreen({
           {/* <Text style={styles.title1}>@starkindustries</Text>
           <Text style={styles.title2}>Stark Industries</Text> */}
           <View style={styles.actionsContainer}>
-            <Pressable>
-              <Text style={[styles.actionItem,{opacity:0.3}]}>Edit Details</Text>
-            </Pressable>
-            <Pressable>
-              <Text style={[styles.actionItem,{opacity:0.3}]}>Reset Password</Text>
-            </Pressable>
-            <Pressable onPress={onPressSubscription}>
-              <Text style={[styles.actionItem,{opacity:0.3}]}>Subscription</Text>
-            </Pressable>
             <Pressable onPress={onPressLogout}>
               <Text style={styles.actionItem}>Sign out</Text>
             </Pressable>
           </View>
           <View style={styles.appInfoCntnr}>
-            <Text style={styles.appInfoTxt}>© Review Reels 2021</Text>
-            <Text style={styles.appInfoTxt}>V1.0.9 — Build 1.010</Text>
+            <Text style={styles.appInfoTxt}>© Review Reels 2021 - V1.0.10</Text>
+            <Pressable onPress={onPressEmail}><Text style={styles.appInfoTxt}>Support : <Text style={{color:colors.Alizarin_Crimson}}>admin@reviewreels.app</Text></Text></Pressable>
           </View>
         </View>
       </View>

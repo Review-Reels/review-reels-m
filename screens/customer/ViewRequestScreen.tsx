@@ -64,9 +64,6 @@ export default function ViewRequestScreen({
   const pickVideo = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Videos,
-      aspect: [16, 9],
-      quality: 1,
-      base64: false,
     });
     if (!result.cancelled) {
       setSelectedFile(result);

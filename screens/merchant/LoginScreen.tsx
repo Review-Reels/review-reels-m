@@ -189,7 +189,7 @@ export default function LoginScreen({
                   <Text style={styles.buttonTxt}>Continue with Google</Text>
                 </Pressable>
               )}
-              <Pressable
+              {/* <Pressable
                 style={[
                   styles.button,
                   { backgroundColor: colors.Black, shadowColor: colors.Black },
@@ -209,7 +209,7 @@ export default function LoginScreen({
                     continue with email
                   </Text>
                 </Text>
-              </Pressable>
+              </Pressable> */}
               <Text style={[styles.signInTxt]}>
                 By signing up you agree to our terms and conditions
               </Text>

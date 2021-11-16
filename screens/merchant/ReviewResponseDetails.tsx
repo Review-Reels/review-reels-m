@@ -47,6 +47,7 @@ export default function ReviewResponseDetails({
                 <Back style={styles.back}></Back>
               )}
             </Pressable>
+            <View>
             <Text style={styles.title}>
               {(reviewResponse &&
                 reviewResponse.EmailTracker &&
@@ -54,6 +55,14 @@ export default function ReviewResponseDetails({
                 reviewResponse.EmailTracker[0].customerName) ||
                 reviewResponse.customerName}
             </Text>
+            <Text style={styles.designationTxt}>
+              {(reviewResponse &&
+                reviewResponse.EmailTracker &&
+                reviewResponse.EmailTracker.length &&
+                reviewResponse.EmailTracker[0].whatYouDo) ||
+                reviewResponse.whatYouDo}
+            </Text>
+            </View>
           </View>
           {Platform.OS == "web" ? (
             <img style={{ width: 4, height: 16 }} src={ThreeDotVertical}></img>
@@ -163,6 +172,13 @@ const styles = StyleSheet.create({
     lineHeight: 32,
     fontFamily: "Karla-Bold",
     fontWeight: "bold",
+  },
+  designationTxt:{
+    fontSize: 14,
+    // lineHeight: 24,
+    fontFamily: "Karla-Bold",
+    fontWeight: "500",
+    color:colors.Black2
   },
   separator: {
     marginVertical: 24,
