@@ -118,11 +118,12 @@ export default function PublishReview({
               source={{
                 uri: reviewResponse.videoUrl,
               }}
-                  rate={1.0}
-                  isMuted={false}
-                  resizeMode="contain"
-                  volume={0.5}
-                  useNativeControls
+              style={styles.rounded}
+              rate={1.0}
+              isMuted={false}
+              resizeMode="contain"
+              volume={0.5}
+              useNativeControls
             />
           )}
           <View style={styles.btnCntnr}>
@@ -226,5 +227,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
     fontFamily: "Karla-Bold",
+  },
+  rounded: {
+    height: "80%",
+    width: scaleSize(279),
+    aspectRatio: 9 / 16,
+    borderRadius: 16,
+    alignSelf: "center",
   },
 });
