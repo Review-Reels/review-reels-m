@@ -90,19 +90,18 @@ export default function PublishReview({
           <View style={[styles.card, { backgroundColor: colors.Sweet_Pink }]}>
             <View style={styles.cardRow1}>
               <View>
-                <Text style={styles.cardTxt1}>POST ON INSTAGRAM</Text>
+                <Text style={styles.cardTxt1}>DOWLOAD THE VIDEO</Text>
                 <Text style={styles.cardTxt2}>
-                  Share the review with your followers on instagram and gain
-                  more followers.
+                  Share the downloaded video to your social media followers to improve the social proof.
                 </Text>
               </View>
-              <View>
+              {/* <View>
                 {Platform.OS == "web" ? (
                   <img style={{ width: 40, height: 40 }} src={Instagram}></img>
                 ) : (
                   <Instagram width={40} height={40}></Instagram>
                 )}
-              </View>
+              </View> */}
             </View>
             <View style={{ alignSelf: "flex-start" }}>
               <Pressable onPress={onPressDownload} style={styles.action}>
@@ -118,7 +117,7 @@ export default function PublishReview({
               source={{
                 uri: reviewResponse.videoUrl,
               }}
-              style={styles.rounded}
+              style={[Platform.OS!=='web'&&styles.rounded]}
               rate={1.0}
               isMuted={false}
               resizeMode="contain"
@@ -232,6 +231,7 @@ const styles = StyleSheet.create({
     height: "80%",
     width: scaleSize(279),
     aspectRatio: 9 / 16,
+    marginTop: 24,
     borderRadius: 16,
     alignSelf: "center",
   },

@@ -14,7 +14,7 @@ export type RootStackParamList = {
   Home: undefined;
   ShareRequest: undefined;
   ViewRequest: { merchant: string };
-  SubmitSuccess: undefined;
+  SubmitSuccess: { merchantName: string };
   Loading: undefined;
   SendEmails: undefined;
   PublishReview: undefined;
