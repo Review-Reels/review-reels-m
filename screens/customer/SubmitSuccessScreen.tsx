@@ -17,6 +17,7 @@ import { RRAppWrapper } from "components";
 
 export default function SubmitSuccessScreen({
   navigation,
+  route,
 }: StackScreenProps<RootStackParamList, "SubmitSuccess">) {
   return (
     <RRAppWrapper>
@@ -29,9 +30,13 @@ export default function SubmitSuccessScreen({
           <Text style={styles.content}>
             Thank you so much for your response. Hope you had a great expereince
             with
-            <Text style={{ fontWeight: "700", fontFamily: "Karla-Bold" }}>
-              {" "}
-              Carnival Collections.
+            <Text
+              style={{
+                fontWeight: "700",
+                fontFamily: "Karla-Bold",
+              }}
+            >
+              {route.params.user.merchantName}.
             </Text>
           </Text>
         </View>
