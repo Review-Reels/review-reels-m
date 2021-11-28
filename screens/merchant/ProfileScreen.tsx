@@ -85,7 +85,7 @@ export default function ProfileScreen({
             </Pressable>
           </View>
           <View style={styles.appInfoCntnr}>
-            <Text style={styles.appInfoTxt}>© Review Reels 2021 - V1.0.11</Text>
+            <Text style={styles.appInfoTxt}>© Review Reels 2021 - V1.0.12</Text>
             <Pressable onPress={onPressEmail}><Text style={styles.appInfoTxt}>Support : <Text style={{color:colors.Alizarin_Crimson}}>admin@reviewreels.app</Text></Text></Pressable>
           </View>
         </View>
