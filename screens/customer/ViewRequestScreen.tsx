@@ -74,7 +74,7 @@ export default function ViewRequestScreen({
   const onPressReply = () => {
     setShowInfoTxt(true);
     setShowVideo(false);
-      video.current.stopAsync();
+    video.current.stopAsync();
   };
 
   const onProceedCustomerInfo = (info: any) => {
@@ -92,7 +92,7 @@ export default function ViewRequestScreen({
       updateReviewResponse(formData, route.params.reviewResponseId)
         .then((res) => {
           authDispatch(set(SET_LOADER, false));
-          navigation.navigate("SubmitSuccess");
+          navigation.navigate("SubmitSuccess", { user: reviewRequest.user });
         })
         .catch((err) => {
           authDispatch(set(SET_LOADER, false));
@@ -102,7 +102,7 @@ export default function ViewRequestScreen({
       submitReview(formData)
         .then((res) => {
           authDispatch(set(SET_LOADER, false));
-          navigation.navigate("SubmitSuccess");
+          navigation.navigate("SubmitSuccess", { user: reviewRequest.user });
         })
         .catch((err) => {
           authDispatch(set(SET_LOADER, false));
@@ -116,28 +116,27 @@ export default function ViewRequestScreen({
       <View style={{ flex: 1 }}>
         <ScrollView style={styles.container}>
           <View style={styles.addVideoCntnr}>
-            {reviewRequest.videoUrl &&
-                <Video
-                  ref={video}
-                  source={{ uri: S3_URL + reviewRequest.videoUrl }}
-                  // style={[
-                  //   {
-                  //     width: scaleSize(279),
-                  //     aspectRatio: 9 / 16,
-                  //     borderRadius: 16,
-                  //     alignSelf: "center",
-                  //   },
-                  // ]}
-                  // useNativeControls={true}
-                  style={styles.rounded}
-                  rate={1.0}
-                  isMuted={false}
-                  resizeMode="contain"
-                  volume={0.5}
-                  useNativeControls
-                />
-}
-              
+            {reviewRequest.videoUrl && (
+              <Video
+                ref={video}
+                source={{ uri: S3_URL + reviewRequest.videoUrl }}
+                // style={[
+                //   {
+                //     width: scaleSize(279),
+                //     aspectRatio: 9 / 16,
+                //     borderRadius: 16,
+                //     alignSelf: "center",
+                //   },
+                // ]}
+                // useNativeControls={true}
+                style={styles.rounded}
+                rate={1.0}
+                isMuted={false}
+                resizeMode="contain"
+                volume={0.5}
+                useNativeControls
+              />
+            )}
           </View>
           <View style={{ alignItems: "center" }}>
             <View style={styles.requestMsgCntnr}>
@@ -242,7 +241,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   overlay: {
-    width: '100%',
+    width: "100%",
     marginBottom: 8,
   },
 });
