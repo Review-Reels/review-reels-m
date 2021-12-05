@@ -12,3 +12,7 @@ export const WEB_APP_URL =
 
 export const BACKEND_URL =
   "http://ec2-3-108-151-164.ap-south-1.compute.amazonaws.com:3000/api/";
+
+//prod
+// export const BACKEND_URL =
+// "https://backend.reviewreels.app/api/";
