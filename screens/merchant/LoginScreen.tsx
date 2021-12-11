@@ -25,6 +25,7 @@ import { set, SET_LOADER, SET_TOKEN, SET_USER } from "context/authActions";
 import { GoogleLogin } from "react-google-login";
 import colors from "constants/Colors";
 import { GoogleClientId } from "constants/Google_Client";
+import Email from "assets/svg/Email.svg";
 
 export default function LoginScreen({
   navigation,
@@ -167,6 +168,13 @@ export default function LoginScreen({
               <Text style={styles.statement}>
                 Collect short video reviews, quickly.
               </Text>
+              <Pressable style={styles.button} onPress={() => signInAsync()}>
+                  {Platform.OS==='web'?<img
+                    style={{ width: 20, height: 20, marginRight: 4 }}
+                    src={Email}
+                  ></img> : <Email></Email>}
+                  <Text style={styles.buttonTxt}>Continue with Email</Text>
+                </Pressable>
               {Platform.OS === "web" ? (
                 <GoogleLogin
                   clientId={getGoogleClientId()}
@@ -201,15 +209,15 @@ export default function LoginScreen({
                   <AppleIcon></AppleIcon>
                 )}
                 <Text style={styles.buttonTxt}>Continue with Apple</Text>
-              </Pressable>
+              </Pressable> */}
               <Pressable>
                 <Text style={styles.emailTxt}>
-                  You can also{" "}
+                  Dont have an account?{" "}
                   <Text style={{ textDecorationLine: "underline" }}>
-                    continue with email
+                    Signup
                   </Text>
                 </Text>
-              </Pressable> */}
+              </Pressable>
               <Text style={[styles.signInTxt]}>
                 By signing up you agree to our terms and conditions
               </Text>
