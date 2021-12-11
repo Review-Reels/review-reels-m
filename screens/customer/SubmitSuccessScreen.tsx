@@ -34,6 +34,7 @@ export default function SubmitSuccessScreen({
               style={{
                 fontWeight: "700",
                 fontFamily: "Karla-Bold",
+                marginLeft: 5,
               }}
             >
               {route.params.user.merchantName}.

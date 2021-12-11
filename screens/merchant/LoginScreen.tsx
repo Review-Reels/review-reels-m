@@ -168,13 +168,20 @@ export default function LoginScreen({
               <Text style={styles.statement}>
                 Collect short video reviews, quickly.
               </Text>
-              <Pressable style={styles.button} onPress={() => signInAsync()}>
-                  {Platform.OS==='web'?<img
+              <Pressable
+                style={styles.button}
+                onPress={() => navigation.navigate("EmailSignIn")}
+              >
+                {Platform.OS === "web" ? (
+                  <img
                     style={{ width: 20, height: 20, marginRight: 4 }}
                     src={Email}
-                  ></img> : <Email></Email>}
-                  <Text style={styles.buttonTxt}>Continue with Email</Text>
-                </Pressable>
+                  ></img>
+                ) : (
+                  <Email></Email>
+                )}
+                <Text style={styles.buttonTxt}>Continue with Email</Text>
+              </Pressable>
               {Platform.OS === "web" ? (
                 <GoogleLogin
                   clientId={getGoogleClientId()}

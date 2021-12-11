@@ -21,6 +21,7 @@ export type RootStackParamList = {
   ReviewResponseDetails: { reviewRequest: any; reviewResponse: any };
   Subscription: undefined;
   Profile: undefined;
+  EmailSignInScreen: undefined;
 };
 
 export type TextInputProps = {
@@ -35,6 +36,7 @@ export type TextInputProps = {
   numberOfLines?: number;
   multiline?: boolean;
   ref?: any;
+  password?: boolean;
 };
 
 export type ButtonProps = {
@@ -67,6 +69,10 @@ export type SignupPayload = {
 
 export type googleSignUpPayload = {
   idToken: string;
+};
+export type signInPayload = {
+  email: string;
+  password: string;
 };
 
 export type updateUserPayload = {

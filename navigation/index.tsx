@@ -13,7 +13,7 @@ import * as React from "react";
 import { ColorSchemeName } from "react-native";
 import LoginScreen from "screens/merchant/LoginScreen";
 import NotFoundScreen from "screens/merchant/NotFoundScreen";
-import ReviewDetailsScreen from "screens/merchant/ReviewDetailScreen";
+// import ReviewDetailsScreen from "screens/merchant/ReviewDetailScreen";
 import ReviewRequestScreen from "screens/merchant/ReviewRequestScreen";
 import ShareRequestScreen from "screens/merchant/ShareRequestScreen";
 import HomeScreen from "screens/merchant/HomeScreen";
@@ -24,6 +24,7 @@ import SubmitSuccessScreen from "screens/customer/SubmitSuccessScreen";
 import ReviewResponseDetails from "screens/merchant/ReviewResponseDetails";
 import PublishReview from "screens/merchant/PublishReview";
 import SubscriptionScreen from "screens/merchant/SubscriptionScreen";
+import EmailSignInScreen from "screens/merchant/EmailSignInScreen";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwt_decode, { JwtPayload } from "jwt-decode";
@@ -82,6 +83,7 @@ function RootNavigator() {
       {isLoadNav && !authState.token ? (
         <>
           <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="EmailSignIn" component={EmailSignInScreen} />
           <Stack.Screen name="ViewRequest" component={ViewRequestScreen} />
           <Stack.Screen name="SubmitSuccess" component={SubmitSuccessScreen} />
         </>

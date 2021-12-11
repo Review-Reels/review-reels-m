@@ -24,6 +24,7 @@ export default function RRTextInput({
   numberOfLines,
   multiline,
   ref,
+  password,
 }: TextInputProps) {
   return (
     <View style={[style]}>
@@ -43,6 +44,7 @@ export default function RRTextInput({
         numberOfLines={Platform.OS == "web" ? numberOfLines : undefined}
         multiline={multiline}
         placeholderTextColor={colors.Black3}
+        secureTextEntry={password == true ? true : false}
       />
       {error ? <Text style={styles.errorTxt}>{error}</Text> : null}
     </View>
@@ -52,7 +54,6 @@ export default function RRTextInput({
 const styles = StyleSheet.create({
   input: {
     borderRadius: 8,
-    // height: 56,
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 16,
@@ -60,6 +61,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.Concrete,
     color: colors.Black,
     lineHeight: 24,
+    minHeight: 56,
     fontFamily: "Karla-Bold",
     marginTop: 8,
   },
