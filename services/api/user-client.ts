@@ -3,6 +3,7 @@ import {
   googleSignUpPayload,
   updateUserPayload,
   signInPayload,
+  signUpPayload,
 } from "types";
 import axios from "./index";
 
@@ -21,6 +22,9 @@ export default {
   },
   emailSignIn(payload: signInPayload | undefined) {
     return axios.post("auth/signin", payload);
+  },
+  emailSignUp(payload: signUpPayload | undefined) {
+    return axios.post("auth/signup", payload);
   },
   updateUser(payload: updateUserPayload | undefined, auth: string) {
     const headers = {

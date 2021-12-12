@@ -217,7 +217,7 @@ export default function LoginScreen({
                 )}
                 <Text style={styles.buttonTxt}>Continue with Apple</Text>
               </Pressable> */}
-              <Pressable>
+              <Pressable onPress={() => navigation.navigate("EmailSignUp")}>
                 <Text style={styles.emailTxt}>
                   Dont have an account?{" "}
                   <Text style={{ textDecorationLine: "underline" }}>

@@ -13,43 +13,67 @@ import userClient from "services/api/user-client";
 import { authContext } from "context/AuthContext";
 import { set, SET_LOADER, SET_TOKEN, SET_USER } from "context/authActions";
 
-export default function EmailSignInScreen({
+export default function EmailSignUpScreen({
   navigation,
 }: StackScreenProps<RootStackParamList, "NotFound">) {
   const [email, setEmail] = React.useState<string>("");
   const [emailError, setEmailError] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
   const [passwordError, setPasswordError] = React.useState<string>("");
+  const [username, setUsername] = React.useState<string>("");
+  const [usernameError, setUsernameError] = React.useState<string>("");
+  const [merchantName, setMerchantName] = React.useState<string>("");
+  const [merchantNameError, setMerchantNameError] = React.useState<string>("");
 
   const { authDispatch } = React.useContext(authContext);
-  const emailSignin = async () => {
+
+  const validateEmail = (email: string) => {
+    const re =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  };
+
+  const emailSignUp = async () => {
     if (!email) {
       setEmailError("Email cannot be blank");
+      return;
+    } else if (validateEmail(email)) {
+      setEmailError("Email not valid");
       return;
     }
     if (!password) {
       setPasswordError("Password cannot be blank");
       return;
     }
+    if (!username) {
+      setUsernameError("Username cannot be blank");
+      return;
+    }
+    if (!merchantName) {
+      setMerchantNameError("Merchant Name cannot be blank");
+      return;
+    }
     authDispatch(set(SET_LOADER, true));
     try {
-      const signedInUser = await userClient.emailSignIn({ email, password });
-      if (signedInUser && signedInUser.data) saveAuthDetails(signedInUser.data);
+      const signedInUser = await userClient.emailSignUp({
+        email,
+        password,
+        username,
+        name: merchantName,
+      });
+      if (signedInUser && signedInUser.data) {
+        navigation.goBack();
+      }
     } catch (err) {
-      if (err.response.data.message.includes("Password"))
-        setPasswordError(err.response.data.message);
-      else if (err.response.data.message.includes("User"))
-        setEmailError("Email wrong");
+      if (err.response.data.message.includes("username_unique"))
+        setUsernameError("That username already taken. Try another");
+      else if (err.response.data.message.includes("email_unique"))
+        setEmailError("That email already exist.");
     } finally {
       authDispatch(set(SET_LOADER, false));
     }
   };
-  const saveAuthDetails = async (user: any) => {
-    await AsyncStorage.setItem("@token", user.Authorization);
-    await AsyncStorage.setItem("@user", JSON.stringify(user));
-    authDispatch(set(SET_TOKEN, user.Authorization));
-    authDispatch(set(SET_USER, user));
-  };
+
   return (
     <RRAppWrapper style={{ flex: 1, padding: 24 }}>
       <>
@@ -57,9 +81,9 @@ export default function EmailSignInScreen({
           <View style={styles.logoCntnr}>
             {Platform.OS == "web" ? <img src={Logo}></img> : <Logo></Logo>}
           </View>
-          <View style={{ flex: 2 }}>
+          <View style={{ flex: 4 }}>
             <View style={{ justifyContent: "flex-start" }}>
-              <Text style={styles.statement}>Sign In</Text>
+              <Text style={styles.statement}>Sign Up</Text>
             </View>
             <View style={{ justifyContent: "flex-start", minWidth: 300 }}>
               <RRTextInput
@@ -82,6 +106,28 @@ export default function EmailSignInScreen({
                 }}
                 error={passwordError}
               ></RRTextInput>
+              <View style={{ marginTop: 24 }}></View>
+              <RRTextInput
+                label="USERNAME"
+                value={username}
+                onChangeText={(val: string) => {
+                  setUsername(val);
+                  setUsernameError("");
+                }}
+                placeholder="eg:nickfury"
+                error={usernameError}
+              ></RRTextInput>
+              <View style={{ marginTop: 24 }}></View>
+              <RRTextInput
+                label="BUSINESS NAME"
+                value={merchantName}
+                onChangeText={(val: string) => {
+                  setMerchantName(val);
+                  setMerchantNameError("");
+                }}
+                placeholder="eg:Avengers Inc."
+                error={merchantNameError}
+              ></RRTextInput>
             </View>
             <View style={{ flexDirection: "row", marginTop: 20 }}>
               <RRButton
@@ -92,8 +138,8 @@ export default function EmailSignInScreen({
               ></RRButton>
               <RRButton
                 style={{ width: 150 }}
-                title="Sign In"
-                onPress={() => emailSignin()}
+                title="Sign Up"
+                onPress={() => emailSignUp()}
               ></RRButton>
             </View>
           </View>

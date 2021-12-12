@@ -10,17 +10,18 @@ export default {
   prefixes: [Linking.makeUrl("/")],
   config: {
     screens: {
+      Home: "home",
       Login: "login",
       ReviewRequest: "create-review",
       ShareRequest: "share-review",
-      Home: "home",
       ReviewDetails: "review",
       ReviewResponseDetails: "review-response",
       NotFound: "*",
-      ViewRequest: ":username/:reviewResponseId?",
+      ViewRequest: "view/:username/:reviewResponseId?",
       SubmitSuccess: "success",
       PublishReview: "publish-review",
       SendEmails: "send-emails",
+      EmailSignIn: "email-signin",
     },
   },
 };

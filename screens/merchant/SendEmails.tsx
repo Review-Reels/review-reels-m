@@ -45,6 +45,8 @@ export default function SendEmails({
     []
   );
   const [subject, setSubject] = React.useState<string>("");
+  const [subjectError, setSubjectError] = React.useState<string>("");
+  const [emailListError, setEmailListError] = React.useState<string>("");
   const [reviewRequestId, setRequestId] = React.useState<string>("");
   const { authState, authDispatch } = React.useContext(authContext);
   const toast = useToast();
@@ -58,6 +60,7 @@ export default function SendEmails({
   }, [route]);
 
   const onAddCustomerInfo = (info: recepientType) => {
+    setEmailListError("");
     let mailList = JSON.parse(JSON.stringify(toEmailList));
     mailList.push(info);
     setToEmailList(mailList);
@@ -70,6 +73,14 @@ export default function SendEmails({
   };
 
   const onPressProceed = () => {
+    if (toEmailList.length === 0) {
+      setEmailListError("Customers be blank");
+      return;
+    }
+    if (!subject) {
+      setSubjectError("Subject cannot be blank");
+      return;
+    }
     authDispatch(set(SET_LOADER, true));
     emailClient
       .sendEmail({ subject, sendTo: toEmailList, reviewRequestId })
@@ -144,13 +155,17 @@ export default function SendEmails({
                   <Text style={styles.toItemText}>Add Customers</Text>
                 </Pressable>
               </View>
+              {<Text style={styles.errorTxt}>{emailListError}</Text>}
             </View>
             <RRTextInput
               label="SUBJECT"
               value={subject}
-              onChangeText={(val: string) => setSubject(val)}
+              onChangeText={(val: string) => {
+                setSubject(val);
+                setSubjectError("");
+              }}
               placeholder="eg:nickfury"
-              //   error={usernameError}
+              error={subjectError}
             ></RRTextInput>
             <View style={styles.inputCntnr}>
               <Text style={styles.label}>CONTENT</Text>
@@ -394,5 +409,10 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     fontFamily: "Karla",
     color: colors.Black2,
+  },
+  errorTxt: {
+    color: "red",
+    fontSize: 12,
+    marginTop: 8,
   },
 });

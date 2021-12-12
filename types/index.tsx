@@ -21,7 +21,8 @@ export type RootStackParamList = {
   ReviewResponseDetails: { reviewRequest: any; reviewResponse: any };
   Subscription: undefined;
   Profile: undefined;
-  EmailSignInScreen: undefined;
+  EmailSignIn: undefined;
+  EmailSignUp: undefined;
 };
 
 export type TextInputProps = {
@@ -73,6 +74,12 @@ export type googleSignUpPayload = {
 export type signInPayload = {
   email: string;
   password: string;
+};
+export type signUpPayload = {
+  email: string;
+  password: string;
+  name: string;
+  username: string;
 };
 
 export type updateUserPayload = {

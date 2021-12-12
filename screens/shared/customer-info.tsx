@@ -16,18 +16,27 @@ export default function CustomerInfo({
   onPressProceed: any;
 }) {
   const [name, setName] = React.useState("");
+  const [nameError, setNameError] = React.useState("");
   const [job, setJob] = React.useState("");
 
+  const sendReview = () => {
+    if (name) onPressProceed({ name, job });
+    else setNameError("Your name cannot be blank");
+  };
   return (
     <Actionsheet isOpen={visible} onClose={onPressClose}>
       <View style={styles.container}>
         <Text style={styles.headerTxt}>A little about you</Text>
         <RRTextInput
           style={styles.mt_24}
-          onChangeText={(val: string) => setName(val)}
+          onChangeText={(val: string) => {
+            setName(val);
+            setNameError("");
+          }}
           value={name}
           label="YOUR NAME?"
           placeholder="eg: Nick Fury"
+          error={nameError}
         ></RRTextInput>
         <RRTextInput
           style={styles.mt_24}
@@ -37,10 +46,7 @@ export default function CustomerInfo({
           placeholder="eg: Founder of Avengers"
         ></RRTextInput>
         <View style={styles.mt_24}>
-          <RRButton
-            onPress={() => onPressProceed({ name, job })}
-            title="Send Review"
-          ></RRButton>
+          <RRButton onPress={sendReview} title="Send Review"></RRButton>
         </View>
       </View>
     </Actionsheet>
