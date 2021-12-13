@@ -9,6 +9,7 @@ import Logo from "assets/svg/Logo.svg";
 import colors from "constants/Colors";
 import RRButton from "components/RRButton";
 import userClient from "services/api/user-client";
+import { validateEmail } from "utils/validation";
 
 import { authContext } from "context/AuthContext";
 import { set, SET_LOADER, SET_TOKEN, SET_USER } from "context/authActions";
@@ -25,6 +26,9 @@ export default function EmailSignInScreen({
   const emailSignin = async () => {
     if (!email) {
       setEmailError("Email cannot be blank");
+      return;
+    } else if (!validateEmail(email)) {
+      setEmailError("Email not valid");
       return;
     }
     if (!password) {

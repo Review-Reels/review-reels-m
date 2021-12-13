@@ -10,6 +10,8 @@ import colors from "constants/Colors";
 import RRButton from "components/RRButton";
 import userClient from "services/api/user-client";
 
+import { validateEmail } from "utils/validation";
+
 import { authContext } from "context/AuthContext";
 import { set, SET_LOADER, SET_TOKEN, SET_USER } from "context/authActions";
 
@@ -27,17 +29,11 @@ export default function EmailSignUpScreen({
 
   const { authDispatch } = React.useContext(authContext);
 
-  const validateEmail = (email: string) => {
-    const re =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase());
-  };
-
   const emailSignUp = async () => {
     if (!email) {
       setEmailError("Email cannot be blank");
       return;
-    } else if (validateEmail(email)) {
+    } else if (!validateEmail(email)) {
       setEmailError("Email not valid");
       return;
     }
