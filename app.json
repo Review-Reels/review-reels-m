@@ -32,7 +32,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.reviewreels.myapp",
-      "versionCode": 13
+      "versionCode": 15
     },
     "web": {
       "favicon": "./assets/images/icon.png"

@@ -36,10 +36,13 @@ export default function LoginScreen({
   const [usernameError, setUsernameError] = React.useState<string>("");
   const [merchantName, setMerchantName] = React.useState<string>("");
   const [merchantNameError, setMerchantNameError] = React.useState<string>("");
-  const { authState, authDispatch } = React.useContext(authContext);
+  const { authState, authDispatch } = React.useContext<any>(authContext);
   const [userDetails, setUserDetails] = React.useState<any>();
+  const [googleDisabled, setGoogleDisabled] = React.useState<boolean>(false);
 
   const signInAsync = async () => {
+    setGoogleDisabled(true);
+    authDispatch(set(SET_LOADER, true));
     const config: Google.GoogleLogInConfig = {
       clientId: GoogleClientId.web,
       iosClientId: GoogleClientId.ios,
@@ -48,11 +51,19 @@ export default function LoginScreen({
       iosStandaloneAppClientId: GoogleClientId.iosStandalone,
       scopes: ["profile", "email"],
     };
-    const { type, idToken }: Google.LogInResult = await Google.logInAsync(
-      config
-    );
-    if (type === "success") {
-      googleSignInSignUp(idToken);
+    try {
+      const { type, idToken }: Google.LogInResult = await Google.logInAsync(
+        config
+      );
+
+      if (type === "success") {
+        googleSignInSignUp(idToken);
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setGoogleDisabled(false);
+      authDispatch(set(SET_LOADER, false));
     }
   };
 
@@ -95,14 +106,18 @@ export default function LoginScreen({
 
   const googleSignInSignUp = async (idToken: string) => {
     authDispatch(set(SET_LOADER, true));
-    const signedInUser = await userClient.googleSignIn({ idToken });
-    console.log(signedInUser);
-    authDispatch(set(SET_LOADER, false));
-    setUserDetails(signedInUser.data);
-    if (!signedInUser.data.username || !signedInUser.data.merchantName) {
-      setIsUsername(true);
-    } else {
-      saveAuthDetails(signedInUser.data);
+    try {
+      const signedInUser = await userClient.googleSignIn({ idToken });
+      console.log(signedInUser);
+      authDispatch(set(SET_LOADER, false));
+      setUserDetails(signedInUser.data);
+      if (!signedInUser.data.username || !signedInUser.data.merchantName) {
+        setIsUsername(true);
+      } else {
+        saveAuthDetails(signedInUser.data);
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -199,7 +214,11 @@ export default function LoginScreen({
                   cookiePolicy={"single_host_origin"}
                 />
               ) : (
-                <Pressable style={styles.button} onPress={() => signInAsync()}>
+                <Pressable
+                  style={styles.button}
+                  onPress={() => signInAsync()}
+                  disabled={googleDisabled}
+                >
                   <GoogleIcon></GoogleIcon>
                   <Text style={styles.buttonTxt}>Continue with Google</Text>
                 </Pressable>
