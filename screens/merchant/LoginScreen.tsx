@@ -206,7 +206,7 @@ export default function LoginScreen({
                       onPress={renderProps.onClick}
                     >
                       <img src={GoogleIcon}></img>
-                      <Text style={styles.buttonTxt}>Continue with Google</Text>
+                      <Text style={styles.buttonTxt}>Sign in with Google</Text>
                     </Pressable>
                   )}
                   onSuccess={responseGoogle}
@@ -220,7 +220,7 @@ export default function LoginScreen({
                   disabled={googleDisabled}
                 >
                   <GoogleIcon></GoogleIcon>
-                  <Text style={styles.buttonTxt}>Continue with Google</Text>
+                  <Text style={styles.buttonTxt}>Sign in with Google</Text>
                 </Pressable>
               )}
               {/* <Pressable
