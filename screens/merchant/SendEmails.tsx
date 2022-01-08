@@ -48,7 +48,7 @@ export default function SendEmails({
   const [subjectError, setSubjectError] = React.useState<string>("");
   const [emailListError, setEmailListError] = React.useState<string>("");
   const [reviewRequestId, setRequestId] = React.useState<string>("");
-  const { authState, authDispatch } = React.useContext(authContext);
+  const { authDispatch } = React.useContext(authContext);
   const toast = useToast();
 
   React.useEffect(() => {
@@ -66,13 +66,15 @@ export default function SendEmails({
     setToEmailList(mailList);
   };
 
-  const onDeleteToEmail = (info: recepientType) => {
-    let mailList = JSON.parse(JSON.stringify(toEmailList));
-    mailList.splice(mailList.indexOf(info), 1);
-    setToEmailList(mailList);
+  const onDeleteToEmail = (index: number) => {
+    const newMailList = [...toEmailList];
+    newMailList.splice(index, 1);
+    setToEmailList(newMailList);
   };
 
   const onPressProceed = () => {
+    setEmailListError("");
+    setSubjectError("");
     if (toEmailList.length === 0) {
       setEmailListError("Customers be blank");
       return;
@@ -81,20 +83,28 @@ export default function SendEmails({
       setSubjectError("Subject cannot be blank");
       return;
     }
+    const emailDuplicateCheckList = toEmailList.map((item) => item.email);
+    const emailDuplicateCheckMap = new Set(emailDuplicateCheckList);
+    console.log(emailDuplicateCheckMap.size, emailDuplicateCheckList.length);
+    if (emailDuplicateCheckMap.size < emailDuplicateCheckList.length) {
+      setEmailListError("You have same email id for two or more customers");
+      return;
+    }
     authDispatch(set(SET_LOADER, true));
     emailClient
       .sendEmail({ subject, sendTo: toEmailList, reviewRequestId })
       .then(
         (res) => {
-          authDispatch(set(SET_LOADER, false));
           toast.show({ title: "Emails sent successfully" });
           navigation.replace("Home");
         },
         (err) => {
-          authDispatch(set(SET_LOADER, false));
           toast.show({ title: "Something went wrong" });
         }
-      );
+      )
+      .finally(() => {
+        authDispatch(set(SET_LOADER, false));
+      });
   };
 
   return (
@@ -132,7 +142,7 @@ export default function SendEmails({
                     <View key={i} style={styles.toItem}>
                       <Text style={styles.toItemText}>{item.customerName}</Text>
                       <Pressable
-                        onPress={() => onDeleteToEmail(item)}
+                        onPress={() => onDeleteToEmail(i)}
                         style={styles.toItemIcon}
                       >
                         {Platform.OS == "web" ? (
