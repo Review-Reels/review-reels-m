@@ -39,20 +39,23 @@ export default function ReviewResponseDetails({
   const toast = useToast();
 
   const sendEmailAgain = (id) => {
-    emailClient
-      .reSendMail({ id: id })
-      .then(
-        (res) => {
-          toast.show({ title: "Emails sent successfully" });
-          navigation.replace("Home");
-        },
-        (err) => {
-          toast.show({ title: "Something went wrong" });
-        }
-      )
-      .finally(() => {
-        authDispatch(set(SET_LOADER, false));
-      });
+    if (reviewResponse.EmailTracker[0].status === false) {
+      authDispatch(set(SET_LOADER, true));
+      emailClient
+        .reSendMail({ id: id })
+        .then(
+          (res) => {
+            toast.show({ title: "Emails sent successfully" });
+            navigation.replace("Home");
+          },
+          (err) => {
+            toast.show({ title: "Something went wrong" });
+          }
+        )
+        .finally(() => {
+          authDispatch(set(SET_LOADER, false));
+        });
+    }
   };
 
   React.useEffect(() => {
