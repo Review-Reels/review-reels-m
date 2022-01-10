@@ -78,7 +78,6 @@ export default function HomeScreen({
   React.useEffect(() => {
     getReviewResponses();
     getReviewRequests();
-    getMerchantInfo();
   }, [isFocused == true]);
 
   React.useEffect(() => {
@@ -96,14 +95,6 @@ export default function HomeScreen({
 
   const _keyboardDidHide = () => {
     setShowAsk(true);
-  };
-
-  const getMerchantInfo = () => {
-    // setRefreshing(true);
-    // getReviewRequestWithUsername().then((res) => {
-    //   if (res.data.length) setReviewRequest(res.data[0]);
-    //   // setRefreshing(true);
-    // });
   };
 
   const getReviewResponses = () => {
@@ -186,11 +177,15 @@ export default function HomeScreen({
             <Text style={styles.title}>Inbox</Text>
             {Platform.OS == "web" ? (
               <Pressable onPress={onPressProfile}>
-                <img  height={20} width={20} src={ThreeDot}></img>
+                <img height={20} width={20} src={ThreeDot}></img>
               </Pressable>
             ) : (
               <Pressable onPress={onPressProfile}>
-                <ThreeDot height={20} width={20} style={styles.threeDot}></ThreeDot>
+                <ThreeDot
+                  height={20}
+                  width={20}
+                  style={styles.threeDot}
+                ></ThreeDot>
               </Pressable>
             )}
           </View>
@@ -255,7 +250,9 @@ export default function HomeScreen({
                               }}
                             >
                               {item.EmailTracker.length
-                                ? "Asked via Email"
+                                ? item.EmailTracker[0].status === false
+                                  ? "Email Send Failed"
+                                  : "Asked via Email"
                                 : "Shared a video review"}
                             </Text>
                             <View style={styles.inboxSeperator}></View>
