@@ -63,6 +63,14 @@ export default function ReviewResponseDetails({
     setReviewRequest(route.params.reviewRequest);
   }, [route]);
 
+  const reviewResponseRecieved =
+    Object.values(reviewResponse).length > 0 &&
+    reviewResponse?.EmailTracker &&
+    reviewResponse.EmailTracker.length > 0;
+
+  const responseEmail =
+    reviewResponseRecieved && reviewResponse.EmailTracker[0];
+
   return (
     <RRAppWrapper>
       <View>
@@ -77,17 +85,11 @@ export default function ReviewResponseDetails({
             </Pressable>
             <View>
               <Text style={styles.title}>
-                {(reviewResponse &&
-                  reviewResponse.EmailTracker &&
-                  reviewResponse.EmailTracker.length &&
-                  reviewResponse.EmailTracker[0].customerName) ||
+                {(reviewResponseRecieved && responseEmail.customerName) ||
                   reviewResponse.customerName}
               </Text>
               <Text style={styles.designationTxt}>
-                {(reviewResponse &&
-                  reviewResponse.EmailTracker &&
-                  reviewResponse.EmailTracker.length &&
-                  reviewResponse.EmailTracker[0].whatYouDo) ||
+                {(reviewResponseRecieved && responseEmail.whatYouDo) ||
                   reviewResponse.whatYouDo}
               </Text>
             </View>
@@ -98,83 +100,73 @@ export default function ReviewResponseDetails({
             <ThreeDotVertical style={styles.threeDot}></ThreeDotVertical>
           )}
         </View>
-        {Object.values(reviewResponse).length > 0 &&
-          reviewResponse?.EmailTracker &&
-          reviewResponse.EmailTracker.length > 0 &&
-          reviewResponse.EmailTracker[0].status === false && (
-            <View style={{ display: "flex" }}>
-              <Text style={styles.sendFailedTxt}>Email Send Failed!</Text>
-            </View>
-          )}
+        {reviewResponseRecieved && responseEmail.status === false && (
+          <View style={{ display: "flex" }}>
+            <Text style={styles.sendFailedTxt}>Email Send Failed!</Text>
+          </View>
+        )}
         <ScrollView>
-          {Object.values(reviewResponse).length > 0 &&
-            reviewResponse?.EmailTracker &&
-            reviewResponse.EmailTracker.length > 0 && (
-              <View style={styles.inputView}>
-                <View style={styles.contentContainer}>
-                  <View style={styles.addVideoCntnr}>
-                    <Pressable style={styles.overlay}>
-                      {reviewRequest.imageUrl && (
-                        <Image
-                          style={styles.rounded}
-                          source={{ uri: S3_URL + reviewRequest.imageUrl }}
-                        />
-                      )}
+          {reviewResponseRecieved && (
+            <View style={styles.inputView}>
+              <View style={styles.contentContainer}>
+                <View style={styles.addVideoCntnr}>
+                  <Pressable style={styles.overlay}>
+                    {reviewRequest.imageUrl && (
+                      <Image
+                        style={styles.rounded}
+                        source={{ uri: S3_URL + reviewRequest.imageUrl }}
+                      />
+                    )}
+                    {Platform.OS == "web" ? (
+                      <img
+                        src={PlayButton}
+                        style={{
+                          position: "absolute",
+                          top: "50%",
+                          left: "40%",
+                        }}
+                      />
+                    ) : (
+                      <PlayButton
+                        style={{
+                          position: "absolute",
+                          top: "50%",
+                          left: "40%",
+                        }}
+                      ></PlayButton>
+                    )}
+                  </Pressable>
+                </View>
+                <View style={{ alignItems: "center" }}>
+                  <View style={styles.requestMsgCntnr}>
+                    <Text style={styles.requestMsgTxt}>
+                      {reviewRequest.askMessage}
+                    </Text>
+                  </View>
+                  <View style={{ alignSelf: "center" }}>
+                    <Pressable
+                      style={{
+                        ...styles.button,
+                        opacity: responseEmail.status === true ? 0.2 : 1,
+                      }}
+                      onPress={() => sendEmailAgain(responseEmail.id)}
+                    >
                       {Platform.OS == "web" ? (
-                        <img
-                          src={PlayButton}
-                          style={{
-                            position: "absolute",
-                            top: "50%",
-                            left: "40%",
-                          }}
-                        />
+                        <img src={VideoCam}></img>
                       ) : (
-                        <PlayButton
-                          style={{
-                            position: "absolute",
-                            top: "50%",
-                            left: "40%",
-                          }}
-                        ></PlayButton>
+                        <VideoCam></VideoCam>
+                      )}
+                      {responseEmail.status === true ? (
+                        <Text style={styles.buttonTxt}>Reply with Video</Text>
+                      ) : (
+                        <Text style={styles.buttonTxt}>Send Again</Text>
                       )}
                     </Pressable>
                   </View>
-                  <View style={{ alignItems: "center" }}>
-                    <View style={styles.requestMsgCntnr}>
-                      <Text style={styles.requestMsgTxt}>
-                        {reviewRequest.askMessage}
-                      </Text>
-                    </View>
-                    <View style={{ alignSelf: "center" }}>
-                      <Pressable
-                        style={{
-                          ...styles.button,
-                          opacity:
-                            reviewResponse.EmailTracker[0].status === true
-                              ? 0.2
-                              : 1,
-                        }}
-                        onPress={() =>
-                          sendEmailAgain(reviewResponse.EmailTracker[0].id)
-                        }
-                      >
-                        {Platform.OS == "web" ? (
-                          <img src={VideoCam}></img>
-                        ) : (
-                          <VideoCam></VideoCam>
-                        )}
-                        {reviewResponse.EmailTracker.status === true ? (
-                          <Text style={styles.buttonTxt}>Reply with Video</Text>
-                        ) : (
-                          <Text style={styles.buttonTxt}>Send Again</Text>
-                        )}
-                      </Pressable>
-                    </View>
-                  </View>
                 </View>
               </View>
-            )}
+            </View>
+          )}
 
           <View style={styles.container}>
             {reviewResponse.videoUrl !== "" && (
