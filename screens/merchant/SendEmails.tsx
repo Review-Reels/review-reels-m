@@ -48,7 +48,7 @@ export default function SendEmails({
   const [subjectError, setSubjectError] = React.useState<string>("");
   const [emailListError, setEmailListError] = React.useState<string>("");
   const [reviewRequestId, setRequestId] = React.useState<string>("");
-  const { authDispatch } = React.useContext(authContext);
+  const { authDispatch } = React.useContext<any>(authContext);
   const toast = useToast();
 
   React.useEffect(() => {

@@ -1,4 +1,4 @@
-import React, { ReactElement, useContext } from "react";
+import React, { ReactElement, useContext, useEffect, useState } from "react";
 import {
   StyleSheet,
   SafeAreaView,
@@ -10,6 +10,7 @@ import {
   Keyboard,
   Dimensions,
   StatusBar,
+  Text,
 } from "react-native";
 import Colors from "constants/Colors";
 import { authContext } from "context/AuthContext";
@@ -23,7 +24,7 @@ export default function CSAppWrapper({
   children: ReactElement;
   backgroundColor?: string;
 }) {
-  const { authState, authDispatch } = useContext(authContext);
+  const { authState } = useContext(authContext);
   return (
     <SafeAreaView
       style={[

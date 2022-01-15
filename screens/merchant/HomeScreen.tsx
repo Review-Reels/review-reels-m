@@ -2,7 +2,6 @@ import { StackScreenProps } from "@react-navigation/stack";
 import * as React from "react";
 import { useIsFocused } from "@react-navigation/native";
 import {
-  Button,
   StyleSheet,
   Text,
   View,
@@ -11,15 +10,13 @@ import {
   Platform,
   ScrollView,
   RefreshControl,
-  ActivityIndicator,
   Image,
   Dimensions,
   Keyboard,
 } from "react-native";
 import { RootStackParamList } from "../../types";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { authContext } from "context/AuthContext";
-import { LOGOUT_USER, set, SET_LOADER, SET_TOKEN } from "context/authActions";
+import { LOGOUT_USER, set, SET_LOADER } from "context/authActions";
 import {
   getReviewResponse,
   updateReviewResponseNonFormData,
@@ -32,14 +29,10 @@ import colors from "constants/Colors";
 import { getElapsedTime } from "utils/daysJsUtils";
 import RRButton from "components/RRButton";
 import NoReview from "screens/shared/no-review";
-import {
-  getReviewRequest,
-  getReviewRequestWithUsername,
-} from "services/api/review-request";
+import { getReviewRequest } from "services/api/review-request";
 import NoAskMessage from "screens/shared/no-ask-message";
 import EventEmitter from "react-native-eventemitter";
 import { S3_URL } from "constants/apiUrls";
-import { backgroundColor } from "styled-system";
 import { LinearGradient } from "expo-linear-gradient";
 
 //added dayjs because its lighter than moment.js so the app  size will decrease
@@ -52,7 +45,7 @@ const colorList = [
 export default function HomeScreen({
   navigation,
 }: StackScreenProps<RootStackParamList, "NotFound">) {
-  const { authState, authDispatch } = React.useContext(authContext);
+  const { authDispatch } = React.useContext<any>(authContext);
   const [reviewResponseList, setReviewResponseList] = React.useState([]);
   const [searchedReviewResponseList, setSearchedReviewResponseList] =
     React.useState([]);
@@ -134,7 +127,7 @@ export default function HomeScreen({
       .catch((error) => authDispatch(set(SET_LOADER, true)));
   };
 
-  const goToReviewResponse = (item) => {
+  const goToReviewResponse = (item: any) => {
     if (!item.isRead)
       updateReviewResponseNonFormData({ isRead: true }, item.id)
         .then((res) => {
@@ -151,7 +144,12 @@ export default function HomeScreen({
 
   const searchReviewResponse = (value: string) => {
     const searchedList = reviewResponseList.filter((item) =>
-      item.customerName.toLowerCase().includes(value.toLowerCase())
+      item.customerName
+        ? item.customerName.toLowerCase().includes(value.toLowerCase())
+        : item.EmailTracker.length &&
+          item.EmailTracker[0].customerName
+            .toLowerCase()
+            .includes(value.toLowerCase())
     );
     setSearchedReviewResponseList(searchedList);
   };
@@ -161,13 +159,39 @@ export default function HomeScreen({
     getReviewRequests();
   }, []);
 
-  const onPressLogout = () => {
-    authDispatch(set(LOGOUT_USER));
-  };
-
   const onPressProfile = () => {
     navigation.navigate("Profile");
   };
+
+  const getSecondaryTitle = React.useCallback(
+    (item) => {
+      return item.EmailTracker.length
+        ? item.EmailTracker[0].status === false
+          ? "Email Send Failed"
+          : "Asked via Email"
+        : "Shared a video review";
+    },
+    [searchedReviewResponseList]
+  );
+
+  const getPrimaryTitle = React.useCallback(
+    (item) => {
+      return item.customerName
+        ? item.customerName
+        : item.EmailTracker.length && item.EmailTracker[0].customerName;
+    },
+    [searchedReviewResponseList]
+  );
+
+  const getAvatarTitle = React.useCallback(
+    (item) => {
+      return item.customerName
+        ? item.customerName.charAt(0).toUpperCase()
+        : item.EmailTracker.length &&
+            item.EmailTracker[0].customerName.charAt(0).toUpperCase();
+    },
+    [searchedReviewResponseList]
+  );
 
   return (
     <RRAppWrapper>
@@ -218,12 +242,7 @@ export default function HomeScreen({
                           ]}
                         >
                           <Text style={styles.textColor}>
-                            {item.customerName
-                              ? item.customerName.charAt(0).toUpperCase()
-                              : item.EmailTracker.length &&
-                                item.EmailTracker[0].customerName
-                                  .charAt(0)
-                                  .toUpperCase()}
+                            {getAvatarTitle(item)}
                           </Text>
                         </View>
                         <View style={styles.nameFlex}>
@@ -235,10 +254,7 @@ export default function HomeScreen({
                               fontFamily: "Karla-Bold",
                             }}
                           >
-                            {item.customerName
-                              ? item.customerName
-                              : item.EmailTracker.length &&
-                                item.EmailTracker[0].customerName}
+                            {getPrimaryTitle(item)}
                           </Text>
                           <View style={styles.textWrapper}>
                             <Text
@@ -249,11 +265,7 @@ export default function HomeScreen({
                                 fontFamily: "Karla",
                               }}
                             >
-                              {item.EmailTracker.length
-                                ? item.EmailTracker[0].status === false
-                                  ? "Email Send Failed"
-                                  : "Asked via Email"
-                                : "Shared a video review"}
+                              {getSecondaryTitle(item)}
                             </Text>
                             <View style={styles.inboxSeperator}></View>
                             <Text
@@ -331,7 +343,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    // marginBottom: 16,
   },
   rounded: {
     width: 40,

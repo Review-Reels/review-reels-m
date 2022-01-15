@@ -35,7 +35,7 @@ export default function ReviewResponseDetails({
   const [reviewRequest, setReviewRequest] = React.useState({});
   const [status, setStatus] = React.useState({});
   const video = React.useRef(null);
-  const { authDispatch } = React.useContext(authContext);
+  const { authDispatch } = React.useContext<any>(authContext);
   const toast = useToast();
 
   const sendEmailAgain = (id) => {
