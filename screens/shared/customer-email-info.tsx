@@ -1,10 +1,9 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import { RRTextInput } from "components";
 import RRButton from "components/RRButton";
-import { Actionsheet } from "native-base";
 import * as React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { BottomSheet } from "react-native-btr";
+import { StyleSheet, Text, View } from "react-native";
+import { validateEmail } from "utils/validation";
 
 export default function CustomerEmailInfo({
   visible,
@@ -20,15 +19,7 @@ export default function CustomerEmailInfo({
   const [email, setEmail] = React.useState("");
   const [emailError, setEmailError] = React.useState("");
 
-  const validateEmail = (email: string) => {
-    const re =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase());
-  };
-
-  const onPressDone = () => {};
-
-  const onPressAddNext = () => {
+  const onPressAdd = () => {
     if (!customerName) {
       setCustomerNameError("Required");
     }
@@ -42,6 +33,7 @@ export default function CustomerEmailInfo({
         onPressProceed({ customerName, email });
         setCustomerName("");
         setEmail("");
+        onPressClose();
       } else {
         setEmailError("Enter valid email.");
       }
@@ -80,8 +72,8 @@ export default function CustomerEmailInfo({
                 style={{ flex: 1 }}
               ></RRButton>
               <RRButton
-                onPress={() => onPressAddNext()}
-                title="Add Next"
+                onPress={() => onPressAdd()}
+                title="Add"
                 style={{ flex: 1, marginLeft: 8 }}
               ></RRButton>
             </View>

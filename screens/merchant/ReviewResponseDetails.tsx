@@ -21,6 +21,11 @@ import { getElapsedTime } from "utils/daysJsUtils";
 import { scaleSize } from "constants/Layout";
 import PlayButton from "assets/svg/PlayButton.svg";
 import VideoCam from "assets/svg/VideoCam.svg";
+import { useToast } from "native-base";
+
+import { authContext } from "context/AuthContext";
+import { set, SET_LOADER } from "context/authActions";
+import emailClient from "services/api/email-client";
 
 export default function ReviewResponseDetails({
   navigation,
@@ -30,11 +35,42 @@ export default function ReviewResponseDetails({
   const [reviewRequest, setReviewRequest] = React.useState({});
   const [status, setStatus] = React.useState({});
   const video = React.useRef(null);
+  const { authDispatch } = React.useContext<any>(authContext);
+  const toast = useToast();
+
+  const sendEmailAgain = (id) => {
+    if (reviewResponse.EmailTracker[0].status === false) {
+      authDispatch(set(SET_LOADER, true));
+      emailClient
+        .reSendMail({ id: id })
+        .then(
+          (res) => {
+            toast.show({ title: "Emails sent successfully" });
+            navigation.replace("Home");
+          },
+          (err) => {
+            toast.show({ title: "Something went wrong" });
+          }
+        )
+        .finally(() => {
+          authDispatch(set(SET_LOADER, false));
+        });
+    }
+  };
+
   React.useEffect(() => {
     setReviewResponse(route.params.reviewResponse);
     setReviewRequest(route.params.reviewRequest);
-    console.log(route.params.reviewResponse);
   }, [route]);
+
+  const reviewResponseRecieved =
+    Object.values(reviewResponse).length > 0 &&
+    reviewResponse?.EmailTracker &&
+    reviewResponse.EmailTracker.length > 0;
+
+  const responseEmail =
+    reviewResponseRecieved && reviewResponse.EmailTracker[0];
+
   return (
     <RRAppWrapper>
       <View>
@@ -48,20 +84,14 @@ export default function ReviewResponseDetails({
               )}
             </Pressable>
             <View>
-            <Text style={styles.title}>
-              {(reviewResponse &&
-                reviewResponse.EmailTracker &&
-                reviewResponse.EmailTracker.length &&
-                reviewResponse.EmailTracker[0].customerName) ||
-                reviewResponse.customerName}
-            </Text>
-            <Text style={styles.designationTxt}>
-              {(reviewResponse &&
-                reviewResponse.EmailTracker &&
-                reviewResponse.EmailTracker.length &&
-                reviewResponse.EmailTracker[0].whatYouDo) ||
-                reviewResponse.whatYouDo}
-            </Text>
+              <Text style={styles.title}>
+                {(reviewResponseRecieved && responseEmail.customerName) ||
+                  reviewResponse.customerName}
+              </Text>
+              <Text style={styles.designationTxt}>
+                {(reviewResponseRecieved && responseEmail.whatYouDo) ||
+                  reviewResponse.whatYouDo}
+              </Text>
             </View>
           </View>
           {Platform.OS == "web" ? (
@@ -70,60 +100,74 @@ export default function ReviewResponseDetails({
             <ThreeDotVertical style={styles.threeDot}></ThreeDotVertical>
           )}
         </View>
+        {reviewResponseRecieved && responseEmail.status === false && (
+          <View style={{ display: "flex" }}>
+            <Text style={styles.sendFailedTxt}>Email Send Failed!</Text>
+          </View>
+        )}
         <ScrollView>
-          {Object.values(reviewResponse).length > 0 &&
-            reviewResponse?.EmailTracker &&
-            reviewResponse.EmailTracker.length > 0 && (
-              <View style={styles.inputView}>
-                <View style={styles.contentContainer}>
-                  <View style={styles.addVideoCntnr}>
-                    <Pressable style={styles.overlay}>
-                      {reviewRequest.imageUrl && (
-                        <Image
-                          style={styles.rounded}
-                          source={{ uri: S3_URL + reviewRequest.imageUrl }}
-                        />
-                      )}
+          {reviewResponseRecieved && (
+            <View style={styles.inputView}>
+              <View style={styles.contentContainer}>
+                <View style={styles.addVideoCntnr}>
+                  <Pressable style={styles.overlay}>
+                    {reviewRequest.imageUrl && (
+                      <Image
+                        style={styles.rounded}
+                        source={{ uri: S3_URL + reviewRequest.imageUrl }}
+                      />
+                    )}
+                    {Platform.OS == "web" ? (
+                      <img
+                        src={PlayButton}
+                        style={{
+                          position: "absolute",
+                          top: "50%",
+                          left: "40%",
+                        }}
+                      />
+                    ) : (
+                      <PlayButton
+                        style={{
+                          position: "absolute",
+                          top: "50%",
+                          left: "40%",
+                        }}
+                      ></PlayButton>
+                    )}
+                  </Pressable>
+                </View>
+                <View style={{ alignItems: "center" }}>
+                  <View style={styles.requestMsgCntnr}>
+                    <Text style={styles.requestMsgTxt}>
+                      {reviewRequest.askMessage}
+                    </Text>
+                  </View>
+                  <View style={{ alignSelf: "center" }}>
+                    <Pressable
+                      style={{
+                        ...styles.button,
+                        opacity: responseEmail.status === true ? 0.2 : 1,
+                      }}
+                      onPress={() => sendEmailAgain(responseEmail.id)}
+                    >
                       {Platform.OS == "web" ? (
-                        <img
-                          src={PlayButton}
-                          style={{
-                            position: "absolute",
-                            top: "50%",
-                            left: "40%",
-                          }}
-                        />
+                        <img src={VideoCam}></img>
                       ) : (
-                        <PlayButton
-                          style={{
-                            position: "absolute",
-                            top: "50%",
-                            left: "40%",
-                          }}
-                        ></PlayButton>
+                        <VideoCam></VideoCam>
+                      )}
+                      {responseEmail.status === true ? (
+                        <Text style={styles.buttonTxt}>Reply with Video</Text>
+                      ) : (
+                        <Text style={styles.buttonTxt}>Send Again</Text>
                       )}
                     </Pressable>
                   </View>
-                  <View style={{ alignItems: "center" }}>
-                    <View style={styles.requestMsgCntnr}>
-                      <Text style={styles.requestMsgTxt}>
-                        {reviewRequest.askMessage}
-                      </Text>
-                    </View>
-                    <View style={{ alignSelf: "center" }}>
-                      <Pressable style={styles.button}>
-                        {Platform.OS == "web" ? (
-                          <img src={VideoCam}></img>
-                        ) : (
-                          <VideoCam></VideoCam>
-                        )}
-                        <Text style={styles.buttonTxt}>Reply with Video</Text>
-                      </Pressable>
-                    </View>
-                  </View>
                 </View>
               </View>
-            )}
+            </View>
+          )}
+
           <View style={styles.container}>
             {reviewResponse.videoUrl !== "" && (
               <Pressable
@@ -173,12 +217,12 @@ const styles = StyleSheet.create({
     fontFamily: "Karla-Bold",
     fontWeight: "bold",
   },
-  designationTxt:{
+  designationTxt: {
     fontSize: 14,
     // lineHeight: 24,
     fontFamily: "Karla-Bold",
     fontWeight: "500",
-    color:colors.Black2
+    color: colors.Black2,
   },
   separator: {
     marginVertical: 24,
@@ -280,6 +324,14 @@ const styles = StyleSheet.create({
     color: colors.White,
     fontFamily: "Karla",
     fontSize: 16,
+    lineHeight: 20,
+    fontWeight: "700",
+  },
+  sendFailedTxt: {
+    textAlign: "center",
+    color: colors.Alizarin_Crimson,
+    fontFamily: "Karla",
+    fontSize: 20,
     lineHeight: 20,
     fontWeight: "700",
   },

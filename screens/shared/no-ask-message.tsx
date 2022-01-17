@@ -1,12 +1,8 @@
 import * as React from "react";
-import { StyleSheet, View, Text, Platform } from "react-native";
-import Chat from "assets/svg/Chat.svg";
+import { StyleSheet, View, Text } from "react-native";
 import RRButton from "components/RRButton";
 import { Video } from "expo-av";
 import { scaleSize } from "constants/Layout";
-import { StackScreenProps } from "@react-navigation/stack";
-import { RootStackParamList } from "types";
-import { ScrollView } from "react-native-gesture-handler";
 import colors from "constants/Colors";
 
 export default function NoAskMessage({ navigation }: { navigation: any }) {

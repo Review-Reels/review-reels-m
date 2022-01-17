@@ -7,14 +7,15 @@ dayjs.extend(relativeTime);
 dayjs.updateLocale("en", {
   relativeTime: {
     s: "%ds",
+    ss: "%ds",
     m: "%dm",
     mm: "%dm",
     h: "%dh",
     hh: "%dh",
     d: "%dd",
     dd: "%dd",
-    M: "%dm",
-    MM: "%dm",
+    M: "%dmo",
+    MM: "%dmo",
     y: "%dy",
     yy: "%dy",
   },
