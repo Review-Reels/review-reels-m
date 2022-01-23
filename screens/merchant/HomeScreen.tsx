@@ -199,19 +199,20 @@ export default function HomeScreen({
         <View style={styles.container}>
           <View style={styles.header}>
             <Text style={styles.title}>Inbox</Text>
-            {Platform.OS == "web" ? (
-              <Pressable onPress={onPressProfile}>
+            <Pressable
+              style={styles.threeDotContainer}
+              onPress={onPressProfile}
+            >
+              {Platform.OS == "web" ? (
                 <img height={20} width={20} src={ThreeDot}></img>
-              </Pressable>
-            ) : (
-              <Pressable onPress={onPressProfile}>
+              ) : (
                 <ThreeDot
                   height={20}
                   width={20}
                   style={styles.threeDot}
                 ></ThreeDot>
-              </Pressable>
-            )}
+              )}
+            </Pressable>
           </View>
           {reviewResponseList.length > 0 ? (
             <View>
@@ -406,5 +407,10 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "flex-end",
+  },
+  threeDotContainer: {
+    paddingLeft: 20,
+    paddingRight: 5,
+    paddingVertical: 10,
   },
 });

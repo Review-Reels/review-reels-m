@@ -26,6 +26,8 @@ import { useToast } from "native-base";
 import { authContext } from "context/AuthContext";
 import { set, SET_LOADER } from "context/authActions";
 import emailClient from "services/api/email-client";
+import { WEB_APP_URL } from "constants/apiUrls";
+import * as Linking from "expo-linking";
 
 export default function ReviewResponseDetails({
   navigation,
@@ -35,7 +37,7 @@ export default function ReviewResponseDetails({
   const [reviewRequest, setReviewRequest] = React.useState({});
   const [status, setStatus] = React.useState({});
   const video = React.useRef(null);
-  const { authDispatch } = React.useContext<any>(authContext);
+  const { authDispatch, authState } = React.useContext<any>(authContext);
   const toast = useToast();
 
   const sendEmailAgain = (id) => {
@@ -58,6 +60,10 @@ export default function ReviewResponseDetails({
     }
   };
 
+  const onPressPreview = () => {
+    Linking.openURL(shareUrl);
+  };
+
   React.useEffect(() => {
     setReviewResponse(route.params.reviewResponse);
     setReviewRequest(route.params.reviewRequest);
@@ -70,13 +76,19 @@ export default function ReviewResponseDetails({
 
   const responseEmail =
     reviewResponseRecieved && reviewResponse.EmailTracker[0];
+  const shareUrl = WEB_APP_URL + "view/" + authState.user.username;
+
+  console.log(responseEmail, shareUrl);
 
   return (
     <RRAppWrapper>
       <View>
         <View style={styles.header}>
           <View style={styles.nameAndBack}>
-            <Pressable onPress={() => navigation.goBack()}>
+            <Pressable
+              style={styles.backContainer}
+              onPress={() => navigation.goBack()}
+            >
               {Platform.OS == "web" ? (
                 <img style={{ marginRight: 16 }} src={Back}></img>
               ) : (
@@ -88,29 +100,44 @@ export default function ReviewResponseDetails({
                 {(reviewResponseRecieved && responseEmail.customerName) ||
                   reviewResponse.customerName}
               </Text>
-              <Text style={styles.designationTxt}>
-                {(reviewResponseRecieved && responseEmail.whatYouDo) ||
-                  reviewResponse.whatYouDo}
-              </Text>
+              {reviewResponseRecieved && responseEmail.whatYouDo && (
+                <Text style={styles.designationTxt}>
+                  {reviewResponse.whatYouDo}
+                </Text>
+              )}
             </View>
           </View>
-          {Platform.OS == "web" ? (
+          {/* {Platform.OS == "web" ? (
             <img style={{ width: 4, height: 16 }} src={ThreeDotVertical}></img>
           ) : (
             <ThreeDotVertical style={styles.threeDot}></ThreeDotVertical>
-          )}
+          )} */}
         </View>
-        {reviewResponseRecieved && responseEmail.status === false && (
-          <View style={{ display: "flex" }}>
-            <Text style={styles.sendFailedTxt}>Email Send Failed!</Text>
-          </View>
-        )}
+
         <ScrollView>
+          <View style={{ display: "flex" }}>
+            <Text
+              style={{
+                ...styles.emailDisplay,
+                color:
+                  reviewResponseRecieved && responseEmail.status === false
+                    ? colors.Alizarin_Crimson
+                    : colors.Black,
+              }}
+            >
+              to: {"<" + responseEmail.emailId + ">"}
+            </Text>
+          </View>
+          {reviewResponseRecieved && responseEmail.status === false && (
+            <View style={{ display: "flex" }}>
+              <Text style={styles.sendFailedTxt}>Email Send Failed!</Text>
+            </View>
+          )}
           {reviewResponseRecieved && (
             <View style={styles.inputView}>
               <View style={styles.contentContainer}>
                 <View style={styles.addVideoCntnr}>
-                  <Pressable style={styles.overlay}>
+                  <Pressable style={styles.overlay} onPress={onPressPreview}>
                     {reviewRequest.imageUrl && (
                       <Image
                         style={styles.rounded}
@@ -334,5 +361,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
     lineHeight: 20,
     fontWeight: "700",
+  },
+  emailDisplay: {
+    paddingStart: 16,
+    paddingBottom: 10,
+    fontFamily: "Karla",
+    fontSize: 16,
+  },
+  backContainer: {
+    paddingVertical: 15,
   },
 });
