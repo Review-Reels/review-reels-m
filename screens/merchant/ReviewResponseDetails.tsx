@@ -107,27 +107,24 @@ export default function ReviewResponseDetails({
               )}
             </View>
           </View>
-          {/* {Platform.OS == "web" ? (
-            <img style={{ width: 4, height: 16 }} src={ThreeDotVertical}></img>
-          ) : (
-            <ThreeDotVertical style={styles.threeDot}></ThreeDotVertical>
-          )} */}
         </View>
 
         <ScrollView>
-          <View style={{ display: "flex" }}>
-            <Text
-              style={{
-                ...styles.emailDisplay,
-                color:
-                  reviewResponseRecieved && responseEmail.status === false
-                    ? colors.Alizarin_Crimson
-                    : colors.Black,
-              }}
-            >
-              to: {"<" + responseEmail.emailId + ">"}
-            </Text>
-          </View>
+          {reviewResponseRecieved && (
+            <View style={{ display: "flex" }}>
+              <Text
+                style={{
+                  ...styles.emailDisplay,
+                  color:
+                    reviewResponseRecieved && responseEmail.status === false
+                      ? colors.Alizarin_Crimson
+                      : colors.Black,
+                }}
+              >
+                to: {"<" + responseEmail.emailId + ">"}
+              </Text>
+            </View>
+          )}
           {reviewResponseRecieved && responseEmail.status === false && (
             <View style={{ display: "flex" }}>
               <Text style={styles.sendFailedTxt}>Email Send Failed!</Text>

@@ -1,16 +1,6 @@
 import { RRAppWrapper, RRCamera, RRTextInput } from "components";
 import * as React from "react";
-import {
-  Keyboard,
-  KeyboardAvoidingView,
-  Modal,
-  Platform,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
 import colors from "constants/Colors";
 import { useEffect, useState } from "react";
 import RRButton from "components/RRButton";
@@ -18,7 +8,7 @@ import Close from "assets/svg/Close.svg";
 import VideoCap from "assets/svg/VideoCap.svg";
 import VideoCam from "assets/svg/VideoCam.svg";
 import { scaleSize } from "constants/Layout";
-import { Actionsheet, useDisclose } from "native-base";
+import { Actionsheet } from "native-base";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "types";
 import * as ImagePicker from "expo-image-picker";
@@ -84,12 +74,34 @@ export default function ReviewRequestScreen({
       aspect: [4, 3],
       quality: 1,
     });
-    console.log(result);
     if (!result.cancelled) {
       setOpenStatus(false);
       setVideo(result);
       setIsNewVideo(true);
     }
+  };
+
+  const makeVideo = () => {
+    setCameraStatus(true);
+    setOpenStatus(false);
+    setVideo(null);
+  };
+  const openActionSheetOrCamera = () => {
+    setShowInfoTxt(false);
+    if (Platform.OS == "web") {
+      pickVideo();
+      setShowedInfo(true);
+    } else {
+      setOpenStatus(true);
+      setShowedInfo(true);
+    }
+  };
+
+  const onVideoPress = () => {
+    if (isShowedInfo) {
+      if (Platform.OS == "web") pickVideo();
+      else setOpenStatus(true);
+    } else setShowInfoTxt(true);
   };
 
   const createReviewRequest = (videoPayload) => {
@@ -115,7 +127,6 @@ export default function ReviewRequestScreen({
         navigation.navigate("ShareRequest");
       })
       .catch((err) => {
-        console.log(err);
         authDispatch(set(SET_LOADER, false));
       });
   };
@@ -158,7 +169,6 @@ export default function ReviewRequestScreen({
           backgroundColor: colors.Athens_Gray,
         }}
       >
-        {/* <ScrollView style={styles.container}> */}
         <KeyboardAwareScrollView
           resetScrollToCoords={{ x: 0, y: 0 }}
           contentContainerStyle={styles.container}
@@ -181,14 +191,7 @@ export default function ReviewRequestScreen({
             </Text>
           </View>
           <View style={styles.mainContainer}>
-            <Pressable
-              style={styles.addVideoCntnr}
-              onPress={() => {
-                if (isShowedInfo) {
-                  setOpenStatus(true);
-                } else setShowInfoTxt(true);
-              }}
-            >
+            <Pressable style={styles.addVideoCntnr} onPress={onVideoPress}>
               {video ? (
                 <Video
                   source={{ uri: video.uri }}
@@ -250,41 +253,36 @@ export default function ReviewRequestScreen({
           </View>
         </LinearGradient>
         <Actionsheet isOpen={isOpen} onClose={() => setOpenStatus(false)}>
-          <View style={styles.actionCntnr}>
-            <Pressable
-              style={[
-                styles.bottomAction,
-                {
-                  paddingRight: 6,
-                  borderBottomWidth: 1,
-                  borderBottomColor: colors.Black1,
-                },
-              ]}
-              onPressIn={() => pickVideo()}
-            >
-              <Text style={styles.bottomActionTxt}>Upload from library</Text>
-              {Platform.OS == "web" ? (
-                <img src={Library}></img>
-              ) : (
-                <Library></Library>
-              )}
-            </Pressable>
-            <Pressable
-              style={styles.bottomAction}
-              onPressIn={() => {
-                setCameraStatus(true);
-                setOpenStatus(false);
-                setVideo(null);
-              }}
-            >
-              <Text style={styles.bottomActionTxt}>Make a video</Text>
-              {Platform.OS == "web" ? (
-                <img src={VideoCap}></img>
-              ) : (
-                <VideoCap></VideoCap>
-              )}
-            </Pressable>
-          </View>
+          <Actionsheet.Content style={styles.actionCntnr}>
+            <View style={{ width: "100%" }}>
+              <Pressable
+                style={[
+                  styles.bottomAction,
+                  {
+                    paddingRight: 6,
+                    borderBottomWidth: 1,
+                    borderBottomColor: colors.Black1,
+                  },
+                ]}
+                onPressIn={() => pickVideo()}
+              >
+                <Text style={styles.bottomActionTxt}>Upload from library</Text>
+                {Platform.OS == "web" ? (
+                  <img src={Library}></img>
+                ) : (
+                  <Library></Library>
+                )}
+              </Pressable>
+              <Pressable style={styles.bottomAction} onPressIn={makeVideo}>
+                <Text style={styles.bottomActionTxt}>Make a video</Text>
+                {Platform.OS == "web" ? (
+                  <img src={VideoCap}></img>
+                ) : (
+                  <VideoCap></VideoCap>
+                )}
+              </Pressable>
+            </View>
+          </Actionsheet.Content>
         </Actionsheet>
         {isOpenCamera && (
           <RRCamera
@@ -299,11 +297,7 @@ export default function ReviewRequestScreen({
         )}
         {isShowInfoTxt && !isShowedInfo && (
           <MerchantVideoInfo
-            onPressOk={() => {
-              setShowInfoTxt(false);
-              setOpenStatus(true);
-              setShowedInfo(true);
-            }}
+            onPressOk={openActionSheetOrCamera}
             onPressClose={() => setShowInfoTxt(false)}
           />
         )}
@@ -327,8 +321,8 @@ const styles = StyleSheet.create({
   bottomAction: {
     flexDirection: "row",
     justifyContent: "space-between",
-
     alignItems: "center",
+    paddingHorizontal: 5,
   },
   bottomActionTxt: {
     fontWeight: "700",

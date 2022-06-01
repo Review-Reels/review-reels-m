@@ -44,7 +44,9 @@ export default function SubmitSuccessScreen({
         <View style={styles.footer}>
           <Text style={styles.footerTxt}>Experience powered by</Text>
           {Platform.OS == "web" ? (
-            <img height={32} width={100} src={LogoSmall}></img>
+            <a href="www.reviewreels.app">
+              <img height={32} width={100} src={LogoSmall}></img>
+            </a>
           ) : (
             <LogoSmall></LogoSmall>
           )}
