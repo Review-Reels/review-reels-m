@@ -20,7 +20,7 @@ import { authContext } from "context/AuthContext";
 import { LOGOUT_USER, set, SET_LOADER, SET_TOKEN } from "context/authActions";
 import { useToast } from "native-base";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as MailComposer from 'expo-mail-composer';
+import * as MailComposer from "expo-mail-composer";
 
 export type recepientType = {
   customerName: string;
@@ -59,9 +59,11 @@ export default function ProfileScreen({
     }
   };
 
-  const onPressEmail=()=>{
-    MailComposer.composeAsync({recipients:['admin@reviewreels.app']})
-  }
+  const onPressEmail = () => {
+    MailComposer.composeAsync({
+      recipients: ["hari@reviewreels.app", "d@reviewreels.app"],
+    });
+  };
 
   return (
     <RRAppWrapper>
@@ -76,6 +78,27 @@ export default function ProfileScreen({
             <Close width={48} height={48}></Close>
           )}
         </Pressable>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            margin: 10,
+          }}
+        >
+          <Text style={styles.title1}>Support : </Text>
+          <Text style={{ color: colors.Alizarin_Crimson }}>
+            hari@reviewreels.app,d@reviewreels.app
+          </Text>
+          <Text style={styles.title2}>
+            We typically reply within 24 hours. We are still a very small team
+            and appreciate your patience with us.
+          </Text>
+          <Text style={styles.title2}>
+            Our business hours are: Monday to Friday 09:00 am to 06:00 pm
+            (GMT+05:30)
+          </Text>
+        </View>
         <View style={{ flex: 1, justifyContent: "flex-end" }}>
           {/* <Text style={styles.title1}>@starkindustries</Text>
           <Text style={styles.title2}>Stark Industries</Text> */}
@@ -86,7 +109,14 @@ export default function ProfileScreen({
           </View>
           <View style={styles.appInfoCntnr}>
             <Text style={styles.appInfoTxt}>© Review Reels 2021 - V1.0.12</Text>
-            <Pressable onPress={onPressEmail}><Text style={styles.appInfoTxt}>Support : <Text style={{color:colors.Alizarin_Crimson}}>admin@reviewreels.app</Text></Text></Pressable>
+            <Pressable onPress={onPressEmail}>
+              <Text style={styles.appInfoTxt}>
+                Support :{" "}
+                <Text style={{ color: colors.Alizarin_Crimson }}>
+                  hari@reviewreels.app,d@reviewreels.app
+                </Text>
+              </Text>
+            </Pressable>
           </View>
         </View>
       </View>
@@ -113,6 +143,7 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     color: colors.Black5,
     marginTop: 4,
+    textAlign: "center",
   },
   actionsContainer: {
     backgroundColor: colors.Peach_Cream,
