@@ -17,6 +17,7 @@ import Copy from "assets/svg/Copy.svg";
 import Email from "assets/svg/Email.svg";
 import colors from "constants/Colors";
 import { scaleSize } from "constants/Layout";
+// import Clipboard from "@react-native-community/clipboard";
 import * as Clipboard from "expo-clipboard";
 import { getReviewRequest, reviewRequest } from "services/api/review-request";
 import { WEB_APP_URL } from "constants/apiUrls";
@@ -64,7 +65,7 @@ export default function ShareRequestScreen({
   };
 
   const onPressCopy = () => {
-    Clipboard.default.setString(shareUrl);
+    Clipboard.setString(shareUrl);
     toast.show({ title: "Copied to clipboard" });
   };
 
