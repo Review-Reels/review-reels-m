@@ -25,30 +25,32 @@ export default function CustomerInfo({
   };
   return (
     <Actionsheet isOpen={visible} onClose={onPressClose}>
-      <View style={styles.container}>
-        <Text style={styles.headerTxt}>A little about you</Text>
-        <RRTextInput
-          style={styles.mt_24}
-          onChangeText={(val: string) => {
-            setName(val);
-            setNameError("");
-          }}
-          value={name}
-          label="YOUR NAME?"
-          placeholder="eg: Nick Fury"
-          error={nameError}
-        ></RRTextInput>
-        <RRTextInput
-          style={styles.mt_24}
-          onChangeText={(val: string) => setJob(val)}
-          value={job}
-          label="WHAT YOU DO? (OPTIONAL)"
-          placeholder="eg: Founder of Avengers"
-        ></RRTextInput>
-        <View style={styles.mt_24}>
-          <RRButton onPress={sendReview} title="Send Review"></RRButton>
+      <Actionsheet.Content style={styles.container}>
+        <View style={{ width: "100%" }}>
+          <Text style={styles.headerTxt}>A little about you</Text>
+          <RRTextInput
+            style={styles.mt_24}
+            onChangeText={(val: string) => {
+              setName(val);
+              setNameError("");
+            }}
+            value={name}
+            label="YOUR NAME?"
+            placeholder="eg: Nick Fury"
+            error={nameError}
+          ></RRTextInput>
+          <RRTextInput
+            style={styles.mt_24}
+            onChangeText={(val: string) => setJob(val)}
+            value={job}
+            label="WHAT YOU DO? (OPTIONAL)"
+            placeholder="eg: Founder of Avengers"
+          ></RRTextInput>
+          <View style={styles.mt_24}>
+            <RRButton onPress={sendReview} title="Send Review"></RRButton>
+          </View>
         </View>
-      </View>
+      </Actionsheet.Content>
     </Actionsheet>
   );
 }
